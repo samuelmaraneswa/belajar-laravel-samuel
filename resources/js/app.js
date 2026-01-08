@@ -1,1 +1,8 @@
 import './bootstrap';
+import './muscle-workout';
+import './admin/workouts/workout-calculate';
+import './admin/workouts/WorkoutSearch';
+import './admin/utils/searchSuggestions';
+import './components/header';
+import './components/admin-header';
+import './components/admin-sidebar';

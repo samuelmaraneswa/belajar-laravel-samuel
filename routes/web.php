@@ -23,13 +23,23 @@ Route::get('/workouts/suggest', [WorkoutController::class, 'suggest']);
 Route::middleware('auth')->prefix('admin')->group(function() {
   Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 
+  // workouts MENU (card-card)
+  Route::get('/workouts', [AdminWorkoutController::class, 'index'])->name('admin.workout.index');
+
+  // workouts LIST (all / gym / home / dll)
+  Route::get('/workouts/list', [AdminWorkoutController::class, 'list'])->name('admin.workout.list');
+
+  // search & suggest
   Route::get('/workouts/suggest', [AdminWorkoutController::class, 'suggest'])->name('admin.workout.suggest');
   Route::get('/workouts/search', [AdminWorkoutController::class, 'search']);
 
-  Route::get('/workouts', [AdminWorkoutController::class, 'index'])->name('admin.workout.index');
+  // CRUD
   Route::get('/workouts/create', [AdminWorkoutController::class, 'create'])->name('admin.workout.create');
   Route::post('/workouts/store', [AdminWorkoutController::class, 'store'])->name('admin.workout.store');
-  Route::get('/workouts/{workout}', [AdminWorkoutController::class, 'show'])->name('admin.workout.show');
-
+  Route::get('/workouts/{slug}', [AdminWorkoutController::class, 'show'])->name('admin.workout.show');
+  Route::get('/workouts/{workout}/edit', [AdminWorkoutController::class, 'edit'])
+    ->name('admin.workouts.edit');
+  Route::delete('/workouts/{workout}', [AdminWorkoutController::class, 'destroy'])
+    ->name('admin.workouts.destroy');
   Route::post('/workouts/{workout}/calculate', [AdminWorkoutController::class, 'calculate'])->name('admin.workout.calculate');
 });

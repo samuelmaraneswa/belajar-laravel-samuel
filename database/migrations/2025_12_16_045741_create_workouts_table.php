@@ -15,14 +15,34 @@ return new class extends Migration
     Schema::create('workouts', function (Blueprint $table) {
       $table->id();
       $table->string('title');
+      $table->string('slug')->unique();
+
+      $table->string('type')->default('machine'); // machine | bodyweight (dipakai logic sets & reps)
 
       $table->foreignIdFor(WorkoutCategory::class)->constrained()->cascadeOnDelete();
 
       $table->text('description')->nullable();
-      $table->string('image')->nullable();
-      $table->string('image_thumb')->nullable();
-      $table->string('video')->nullable();
+
+      $table->string('image')->nullable(); // png/jpg
+      $table->string('gif')->nullable();
+      $table->string('image_thumb')->nullable(); // thumbnail
+      $table->string('video')->nullable(); // optional
+
+      $table->string('difficulty')->nullable(); // beginner/intermediate/advanced
+
+      // compound | isolation
+      $table->string('movement')->nullable();
+
+      // example: 1.00, 0.70, 0.35
+      $table->decimal('difficulty_factor', 3, 2)
+        ->default(1.00);
+        
+      $table->boolean('is_active')->default(true);
+      $table->unsignedInteger('order')->default(0);
+
       $table->timestamps();
+
+      $table->index(['type', 'is_active']);
     });
   }
 

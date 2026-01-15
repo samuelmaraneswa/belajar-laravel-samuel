@@ -14,29 +14,44 @@ class WorkoutCalculator
 
     $baseWeight = $data['weight'] * $genderFactor * $heightFactor * $ageFactor;
 
+    // BODYWEIGHT
     if ($workout->type === 'bodyweight') {
       return [
-        'beginner' => ['sets' => 3, 'reps' => '4–6'],
-        'intermediate' => ['sets' => 4, 'reps' => '6–8'],
-        'advanced' => ['sets' => 4, 'reps' => '8–12'],
+        'beginner' => ['sets' => 3, 'reps' => '6–8'],
+        'intermediate' => ['sets' => 4, 'reps' => '8–12'],
+        'advanced' => ['sets' => 4, 'reps' => '12–15'],
       ];
     }
+
+    // reps berdasarkan movement
+    $reps = $workout->movement === 'isolation'
+      ? ['beginner' => '12–15', 'intermediate' => '12–15', 'advanced' => '15+']
+      : ['beginner' => '8–12', 'intermediate' => '8–12', 'advanced' => '6–10'];
+
+    // level multiplier
+    $levelFactor = [
+      'beginner' => 0.4,
+      'intermediate' => 0.55,
+      'advanced' => 0.7,
+    ];
+
+    $difficulty = $workout->difficulty_factor ?? 1;
 
     return [
       'beginner' => [
         'sets' => 4,
-        'reps' => '8–12',
-        'weight' => round($baseWeight * 0.4),
+        'reps' => $reps['beginner'],
+        'weight' => round($baseWeight * $difficulty * $levelFactor['beginner']),
       ],
       'intermediate' => [
         'sets' => 4,
-        'reps' => '8–12',
-        'weight' => round($baseWeight * 0.55),
+        'reps' => $reps['intermediate'],
+        'weight' => round($baseWeight * $difficulty * $levelFactor['intermediate']),
       ],
       'advanced' => [
         'sets' => 5,
-        'reps' => '15++',
-        'weight' => round($baseWeight * 0.7),
+        'reps' => $reps['advanced'],
+        'weight' => round($baseWeight * $difficulty * $levelFactor['advanced']),
       ],
     ];
   }

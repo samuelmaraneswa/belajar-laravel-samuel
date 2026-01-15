@@ -24,11 +24,13 @@ class MuscleSeeder extends Seeder
         ['name' => 'Hamstring', 'slug' => 'hamstring'],
         ['name' => 'Obliques', 'slug' => 'obliques'],
         ['name' => 'Trapezius', 'slug' => 'trapezius'],
-        ['name' => 'Foreamrs', 'slug' => 'forearms'],
+        ['name' => 'Forearms', 'slug' => 'forearms'],
         ['name' => 'Calves', 'slug' => 'calves'],
         ['name' => 'Abductors', 'slug' => 'abductors'],
         ['name' => 'Adductors', 'slug' => 'adductors'],
         ['name' => 'Necks', 'slug' => 'necks'],
+        ['name' => 'Glutes', 'slug' => 'glutes'],
+        ['name' => 'Lower Back', 'slug' => 'lower-back'],
       ];
 
       foreach ($muscles as $muscle) {

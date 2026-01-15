@@ -21,3 +21,133 @@
 .secondary path {
   fill: #22c55e !important;
 }
+
+@layer components {
+  .anchor-link {
+    @apply relative pb-2 text-sm text-gray-500 transition;
+  }
+
+  .anchor-link.is-active {
+    @apply text-gray-900 font-semibold bg-white;
+  }
+
+  .anchor-link.is-active::after {
+    content: '';
+    @apply absolute left-0 -bottom-px h-0.5 w-full bg-gray-900;
+  }
+}
+
+@layer utilities {
+  /* muscle focus presets */
+  .focus-triceps {
+    --x: 1px;
+    --y: 62.5px;
+  }
+
+  .focus-chest {
+    --x: 1px;
+    --y: 70px;
+  }
+
+  .focus-back {
+    --x: 1px;
+    --y: 54px;
+  }
+
+  .focus-biceps {
+    --x: 1px;
+    --y: 50px;
+  }
+
+  .focus-shoulders {
+    --x: 1px;
+    --y: 78px;
+  }
+
+  .focus-core {
+    --x: 1px;
+    --y: 36px;
+  }
+  
+  .focus-quads {
+    --x: 1px;
+    --y: -6px;
+  }
+
+  .focus-hamstring {
+    --x: 1px;
+    --y: -20px;
+  }
+  
+  .focus-obliques {
+    --x: 1px;
+    --y: 26px;
+  }
+
+  .focus-trapezius {
+    --x: 1px;
+    --y: 76px;
+  }
+
+  .focus-forearms {
+    --x: 30px;
+    --y: 36px;
+  }
+
+  .focus-calves {
+    --x: 1px;
+    --y: -66px;
+  }
+
+  .focus-abductors {
+    --x: 1px;
+    --y: -6px;
+  }
+
+  .focus-adductors {
+    --x: 1px;
+    --y: -6px;
+  }
+
+  .focus-necks {
+    --x: 1px;
+    --y: 86px;
+  }
+
+  .focus-glutes {
+    --x: 1px;
+    --y: 6px;
+  }
+  
+  .focus-lower-back {
+    --x: 1px;
+    --y: 16px;
+  }
+}
+
+/* putihkan muscle sesuai card */
+.muscle-card[data-muscle="triceps"] .triceps * { fill:#fff !important; }
+.muscle-card[data-muscle="chest"] .chest * { fill:#fff !important; }
+.muscle-card[data-muscle="back"] .back * { fill:#fff !important; }
+.muscle-card[data-muscle="biceps"] .biceps * { fill:#fff !important; }
+.muscle-card[data-muscle="shoulders"] .shoulders * { fill:#fff !important; }
+.muscle-card[data-muscle="hamstring"] .hamstring * { fill:#fff !important; }
+.muscle-card[data-muscle="core"] .core * { fill:#fff !important; }
+.muscle-card[data-muscle="quads"] .quads * { fill:#fff !important; }
+.muscle-card[data-muscle="calves"] .calves * { fill:#fff !important; }
+.muscle-card[data-muscle="trapezius"] .trapezius * { fill:#fff !important; }
+.muscle-card[data-muscle="abductors"] .abductors * { fill:#fff !important; }
+.muscle-card[data-muscle="adductors"] .adductors * { fill:#fff !important; }
+.muscle-card[data-muscle="glutes"] .glutes * { fill:#fff !important; }
+.muscle-card[data-muscle="lower-back"] .lower-back * { fill:#fff !important; }
+.muscle-card[data-muscle="forearms"] .forearms * { fill:#fff !important; }
+.muscle-card[data-muscle="obliques"] .obliques * { fill:#fff !important; }
+.muscle-card[data-muscle="necks"] .necks * { fill:#fff !important; }
+
+/* .scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+} */

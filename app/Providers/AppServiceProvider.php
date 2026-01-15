@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\WorkoutContext;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+      View::composer('components.admin.sidebar', function ($view) {
+        $view->with(
+          'workoutContexts',
+          WorkoutContext::orderBy('name')->get()
+        );
+      });
     }
 }

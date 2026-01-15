@@ -6,3 +6,5 @@ import './admin/utils/searchSuggestions';
 import './components/header';
 import './components/admin-header';
 import './components/admin-sidebar';
+import './components/instructions'
+import './components/anchor-menu'

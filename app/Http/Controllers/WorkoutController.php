@@ -49,4 +49,5 @@ class WorkoutController extends Controller
 
     return view('admin.workouts.index', compact('workouts'));
   }
+
 }

@@ -11,16 +11,16 @@ return new class extends Migration
      */
   public function up(): void
   {
-    Schema::table('workouts', function (Blueprint $table) {
-      $table->dropColumn(['is_custom', 'custom_rules']);
+    Schema::create('workout_contexts', function (Blueprint $table) {
+      $table->id();
+      $table->string('name');          // Gym, Home, Calisthenics
+      $table->string('slug')->unique(); // gym, home, calisthenics
+      $table->timestamps();
     });
   }
 
   public function down(): void
   {
-    Schema::table('workouts', function (Blueprint $table) {
-      $table->boolean('is_custom')->default(false);
-      $table->json('custom_rules')->nullable();
-    });
+    Schema::dropIfExists('workout_contexts');
   }
 };

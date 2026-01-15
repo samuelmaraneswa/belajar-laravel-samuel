@@ -1,109 +1,61 @@
 <x-admin-layout>
-  <div class="max-w-7xl mx-auto font-hanken">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
 
-    <x-alert type="success" />
+    {{-- ALL WORKOUTS --}}
+    <x-admin.stat-card
+      title="All Workouts"
+      :value="$totalWorkouts"
+      icon="dumbbell"
+      color="indigo"
+      href="{{ route('admin.workout.list') }}"
+    />
 
-    <div class="flex justify-between items-center mb-6">
-      <div class="hidden sm:block">
-        <x-admin.page-title title="Workouts" />
-      </div>
-      
-      <x-form action="{{url('/admin/workouts')}}" method="GET" class="flex-1">
-        <div class="flex items-center mx-4 relative">
-        
-          {{-- INPUT WRAPPER --}}
-          <x-input inline id="search" name="search" value="{{request('search')}}" placeholder="Cari workout..." autocomplete="off" :unstyled="true" class="w-full h-9 px-4 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200" />
+    @php
+      $contextStyles = [
+        'gym-workout' => [
+          'icon' => 'dumbbell',
+          'color' => 'green',
+        ],
+        'home-workout' => [
+          'icon' => 'house',
+          'color' => 'yellow',
+        ],
+        'calisthenics' => [
+          'icon' => 'person-running',
+          'color' => 'red',
+        ],
+        'gymnastic' => [
+          'icon' => 'person-circle-check',
+          'color' => 'red',
+        ],
+        'cardiovaskular' => [
+          'icon' => 'heart-pulse',
+          'color' => 'red',
+        ],
+        'mobility' => [
+          'icon' => 'arrows-rotate',
+          'color' => 'red',
+        ],
+      ];
+    @endphp
 
-          {{-- Clear icon --}}
-          <i
-            id="searchIcon"
-            class="fa-solid fa-magnifying-glass absolute right-3
-                  text-gray-400 cursor-pointer">
-          </i>
+    {{-- CONTEXT-BASED WORKOUTS --}}
+    @foreach ($contexts as $context)
+      @php
+        $style = $contextStyles[$context->slug] ?? [
+          'icon' => 'dumbbell',
+          'color' => 'indigo',
+        ];
+      @endphp
 
-          {{-- Suggestions --}}
-          <x-admin.search-suggestions id="suggestions" />
-
-        </div>
-      </x-form>
-
-      <a href={{route('admin.workout.create')}}>
-        <x-button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 hover:text-white/90">
-          <i class="fa fa-plus text-lg"></i> 
-          <span class="hidden sm:inline pl-1 text-sm">Tambah</span>
-        </x-button>
-      </a>
-    </div>
-
-    @if ($workouts->isEmpty())
-      <div class="text-center text-gray-500 py-20">
-        Belum ada workout. Tambahkan workout pertama.
-      </div>
-    @else
-      <div id="workoutGrid">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
-
-          @foreach ($workouts as $workout)
-            {{-- CARD --}}
-            <x-admin.card class="p-4">
-
-              {{-- TITLE --}}
-              <h3 class="font-bold text-xl text-gray-800 mb-2">
-                {{ $loop->iteration }}. {{ $workout->title }}
-              </h3>
-
-              {{-- IMAGE --}}
-              <div class="h-56 bg-gray-100 rounded-lg overflow-hidden mb-3">
-                @if ($workout->image_thumb)
-                  <img src="{{ asset('storage/'.$workout->image_thumb) }}"
-                      class="w-full h-full object-cover">
-                @else
-                  <div class="flex items-center justify-center h-full text-gray-400">
-                    No Image
-                  </div>
-                @endif
-              </div>
-
-              {{-- CONTENT (FLEX-1) --}}
-              <div class="flex-1">
-                {{-- CATEGORY --}}
-                <div class="flex items-center gap-2 mb-2">
-                  <p class="text-sm text-gray-500">Muscle target:</p>
-                  <span class="inline-block text-sm bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
-                    {{ $workout->category->name ?? '-' }}
-                  </span>
-                </div>
-
-                {{-- DESCRIPTION --}}
-                <p class="text-gray-600">
-                  {{ \Illuminate\Support\Str::limit($workout->description ?? 'Tidak ada deskripsi', 200) }}
-                </p>
-              </div>
-
-              {{-- ACTION BUTTONS (AUTO BOTTOM) --}}
-              <div class="flex gap-3 mt-auto pt-4 text-sm">
-                <a href="{{route('admin.workout.show', $workout)}}"
-                  class="hover:bg-indigo-600 rounded bg-indigo-500 px-3 py-1.5 text-white">
-                  View
-                </a>
-                <a href="#"
-                  class="hover:bg-green-600 rounded bg-green-500 px-3 py-1.5 text-white">
-                  Edit
-                </a>
-                <a href="#"
-                  class="hover:bg-red-600 rounded bg-red-500 px-3 py-1.5 text-white">
-                  Delete
-                </a>
-              </div>
-
-            </x-admin.card>
-          @endforeach
-
-        </div>
-      </div> 
-      
-      <div id="pagination" class="mt-8 flex justify-center"></div>
-    @endif
+      <x-admin.stat-card
+        :title="$context->name"
+        :value="$context->workouts_count"
+        :icon="$style['icon']"
+        :color="$style['color']"
+        href="{{ route('admin.workout.list', ['context' => $context->slug]) }}"
+      />
+    @endforeach
 
   </div>
 </x-admin-layout>

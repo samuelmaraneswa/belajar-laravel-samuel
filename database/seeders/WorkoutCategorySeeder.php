@@ -34,6 +34,14 @@ class WorkoutCategorySeeder extends Seeder
           'name' => 'Core',
           'description' => 'Latihan otot perut dan stabilitas tubuh'
         ],
+        [
+          'name' => 'Full Body',
+          'description' => 'Latihan yang melatih hampir semua kelompok otot utama (kaki, punggung, dada, bahu, lengan, perut) dalam satu sesi latihan, ideal untuk pemula atau yang punya waktu terbatas karena efisien, meningkatkan pembakaran kalori, dan membantu belajar teknik dasar dengan gerakan majemuk (compound movements) seperti squat, deadlift, dan push-up'
+        ],
+        [
+          'name' => 'Mobility',
+          'description' => 'Latihan yang berfokus pada peningkatan rentang gerak sendi (range of motion) secara dinamis dan terkontrol, berbeda dengan fleksibilitas yang hanya meregangkan otot'
+        ],
       ];
 
       foreach ($categories as $cat) {

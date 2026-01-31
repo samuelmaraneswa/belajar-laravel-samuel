@@ -151,3 +151,33 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 } */
+
+.wizard-option {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.wizard-option:hover {
+  background: #f3f4f6;
+}
+
+.wizard-input {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.wizard-next {
+  width: 100%;
+  background: #111827;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+}

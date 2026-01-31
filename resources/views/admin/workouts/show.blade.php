@@ -153,7 +153,7 @@
 
   {{-- Sets & Reps Start --}}
   <section id="sets-reps" class="my-8">
-    <h3 class="text-xl font-bold mt-8 mb-4 text-gray-600">Training Recommendation</h3>
+    <h3 class="text-xl font-bold mt-8 mb-4 text-gray-600">Sets & Reps Calculation</h3>
   
     <x-form action="{{route('admin.workout.calculate', $workout)}}" id="calculateForm" >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -221,9 +221,9 @@
     }
     
     window.workoutMeta = {
-      type: '{{ $workout->type }}',              // machine | bodyweight | dumbbell | barbell
+      type: '{{ $workout->type }}',               // machine | bodyweight | assisted | dumbbell | barbell
       movement: '{{ $workout->movement }}',      // compound | isolation
-      difficulty: {{ $workout->difficulty }},    // contoh: 1, 0.7, 0.35
+      difficulty_factor: {{ $workout->difficulty_factor ?? 1 }},   // contoh: 1, 0.7, 0.35
     } 
     </script>
 

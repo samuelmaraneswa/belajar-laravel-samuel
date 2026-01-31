@@ -8,6 +8,11 @@
 
   <nav class="p-4 space-y-1">
 
+     <x-user.nav-link href="{{ url('/') }}" target="_blank">
+      <i class="fa-solid fa-globe w-4"></i>
+      <span>View Website</span>
+    </x-user.nav-link>
+
     <x-admin.nav-link href="/admin" :active="request()->is('admin')">
       Dashboard
     </x-admin.nav-link>
@@ -19,29 +24,22 @@
     {{-- WORKOUTS --}}
     <div class="">
 
-      <div class="flex items-center justify-between rounded bg-gray-100 hover:bg-gray-100">
-
-        {{-- TEXT = LINK KE INDEX --}}
+      <div class="flex items-center justify-between rounded {{ request()->routeIs('admin.workout.*') ? 'bg-gray-100' : 'hover:bg-gray-100' }}">
         <x-admin.nav-link
           href="{{ route('admin.workout.index') }}"
-          :active="request()->routeIs('admin.workout.*')"
+          :active="false"
           class="flex-1"
         >
           Workouts
         </x-admin.nav-link>
 
-        {{-- ARROW = TOGGLE SUBMENU --}}
         <button
           type="button"
           data-submenu-toggle="workouts"
-          class="ml-2 p-1 cursor-pointer"
+          class="ml-2 p-2 cursor-pointer"
         >
-          <i
-            data-submenu-icon
-            class="fa-solid fa-chevron-down text-xs transition-transform"
-          ></i>
+          <i data-submenu-icon class="fa-solid fa-chevron-down text-xs transition-transform"></i>
         </button>
-
       </div>
 
       {{-- SUBMENU --}}

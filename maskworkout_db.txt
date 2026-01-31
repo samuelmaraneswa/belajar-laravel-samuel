@@ -1,0 +1,7 @@
+maskworkout_db
+workout_user
+S4mworkout
+
+------emailbox------
+email:info@maskworkout.site
+pass:M4$kworkout

@@ -1,3 +1,16 @@
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function highlightText(text, keyword) {
+  if (!keyword) return text
+
+  const escaped = escapeRegex(keyword)
+  const regex = new RegExp(`(${escaped})`, 'gi')
+
+  return text.replace(regex, '<strong>$1</strong>')
+}
+
 export function initSearchSuggestions({
   input,
   suggestions,
@@ -12,6 +25,12 @@ export function initSearchSuggestions({
     items.forEach((el, i) => {
       el.classList.toggle('bg-gray-100', i === activeIndex)
     })
+
+    if (activeIndex >= 0) {
+      items[activeIndex].scrollIntoView({
+        block: 'nearest',
+      })
+    }
   }
 
   input.addEventListener('input', async function () {
@@ -30,22 +49,26 @@ export function initSearchSuggestions({
     controller = new AbortController()
 
     try{
-      const res = await fetch(endpoint + '?q=' + encodeURIComponent(q), {
-        signal: controller.signal
-      })
+      const res = await fetch(
+        endpoint + '&q=' + encodeURIComponent(q),
+        { signal: controller.signal }
+      )
 
       const data = await res.json()
 
       suggestions.innerHTML = data.length
         ? data.map(item =>
-            `<li class="list-none px-4 py-2 cursor-pointer hover:bg-gray-100">${item}</li>`
+            `<li class="list-none px-4 py-2 cursor-pointer hover:bg-gray-100 whitespace-nowrap"
+                data-value="${item}">
+              ${highlightText(item, q)}
+            </li>`
           ).join('')
         : `<li class="list-none px-4 py-2 text-gray-400">Data tidak ada</li>`
 
       suggestions.classList.remove('hidden')
 
       Array.from(suggestions.children).forEach((li, i) => {
-        li.addEventListener('click', () => onSelect(li.textContent))
+        li.addEventListener('click', () => onSelect(li.dataset.value))
       })
     }catch(err){
       if (err.name !== 'AbortError') {
@@ -71,14 +94,14 @@ export function initSearchSuggestions({
     }
 
     if (activeIndex >= 0 && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
-      input.value = items[activeIndex].textContent // ✅ input ikut berubah
+      input.value = items[activeIndex].dataset.value
       setActive(items)
       setTimeout(() => (isNavigating = false), 0)
     }
 
     if (e.key === 'Enter' && activeIndex >= 0) {
       e.preventDefault()
-      onSelect(items[activeIndex].textContent)
+      onSelect(items[activeIndex].dataset.value)
     }
 
     if (e.key === 'Escape') {

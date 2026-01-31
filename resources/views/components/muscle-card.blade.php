@@ -1,17 +1,32 @@
 @props(['name','slug'])
 
 @php
-  $frontMuscles = ['chest','core','obliques','quads','abductors','adductors','biceps','obliques','forearms','necks','shoulders'];
+  $isActive = request('muscle') === $slug;
+
+  $frontMuscles = [
+    'chest','core','obliques','quads','abductors',
+    'adductors','biceps','forearms','necks','shoulders'
+  ];
+
+  $query = array_filter([
+    'muscle'  => $slug,
+    'context' => request('context'),
+    'search'  => request('search'),
+  ]);
 @endphp
 
-<a href="?muscle={{ $slug }}"
+<a href="{{ url('/admin/workouts/list') . '?' . http_build_query($query) }}"
    class="group transition flex flex-col items-center w-20 shrink-0">
 
-  <div class="h-20 w-20 overflow-hidden mb-2 bg-gray-300 border rounded-lg
-              flex items-center justify-center
-              focus-{{ $slug }}
-              transition
-              group-hover:shadow-md">
+  <div
+    class="h-20 w-20 overflow-hidden ml-2 my-2
+           bg-gray-300 border rounded-lg
+           flex items-center justify-center
+           focus-{{ $slug }}
+           transition
+           group-hover:ring-2 ring-indigo-500
+           {{ $isActive ? 'ring-2 ring-indigo-500' : '' }}"
+  >
 
     <div class="muscle-card relative" data-muscle="{{ $slug }}">
       <div class="relative
@@ -28,7 +43,11 @@
 
   </div>
 
-  <p class="text-xs font-medium text-gray-700 group-hover:text-indigo-600">
+  <p class="text-xs font-medium
+    {{ $isActive
+        ? 'text-indigo-700 font-bold'
+        : 'text-gray-700 group-hover:text-indigo-600'
+    }}">
     {{ $name }}
   </p>
 </a>

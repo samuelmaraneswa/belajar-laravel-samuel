@@ -16,21 +16,22 @@ document.addEventListener('DOMContentLoaded', () => {
     input,
     form,
     onSearch(value) {
-      fetch(`/admin/workouts/search?search=${encodeURIComponent(value)}`)
-        .then(res => res.text())
-        .then(html => {
-          document.getElementById('workoutGrid').innerHTML = html
-        })
+      window.workoutState.search = value
+      window.loadWorkouts(1)
     }
   })
+
+  const urlParams = new URLSearchParams(window.location.search)
+  const muscle = urlParams.get('muscle') || ''
 
   initSearchSuggestions({
     input,
     suggestions,
-    endpoint: '/admin/workouts/suggest',
+    endpoint: `/admin/workouts/suggest?context=${window.workoutContext ?? ''}&muscle=${muscle}`,
     onSelect(value) {
       suggestions.classList.add('hidden')
       input.triggerSearch(value)
     }
   })
+
 })

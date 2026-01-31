@@ -5,25 +5,116 @@
 
     {{-- Top Section --}}
     <div class="flex justify-between items-center mb-6">
+      @php
+        $context = request('context');
+        $cleanContext = $context
+          ? str_replace('-workout', '', $context)
+          : null;
+
+        $title = $cleanContext
+          ? Str::title(str_replace('-', ' ', $cleanContext)) . ' Workouts'
+          : 'All Workouts';
+
+        $titleUrl = $context
+          ? url('/admin/workouts/list?context=' . $context)
+          : url('/admin/workouts/list');
+      @endphp
+
       <div class="hidden sm:block">
-        <x-admin.page-title title="All Workouts" />
+        <a href="{{ $titleUrl }}">
+          <x-admin.page-title :title="$title" class="text-indigo-700 hover:underline" />
+        </a>
+      </div>
+
+      {{-- SEARCH --}}
+      <x-form action="javascript:void(0)" class="flex-1">
+        <div class="flex items-center mx-4 relative">
+          <x-input
+            inline
+            id="search"
+            name="search"
+            placeholder="Cari workout..."
+            autocomplete="off"
+            :unstyled="true"
+            class="w-full h-9 px-4 border rounded-lg"
+          />
+
+          <i id="searchIcon"
+             class="fa-solid fa-magnifying-glass absolute right-3
+                    text-gray-400 cursor-pointer"></i>
+
+          <x-admin.search-suggestions
+            id="suggestions"
+            class="absolute z-50 w-full bg-white border rounded-lg shadow
+                   max-h-50 overflow-y-auto hidden" />
+        </div>
+      </x-form>
+
+      <a href="{{ route('admin.workout.create') }}">
+        <x-button class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
+          <i class="fa fa-plus"></i>
+          <span class="hidden sm:inline pl-1 text-sm">Tambah</span>
+        </x-button>
+      </a>
+    </div>
+
+    {{-- Muscle Groups --}}
+    <x-muscle-groups :muscles="$muscles" />
+
+    {{-- GRID (AJAX INJECT) --}}
+    <div id="workoutGrid"></div>
+
+    {{-- PAGINATION (AJAX INJECT) --}}
+    <div id="pagination" class="mt-8 flex justify-center"></div>
+
+  </div>
+</x-admin-layout>
+
+<script>
+  window.workoutContext = "{{ request('context') }}";
+</script>
+
+{{-- 
+<x-admin-layout>
+  <div class="max-w-7xl mx-auto font-hanken">
+
+    <x-alert type="success" />
+
+    <div class="flex justify-between items-center mb-6">
+      @php
+        $context = request('context'); // gym | home | null
+        $cleanContext = $context
+          ? str_replace('-workout', '', $context)
+          : null;
+
+        $title = $cleanContext
+          ? Str::title(str_replace('-', ' ', $cleanContext)) . ' Workouts'
+          : 'All Workouts';
+
+        $titleUrl = $context
+          ? url('/admin/workouts/list?context=' . $context)
+          : url('/admin/workouts/list');
+      @endphp
+
+      <div class="hidden sm:block">
+        <a href="{{ $titleUrl }}">
+          <x-admin.page-title :title="$title" class="text-indigo-700 hover:underline" />
+        </a>
       </div>
 
       <x-form action="{{url('/admin/workouts')}}" method="GET" class="flex-1">
         <div class="flex items-center mx-4 relative">
 
-          {{-- INPUT WRAPPER --}}
           <x-input inline id="search" name="search" value="{{request('search')}}" placeholder="Cari workout..." autocomplete="off" :unstyled="true" class="w-full h-9 px-4 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200" />
 
-          {{-- Clear icon --}}
           <i
             id="searchIcon"
             class="fa-solid fa-magnifying-glass absolute right-3
                   text-gray-400 cursor-pointer">
           </i>
 
-          {{-- Suggestions --}}
-          <x-admin.search-suggestions id="suggestions" />
+          <x-admin.search-suggestions id="suggestions" class="absolute z-50 w-full bg-white border rounded-lg shadow
+         max-h-50 overflow-y-auto hidden" />
 
         </div>
       </x-form>
@@ -36,7 +127,6 @@
       </a>
     </div>
 
-    {{-- Muscle Groups --}}
     <x-muscle-groups :muscles="$muscles" />
 
     @if ($workouts->isEmpty())
@@ -48,15 +138,12 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
 
         @foreach ($workouts as $workout)
-        {{-- CARD --}}
         <x-admin.card class="p-4">
 
-          {{-- TITLE --}}
           <h3 class="font-bold text-xl text-gray-800 mb-2">
             {{ $loop->iteration }}. {{ Str::title($workout->title) }}
           </h3>
 
-          {{-- IMAGE --}}
           <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden mb-3">
             @if ($workout->image_thumb)
             <img src="{{ asset('storage/'.$workout->image_thumb) }}"
@@ -68,9 +155,7 @@
             @endif
           </div>
 
-          {{-- CONTENT (FLEX-1) --}}
           <div class="flex-1">
-            {{-- CATEGORY --}}
             <div class="flex items-center gap-2 mb-2">
               <p class="text-sm text-gray-500">Category workout:</p>
               <span class="inline-block text-sm bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
@@ -78,29 +163,27 @@
               </span>
             </div>
 
-            {{-- DESCRIPTION --}}
             <p class="text-gray-600">
               {{ \Illuminate\Support\Str::limit($workout->description ?? 'Tidak ada deskripsi', 200) }}
             </p>
           </div>
 
-          {{-- ACTION BUTTONS (AUTO BOTTOM) --}}
           <div class="flex gap-3 mt-auto pt-4 text-sm">
-            <a href="{{route('admin.workout.show', $workout->slug)}}"
+            <a href="{{ route('admin.workout.show', $workout->slug) }}?context={{ request('context') }}"
               class="hover:bg-indigo-600 rounded bg-indigo-500 px-3 py-1.5 text-white">
               View
             </a>
-            <a href="{{ route('admin.workouts.edit', $workout) }}"
+            <a href="{{ route('admin.workout.edit', $workout) }}"
               class="hover:bg-green-600 rounded bg-green-500 px-3 py-1.5 text-white">
               Edit
             </a>
-            <form action="{{ route('admin.workouts.destroy', $workout) }}"
+            <form action="{{ route('admin.workout.destroy', $workout) }}"
                   method="POST"
                   onsubmit="return confirm('Yakin hapus workout ini?')">
               @csrf
               @method('DELETE')
               <button type="submit"
-                class="hover:bg-red-600 rounded bg-red-500 px-3 py-1.5 text-white">
+                class="hover:bg-red-600 rounded bg-red-500 px-3 py-1.5 text-white cursor-pointer">
                 Delete
               </button>
             </form>
@@ -117,3 +200,8 @@
 
   </div>
 </x-admin-layout>
+
+<script>
+  window.workoutContext = "{{ request('context') }}";
+</script>
+--}}

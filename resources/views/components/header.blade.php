@@ -20,6 +20,7 @@
       <x-nav-link href="/workouts" :active="request()->is('workouts*')">Workouts</x-nav-link>
       <x-nav-link href="/artikels" :active="request()->is('artikels*')">Artikels</x-nav-link>
       <x-nav-link href="/meals" :active="request()->is('meals*')">Meals</x-nav-link>
+      <x-nav-link href="/calorie" :active="request()->is('calorie*')">Calorie</x-nav-link>
     </nav>
 
     {{-- USER (selalu kanan) --}}
@@ -55,4 +56,5 @@
   <x-nav-link href="/workouts" class="block" :active="request()->is('workouts*')">Workouts</x-nav-link>
   <x-nav-link href="/artikels" class="block" :active="request()->is('artikels*')">Artikels</x-nav-link>
   <x-nav-link href="/meals" class="block" :active="request()->is('meals*')">Meals</x-nav-link>
+  <x-nav-link href="/calorie" class="block" :active="request()->is('calorie*')">Calorie</x-nav-link>
 </div>

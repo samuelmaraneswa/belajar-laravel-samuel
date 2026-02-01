@@ -5,6 +5,12 @@
         class="max-w-md mx-auto mt-16 space-y-12">
     @csrf
 
+    @if (session('error'))
+      <div id="programError" class="mb-4 p-3 text-sm text-red-700 bg-red-100 rounded">
+        {{ session('error') }}
+      </div>
+    @endif
+
     {{-- HIDDEN STATE --}}
     <input type="hidden" name="goal">
     <input type="hidden" name="context">
@@ -18,10 +24,10 @@
     <section data-step="goal">
       <h1 class="text-2xl font-bold text-center mb-6">What is your goal?</h1>
       <div class="grid gap-4">
-        <button type="button" data-value="fat_loss" class="wizard-option">Fat Loss</button>
+        <button type="button" data-value="fat_loss" data-disabled="1" class="wizard-option">Fat Loss</button>
         <button type="button" data-value="muscle_gain" class="wizard-option">Muscle Gain</button>
-        <button type="button" data-value="calisthenics" class="wizard-option">Calisthenics</button>
-        <button type="button" data-value="endurance" class="wizard-option">Endurance</button>
+        <button type="button" data-value="calisthenics" data-disabled="1" class="wizard-option">Calisthenics</button>
+        <button type="button" data-value="endurance" data-disabled="1" class="wizard-option">Endurance</button>
       </div>
     </section>
 
@@ -30,8 +36,8 @@
       <h1 class="text-2xl font-bold text-center mb-6">Where will you train?</h1>
       <div class="grid gap-4">
         <button type="button" data-value="gym" class="wizard-option">Gym</button>
-        <button type="button" data-value="home" class="wizard-option">Home</button>
-        <button type="button" data-value="calisthenics" class="wizard-option">Calisthenics</button>
+        <button type="button" data-value="home" data-disabled="1" class="wizard-option">Home</button>
+        <button type="button" data-value="calisthenics" data-disabled="1" class="wizard-option">Calisthenics</button>
       </div>
     </section>
 
@@ -46,21 +52,24 @@
 
     {{-- STEP 4 : AGE --}}
     <section data-step="age" class="hidden">
-      <h1 class="text-2xl font-bold text-center mb-6">Your age</h1>
+      <h1 class="text-2xl font-bold text-center mb-4">Your age</h1>
+      <p class="text-sm text-gray-500 text-center mb-2"> Age range: 13–70 years </p>
       <input type="number" class="wizard-input" data-input="age" placeholder="Age (years)">
       <button type="button" class="wizard-next">Continue</button>
     </section>
 
     {{-- STEP 5 : HEIGHT --}}
     <section data-step="height" class="hidden">
-      <h1 class="text-2xl font-bold text-center mb-6">Your height</h1>
+      <h1 class="text-2xl font-bold text-center mb-4">Your height</h1>
+      <p class="text-sm text-gray-500 text-center mb-2"> Height range: 120–220 cm </p>
       <input type="number" class="wizard-input" data-input="height" placeholder="Height (cm)">
       <button type="button" class="wizard-next">Continue</button>
     </section>
 
     {{-- STEP 6 : WEIGHT --}}
     <section data-step="weight" class="hidden">
-      <h1 class="text-2xl font-bold text-center mb-6">Your weight</h1>
+      <h1 class="text-2xl font-bold text-center mb-4">Your weight</h1>
+      <p class="text-sm text-gray-500 text-center mb-2"> Weight range: 30–200 kg </p>
       <input type="number" class="wizard-input" data-input="weight" placeholder="Weight (kg)">
       <button type="button" class="wizard-next">Continue</button>
     </section>

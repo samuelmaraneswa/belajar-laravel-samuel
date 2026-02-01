@@ -227,4 +227,23 @@ class ProgramTemplates
       ],
     ];
   }
+
+  public static function resolve(array $data): ?array
+  {
+    // MUSCLE GAIN - GYM - BEGINNER (RANGE SPESIFIK)
+    if (
+      $data['goal'] === 'muscle_gain' &&
+      $data['context'] === 'gym' &&
+      in_array($data['gender'], ['male', 'female']) &&
+      $data['age'] >= 20 && $data['age'] <= 35 &&
+      $data['height'] >= 155 && $data['height'] <= 175 &&
+      $data['weight'] >= 50 && $data['weight'] <= 70 &&
+      $data['level'] === 'beginner'
+    ) {
+      return self::muscleGainBeginner();
+    }
+
+    // BELUM ADA TEMPLATE LAIN
+    return null;
+  }
 }

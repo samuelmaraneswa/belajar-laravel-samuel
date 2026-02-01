@@ -110,10 +110,20 @@ Route::post('/email/verification-notification', function (Request $request) {
   return back()->with('success', 'Link verifikasi dikirim ulang.');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
-
 // ======
 // USER
 // ======
 Route::get('/dashboard', [UserDashboardController::class, 'index'])
-  ->middleware(['auth', 'verified'])
-  ->name('user.dashboard');
+->middleware(['auth', 'verified'])
+->name('user.dashboard');
+
+// =========
+// PROGRAMS 
+// =========
+Route::get('/programs/{program}', [ProgramController::class, 'show'])
+  ->name('programs.show');
+
+Route::get('/programs', [ProgramController::class, 'index'])
+  ->name('programs.index');
+
+Route::get('/phpinfo', fn() => phpinfo());

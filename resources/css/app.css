@@ -158,10 +158,11 @@
   padding: 1rem;
   font-weight: 600;
   text-align: center;
+  background: #f3f4f6;
 }
 
 .wizard-option:hover {
-  background: #f3f4f6;
+  background: #eee;
 }
 
 .wizard-input {
@@ -180,4 +181,9 @@
   padding: 0.75rem;
   border-radius: 0.75rem;
   font-weight: 600;
+}
+
+.wizard-option[data-disabled="1"] {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

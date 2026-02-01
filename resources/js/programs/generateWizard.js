@@ -1,5 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  const rules = {
+    age:    { min: 13, max: 70 },
+    height: { min: 120, max: 220 },
+    weight: { min: 30,  max: 200 },
+  };
+
+  function isValid(step, value) {
+    if (!rules[step]) return true;
+    const { min, max } = rules[step];
+    const num = Number(value);
+    return num >= min && num <= max;
+  }
+
   const state = {
     goal: null,
     context: null,
@@ -38,7 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
     stepEl.classList.remove('hidden');
     currentStepIndex = index;
 
-    // 🔥 AUTO FOCUS INPUT (JIKA ADA)
     setTimeout(() => {
       const input = stepEl.querySelector('.wizard-input');
       if (input) input.focus();
@@ -46,14 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ============================
-  // HISTORY API
+  // HISTORY
   // ============================
   function pushHistory(index) {
     history.pushState(
-      {
-        stepIndex: index,
-        state: { ...state }
-      },
+      { stepIndex: index, state: { ...state } },
       '',
       location.pathname
     );
@@ -73,10 +82,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ============================
-  // OPTION BUTTONS
+  // OPTION BUTTONS (FIX DISABLED)
   // ============================
   document.querySelectorAll('.wizard-option').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+
+      // ⛔ BLOCK TOTAL JIKA DISABLED
+      if (btn.dataset.disabled === '1') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
       const step = btn.closest('[data-step]').dataset.step;
       state[step] = btn.dataset.value;
 
@@ -94,28 +111,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // ============================
   document.querySelectorAll('.wizard-input').forEach(input => {
 
-    // ENTER = NEXT
     input.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter') return;
 
       e.preventDefault();
       e.stopPropagation();
 
-      const stepSection = input.closest('[data-step]');
-      const step = stepSection.dataset.step;
-
+      const step = input.closest('[data-step]').dataset.step;
       if (!input.value) return;
+
+      if (!isValid(step, input.value)) {
+        alert(`Invalid ${step}.`);
+        return;
+      }
 
       state[step] = input.value;
       goNextStep();
     });
 
-    // CLICK CONTINUE BUTTON
-    const btn = input.closest('[data-step]')?.querySelector('.wizard-next');
-    if (btn) {
-      btn.addEventListener('click', () => {
+    const nextBtn = input.closest('[data-step]')?.querySelector('.wizard-next');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
         if (!input.value) return;
-        const step = btn.closest('[data-step]').dataset.step;
+
+        const step = nextBtn.closest('[data-step]').dataset.step;
+        if (!isValid(step, input.value)) {
+          alert(`Invalid ${step}.`);
+          return;
+        }
+
         state[step] = input.value;
         goNextStep();
       });
@@ -123,14 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ============================
-  // SUBMIT FINAL
+  // SUBMIT
   // ============================
   function submitForm() {
     Object.keys(state).forEach(key => {
       const hidden = form.querySelector(`input[name="${key}"]`);
       if (hidden) hidden.value = state[key];
     });
-
     form.submit();
   }
 
@@ -144,4 +167,19 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
   showStep(0);
+
+  // const errorBox = document.getElementById('programError');
+  // if (errorBox) {
+  //   document.querySelectorAll('.wizard-option, .wizard-input').forEach(el => {
+  //     el.addEventListener('click', () => errorBox.remove());
+  //   });
+  // }
+  const errorBox = document.getElementById('programError');
+  if (errorBox) {
+    setTimeout(() => {
+      errorBox.style.transition = 'opacity 0.5s';
+      errorBox.style.opacity = '0';
+      setTimeout(() => errorBox.remove(), 500);
+    }, 3000);
+  }
 });

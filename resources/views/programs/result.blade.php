@@ -1,51 +1,3 @@
-{{-- <x-user.layout>
-  <div class="max-w-4xl mx-auto mt-10">
-
-    <h1 class="text-2xl font-bold mb-2">
-      Your 30 Days Workout Program
-    </h1>
-
-    <p class="text-sm text-gray-600 mb-6">
-      Goal: <b>{{ str_replace('_',' ', $profile['goal']) }}</b> ·
-      Level: <b>{{ ucfirst($profile['level']) }}</b>
-    </p>
-
-    <div class="space-y-6">
-      @foreach ($program as $day => $data)
-        <div class="border rounded-lg p-5 bg-white">
-
-          <h2 class="font-bold text-lg mb-3">
-            Day {{ $day }}
-          </h2>
-
-          @if ($data['rest'])
-            <p class="text-gray-500 italic">Rest Day</p>
-          @else
-            <ul class="space-y-3">
-              @foreach ($data['workouts'] as $item)
-                <li class="border rounded p-3 bg-gray-50">
-                  <p class="font-semibold text-gray-800">
-                    {{ $item['workout']->title }}
-                  </p>
-
-                  <p class="text-sm text-gray-600">
-                    Sets: {{ $item['plan']['sets'] }} ·
-                    Reps: {{ $item['plan']['reps'] }}
-                    @if(isset($item['plan']['weight']))
-                      · Weight: {{ $item['plan']['weight'] }} kg
-                    @endif
-                  </p>
-                </li>
-              @endforeach
-            </ul>
-          @endif
-
-        </div>
-      @endforeach
-    </div>
-
-  </div>
-</x-user.layout> --}}
 <x-user.layout>
   <div class="max-w-4xl mx-auto mt-10">
 
@@ -53,47 +5,45 @@
       Your 30 Days Workout Program
     </h1>
 
-    <p class="text-sm text-gray-600 mb-6">
+    <p class="text-sm text-gray-600 mb-3">
       Goal: <b>{{ str_replace('_',' ', $program->goal) }}</b> ·
       Level: <b>{{ ucfirst($program->level) }}</b>
     </p>
 
-    <div class="space-y-6">
+    {{-- PROGRESS BAR (0% for now) --}}
+    <div class="mb-8">
+      <div class="flex justify-between text-xs text-gray-500 mb-1">
+        <span>Progress</span>
+        <span>0%</span>
+      </div>
+      <div class="h-2 w-full rounded-full bg-gray-200 overflow-hidden">
+        <div class="h-full bg-gray-800" style="width: 0%"></div>
+      </div>
+    </div>
+
+    {{-- DAYS LIST --}}
+    <div class="grid gap-3">
       @foreach ($program->days->sortBy('day') as $day)
-        <div class="border rounded-lg p-5 bg-white">
+        <a href="{{ route('programs.days.show', [$program, $day->day]) }}"
+           class="flex items-center justify-between
+                  border rounded-lg px-5 py-4 bg-white
+                  hover:bg-gray-50 transition">
 
-          <h2 class="font-bold text-lg mb-3">
-            Day {{ $day->day }}
-          </h2>
+          <div>
+            <p class="font-semibold">
+              Day {{ $day->day }}
+            </p>
 
-          @if ($day->is_rest)
-            <p class="text-gray-500 italic">Rest Day</p>
-          @else
-            <ul class="space-y-3">
-              @foreach ($day->workouts->sortBy('order') as $w)
-                <li class="border rounded p-3 bg-gray-50">
-                  <p class="font-semibold text-gray-800">
-                    {{ $w->workout->title }}
-                  </p>
+            <p class="text-sm text-gray-500">
+              {{ $day->is_rest ? 'Rest Day' : ($day->title ?? 'Workout Day') }}
+            </p>
+          </div>
 
-                  <p class="text-sm text-gray-600">
-                    Sets: {{ $w->sets }} ·
-                    Reps: {{ $w->reps }}
-
-                    @if ($w->weight)
-                      · Weight: {{ $w->weight }} kg
-                    @endif
-
-                    @if ($w->duration)
-                      · {{ $w->duration }} min
-                    @endif
-                  </p>
-                </li>
-              @endforeach
-            </ul>
-          @endif
-
-        </div>
+          {{-- STATUS ICON (future) --}}
+          <span class="text-gray-400 text-xl">
+            →
+          </span>
+        </a>
       @endforeach
     </div>
 

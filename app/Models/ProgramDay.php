@@ -9,6 +9,7 @@ class ProgramDay extends Model
   protected $fillable = [
     'program_id',
     'day',
+    'title',
     'is_rest',
   ];
 

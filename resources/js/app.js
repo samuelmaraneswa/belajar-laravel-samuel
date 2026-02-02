@@ -12,3 +12,4 @@ import './admin/utils/pagination'
 import './admin/workouts/workout-list'
 import './programs/generateWizard'
 import './components/user-sidebar'
+import './programs/workout-counter';

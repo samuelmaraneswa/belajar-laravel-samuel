@@ -2,29 +2,56 @@
 
 namespace Database\Seeders;
 
-use App\Models\WorkoutContext;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class WorkoutContextsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
   public function run(): void
   {
-    $contexts = [
-      'Gym',
-      'Home',
-      'Calisthenics',
-    ];
-
-    foreach ($contexts as $name) {
-      WorkoutContext::firstOrCreate(
-        ['slug' => Str::slug($name)],
-        ['name' => $name]
-      );
-    }
+    DB::table('workout_contexts')->insert([
+      [
+        'id' => 1,
+        'name' => 'Gym Workout',
+        'slug' => 'gym-workout',
+        'created_at' => '2026-01-14 09:33:15',
+        'updated_at' => '2026-01-14 09:33:15',
+      ],
+      [
+        'id' => 2,
+        'name' => 'Home Workout',
+        'slug' => 'home-workout',
+        'created_at' => '2026-01-14 09:33:15',
+        'updated_at' => '2026-01-14 09:33:15',
+      ],
+      [
+        'id' => 3,
+        'name' => 'Calisthenics',
+        'slug' => 'calisthenics',
+        'created_at' => '2026-01-14 09:33:15',
+        'updated_at' => '2026-01-14 09:33:15',
+      ],
+      [
+        'id' => 4,
+        'name' => 'Gymnastic',
+        'slug' => 'gymnastic',
+        'created_at' => null,
+        'updated_at' => null,
+      ],
+      [
+        'id' => 5,
+        'name' => 'Cardiovaskular',
+        'slug' => 'cardiovaskular',
+        'created_at' => null,
+        'updated_at' => null,
+      ],
+      [
+        'id' => 6,
+        'name' => 'Mobility',
+        'slug' => 'mobility',
+        'created_at' => null,
+        'updated_at' => null,
+      ],
+    ]);
   }
 }

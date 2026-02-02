@@ -126,4 +126,5 @@ Route::get('/programs/{program}', [ProgramController::class, 'show'])
 Route::get('/programs', [ProgramController::class, 'index'])
   ->name('programs.index');
 
-Route::get('/phpinfo', fn() => phpinfo());
+Route::get('/programs/{program}/days/{day}', [ProgramController::class, 'showDay'])
+  ->name('programs.days.show');

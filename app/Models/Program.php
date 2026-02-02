@@ -8,12 +8,14 @@ class Program extends Model
 {
   protected $fillable = [
     'user_id',
+    'title',
     'goal',
     'context',
     'gender',
     'age',
     'height',
     'weight',
+    'target_weight',
     'level',
   ];
 

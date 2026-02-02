@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     age:    { min: 13, max: 70 },
     height: { min: 120, max: 220 },
     weight: { min: 30,  max: 200 },
+    target_weight: { min: 30, max: 200 },
   };
 
   function isValid(step, value) {
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     age: null,
     height: null,
     weight: null,
+    target_weight: null,
     level: null,
   };
 
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'age',
     'height',
     'weight',
+    'target_weight',
     'level',
   ];
 
@@ -168,12 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   showStep(0);
 
-  // const errorBox = document.getElementById('programError');
-  // if (errorBox) {
-  //   document.querySelectorAll('.wizard-option, .wizard-input').forEach(el => {
-  //     el.addEventListener('click', () => errorBox.remove());
-  //   });
-  // }
   const errorBox = document.getElementById('programError');
   if (errorBox) {
     setTimeout(() => {

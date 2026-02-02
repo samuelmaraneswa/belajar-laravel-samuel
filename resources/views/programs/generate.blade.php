@@ -18,6 +18,7 @@
     <input type="hidden" name="age">
     <input type="hidden" name="height">
     <input type="hidden" name="weight">
+    <input type="hidden" name="target_weight">
     <input type="hidden" name="level">
 
     {{-- STEP 1 : GOAL --}}
@@ -66,11 +67,20 @@
       <button type="button" class="wizard-next">Continue</button>
     </section>
 
-    {{-- STEP 6 : WEIGHT --}}
+    {{-- STEP 6 : CURRENT WEIGHT --}}
     <section data-step="weight" class="hidden">
-      <h1 class="text-2xl font-bold text-center mb-4">Your weight</h1>
+      <h1 class="text-2xl font-bold text-center mb-4">Your current weight</h1>
       <p class="text-sm text-gray-500 text-center mb-2"> Weight range: 30–200 kg </p>
       <input type="number" class="wizard-input" data-input="weight" placeholder="Weight (kg)">
+      <button type="button" class="wizard-next">Continue</button>
+    </section>
+
+    {{-- STEP : TARGET WEIGHT --}}
+    <section data-step="target_weight" class="hidden">
+      <h1 class="text-2xl font-bold text-center mb-4">
+        Target weight
+      </h1>
+      <input type="number" class="wizard-input" data-input="target_weight" placeholder="Target weight (kg)">
       <button type="button" class="wizard-next">Continue</button>
     </section>
 

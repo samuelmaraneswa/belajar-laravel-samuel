@@ -19,11 +19,12 @@ return new class extends Migration
         ->cascadeOnDelete();
 
       $table->unsignedTinyInteger('day'); // 1–30
+      $table->string('title')->nullable(); // ✅ PINDAH KE SINI
       $table->boolean('is_rest')->default(false);
 
       $table->timestamps();
 
-      $table->unique(['program_id', 'day']); // 1 program tidak boleh duplikat hari
+      $table->unique(['program_id', 'day']);
     });
   }
 

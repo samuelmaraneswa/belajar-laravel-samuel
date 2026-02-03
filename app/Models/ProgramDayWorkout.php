@@ -13,6 +13,7 @@ class ProgramDayWorkout extends Model
     'workout_id',
     'sets',
     'reps',
+    'weight',
     'duration',
     'calories',
     'order',

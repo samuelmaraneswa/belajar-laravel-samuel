@@ -11,27 +11,27 @@ class DatabaseSeeder extends Seeder
 {
   use WithoutModelEvents;
 
-  /**
-   * Seed the application's database.
-   */
   public function run(): void
   {
-    // User::factory(10)->create();
-
-    // User::factory()->create([
-    //   'name' => 'Test User',
-    //   'email' => 'test@example.com',
-    // ]);
-
+    // 1️⃣ User & Auth
     $this->call(AdminUserSeeder::class);
+    $this->call(UserSeeder::class);
+
+    // 2️⃣ Master Data (tidak punya FK)
     $this->call(MuscleSeeder::class);
-    $this->call(WorkoutSeeder::class);
     $this->call(WorkoutCategorySeeder::class);
     $this->call(EquipmentSeeder::class);
-    $this->call(EquipmentWorkoutSeeder::class);
     $this->call(WorkoutContextsSeeder::class);
-    $this->call(WorkoutInstructionSeeder::class);
+
+    // 3️⃣ Core Entity
+    $this->call(WorkoutSeeder::class);
+    
+    // 5️⃣ Pivot Tables
     $this->call(MuscleWorkoutSeeder::class);
+    $this->call(EquipmentWorkoutSeeder::class);
     $this->call(WorkoutContextWorkoutSeeder::class);
+    
+    // 4️⃣ Dependent (FK ke workout)
+    $this->call(WorkoutInstructionSeeder::class);
   }
 }

@@ -23,7 +23,8 @@ return new class extends Migration
         ->cascadeOnDelete();
 
       $table->unsignedTinyInteger('sets')->nullable();
-      $table->unsignedTinyInteger('reps')->nullable();
+      $table->string('reps', 20)->nullable();
+      $table->unsignedSmallInteger('weight')->nullable();
       $table->unsignedSmallInteger('duration')->nullable(); // menit
       $table->unsignedSmallInteger('calories')->nullable();
 

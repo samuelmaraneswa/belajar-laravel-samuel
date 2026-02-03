@@ -41,7 +41,6 @@ class MuscleWorkoutSeeder extends Seeder
       ['id' => 86, 'workout_id' => 10, 'muscle_id' => 1, 'role' => 'primary'],
       ['id' => 87, 'workout_id' => 10, 'muscle_id' => 4, 'role' => 'secondary'],
       ['id' => 88, 'workout_id' => 10, 'muscle_id' => 5, 'role' => 'secondary'],
-      ['id' => 88, 'workout_id' => 10, 'muscle_id' => 5, 'role' => 'secondary'],
       ['id' => 93, 'workout_id' => 11, 'muscle_id' => 4, 'role' => 'primary'],
       ['id' => 94, 'workout_id' => 11, 'muscle_id' => 1, 'role' => 'secondary'],
       ['id' => 95, 'workout_id' => 12, 'muscle_id' => 1, 'role' => 'primary'],

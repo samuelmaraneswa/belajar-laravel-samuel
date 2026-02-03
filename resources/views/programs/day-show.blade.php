@@ -40,6 +40,24 @@
             <div class="space-y-4">
               @for ($set = 1; $set <= $item->sets; $set++)
 
+                @php
+                  // cek apakah set ini sudah selesai
+                  $isCompleted = $completedSets
+                    ->where('program_day_workout_id', $item->id)
+                    ->where('set_number', $set)
+                    ->isNotEmpty();
+
+                  // ambil MAX reps
+                  $reps = $item->reps;
+                  if (str_contains($reps, '–')) {
+                    [, $max] = array_map('intval', explode('–', $reps));
+                  } elseif (str_contains($reps, '-')) {
+                    [, $max] = array_map('intval', explode('-', $reps));
+                  } else {
+                    $max = (int) $reps;
+                  }
+                @endphp
+
                 <div class="border rounded-lg p-4 bg-gray-50 space-y-3 set-item">
 
                   <div class="flex items-center justify-between">
@@ -47,7 +65,10 @@
                       Set {{ $set }}
                     </p>
                     <p class="text-sm text-gray-600">
-                      Reps: {{ $item->reps }}
+                      Reps: {{ $item->reps }} |
+                      @if($item->weight)
+                        Weight: {{ $item->weight }} kg
+                      @endif
                     </p>
                   </div>
 
@@ -65,10 +86,17 @@
                   {{-- ACTION --}}
                   <button
                     type="button"
-                    class="start-btn w-full rounded-lg bg-gray-900 py-2
-                          text-white font-medium hover:bg-gray-800 transition cursor-pointer"
-                    data-reps="{{ explode('-', $item->reps)[1] ?? $item->reps }}">
-                    Start
+                    class="start-btn w-full rounded-lg py-2 font-medium transition
+                           {{ $isCompleted
+                              ? 'bg-green-600 opacity-60 cursor-not-allowed'
+                              : 'bg-gray-700 hover:bg-gray-900 text-white cursor-pointer' }}"
+                    data-disabled="{{ $isCompleted ? 1 : 0 }}"
+                    {{ $isCompleted ? 'disabled' : '' }}
+                    data-reps="{{ $max }}"
+                    data-program-day-workout-id="{{ $item->id }}"
+                    data-set-number="{{ $set }}"
+                  >
+                    {{ $isCompleted ? 'Completed' : 'Start' }}
                   </button>
 
                   <p class="counter text-center font-bold text-xl text-gray-800 mt-2 hidden">

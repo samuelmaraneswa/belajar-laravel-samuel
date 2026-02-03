@@ -84,8 +84,8 @@ class WorkoutCalculator
      * ==========
      */
     $reps = $workout->movement === 'isolation'
-      ? ['beginner' => '12–15', 'intermediate' => '12–15', 'advanced' => '15+']
-      : ['beginner' => '8–12', 'intermediate' => '8–12', 'advanced' => '6–10'];
+      ? ['beginner' => '12–15', 'intermediate' => '12–15', 'advanced' => '15-20']
+      : ['beginner' => '8–12', 'intermediate' => '8–12', 'advanced' => '8–12'];
 
     $levelFactor = [
       'beginner' => 0.4,

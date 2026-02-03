@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Program;
 use App\Models\ProgramDay;
 use App\Models\ProgramDayWorkout;
+use App\Models\ProgramDayWorkoutSet;
 use App\Models\Workout;
 use Illuminate\Http\Request;
 use App\Services\ProgramGeneratorService;
@@ -98,6 +99,7 @@ class ProgramController extends Controller
           'workout_id'     => $workout->id,
           'sets'           => $plan['sets'] ?? null,
           'reps'           => $plan['reps'] ?? null,
+          'weight'         => $plan['weight'] ?? null,
           'duration'       => $plan['duration'] ?? null,
           'calories'       => $plan['calories'] ?? null,
           'order'          => $order++,
@@ -110,10 +112,46 @@ class ProgramController extends Controller
 
   public function show(Program $program)
   {
-    $this->authorize('view', $program); // optional tapi bagus
+    $this->authorize('view', $program);
+
+    $program->load('days.workouts.workout');
+
+    $completedSets = ProgramDayWorkoutSet::where('user_id', Auth::id())
+      ->whereIn(
+        'program_day_workout_id',
+        $program->days->flatMap(fn($d) => $d->workouts->pluck('id'))
+      )
+      ->get();
+
+    $dayProgress = [];
+
+    foreach ($program->days as $day) {
+      $totalSets = $day->workouts->sum('sets');
+
+      $completedCount = $completedSets
+        ->whereIn('program_day_workout_id', $day->workouts->pluck('id'))
+        ->count();
+
+      $dayProgress[$day->id] = $totalSets > 0
+        ? round(($completedCount / $totalSets) * 100)
+        : 0;
+    }
+
+    // ⬇️ HITUNG SETELAH LOOP
+    $totalDays = $program->days->count();
+
+    $completedDays = collect($dayProgress)
+      ->filter(fn($p) => $p >= 100)
+      ->count();
+
+    $programProgress = $totalDays > 0
+      ? round(($completedDays / $totalDays) * 100)
+      : 0;
 
     return view('programs.result', [
-      'program' => $program->load('days.workouts.workout')
+      'program'         => $program,
+      'dayProgress'     => $dayProgress,
+      'programProgress' => $programProgress,
     ]);
   }
 
@@ -124,9 +162,14 @@ class ProgramController extends Controller
       ->where('day', $day)
       ->firstOrFail();
 
+    $completedSets = ProgramDayWorkoutSet::where('user_id', Auth::id())
+      ->whereIn('program_day_workout_id', $day->workouts->pluck('id'))
+      ->get();
+
     return view('programs.day-show', [
-      'program' => $program,
-      'day'     => $day,
+      'program'       => $program,
+      'day'           => $day,
+      'completedSets' => $completedSets,
     ]);
   }
 }

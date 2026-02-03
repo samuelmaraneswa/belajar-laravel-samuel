@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\WorkoutController;
+use App\Http\Controllers\WorkoutSetController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -120,11 +121,16 @@ Route::get('/dashboard', [UserDashboardController::class, 'index'])
 // =========
 // PROGRAMS 
 // =========
-Route::get('/programs/{program}', [ProgramController::class, 'show'])
-  ->name('programs.show');
+Route::middleware('auth')->group(function () {
 
-Route::get('/programs', [ProgramController::class, 'index'])
-  ->name('programs.index');
+  Route::get('/programs', [ProgramController::class, 'index'])
+    ->name('programs.index');
 
-Route::get('/programs/{program}/days/{day}', [ProgramController::class, 'showDay'])
-  ->name('programs.days.show');
+  Route::get('/programs/{program}', [ProgramController::class, 'show'])
+    ->name('programs.show');
+
+  Route::get('/programs/{program}/days/{day}', [ProgramController::class, 'showDay'])
+    ->name('programs.days.show');
+
+  Route::post('/workout-sets/complete', [WorkoutSetController::class, 'complete']);
+});

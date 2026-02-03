@@ -18,13 +18,18 @@ return new class extends Migration
         ->constrained()
         ->cascadeOnDelete();
 
-      $table->string('goal');        // bulking | cutting | maintenance
-      $table->string('context');     // home | gym | calisthenics
-      $table->string('gender');      // male | female
+      // ✅ IDENTITAS PROGRAM
+      $table->string('title');
+      $table->string('goal');          // bulking | cutting | maintenance
+      $table->string('context');       // home | gym | calisthenics
+
+      // ✅ PROFIL USER SAAT GENERATE
+      $table->string('gender');        // male | female
       $table->unsignedTinyInteger('age');
       $table->unsignedSmallInteger('height'); // cm
       $table->unsignedSmallInteger('weight'); // kg
-      $table->string('level');       // beginner | intermediate | advanced
+      $table->unsignedSmallInteger('target_weight'); // kg
+      $table->string('level');         // beginner | intermediate | advanced
 
       $table->timestamps();
     });

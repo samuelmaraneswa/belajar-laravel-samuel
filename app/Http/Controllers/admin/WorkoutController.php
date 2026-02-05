@@ -272,25 +272,7 @@ class WorkoutController extends Controller
     $context = $request->query('context');
     $muscle  = $request->query('muscle');
 
-    $muscles = [
-      ['name' => 'Chest', 'slug' => 'chest'],
-      ['name' => 'Back', 'slug' => 'back'],
-      ['name' => 'Biceps', 'slug' => 'biceps'],
-      ['name' => 'Triceps', 'slug' => 'triceps'],
-      ['name' => 'Shoulders', 'slug' => 'shoulders'],
-      ['name' => 'Core', 'slug' => 'core'],
-      ['name' => 'Quads', 'slug' => 'quads'],
-      ['name' => 'Hamstring', 'slug' => 'hamstring'],
-      ['name' => 'Obliques', 'slug' => 'obliques'],
-      ['name' => 'Trapezius', 'slug' => 'trapezius'],
-      ['name' => 'Forearms', 'slug' => 'forearms'],
-      ['name' => 'Calves', 'slug' => 'calves'],
-      ['name' => 'Abductors', 'slug' => 'abductors'],
-      ['name' => 'Adductors', 'slug' => 'adductors'],
-      ['name' => 'Necks', 'slug' => 'necks'],
-      ['name' => 'Glutes', 'slug' => 'glutes'],
-      ['name' => 'Lower Back', 'slug' => 'lower-back'],
-    ];
+    $muscles = Muscle::orderBy('name')->get(['name', 'slug']);
 
     return view('admin.workouts.list', compact(
       'muscles',

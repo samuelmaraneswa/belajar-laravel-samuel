@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const list = document.getElementById('instruction-list')
   const addBtn = document.getElementById('add-step')
 
+  if (!list || !addBtn) return
+
   addBtn.addEventListener('click', () => {
     const li = document.createElement('li')
     li.className = 'flex gap-2'

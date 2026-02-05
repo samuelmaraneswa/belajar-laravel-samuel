@@ -8,13 +8,16 @@
       suggestUrl="/workouts/suggest"
     />
 
+    {{-- EXPLORE BY MUSCLE GROUP --}}
+    <x-muscle-groups :muscles="$muscles" scope="public" />
+
     {{-- CONTENT --}}
     @if ($workouts->isEmpty())
       <div class="text-center text-gray-500 py-20">
         Belum ada workout.
       </div>
     @else
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8 mb-12">
         @foreach ($workouts as $workout)
           <x-workout-card :workout="$workout" />
         @endforeach

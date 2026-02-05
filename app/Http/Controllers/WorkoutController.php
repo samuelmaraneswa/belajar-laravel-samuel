@@ -15,15 +15,24 @@ class WorkoutController extends Controller
   public function index(Request $request)
   {
     $search = $request->query('search');
+    $muscle = $request->query('muscle');
 
-    $workouts = Workout::with('category')
-        ->when($search, function($q) use ($search){
-          $q->where('title', 'like', "%{$search}%");})
-        ->latest()
-        ->paginate(20)
-        ->withQueryString();
-    
-    return view('workouts.index', compact('workouts'));
+    $workouts = Workout::with(['category', 'muscles'])
+      ->when($search, function ($q) use ($search) {
+        $q->where('title', 'like', "%{$search}%");
+      })
+      ->when($muscle, function ($q) use ($muscle) {
+        $q->whereHas('muscles', function ($m) use ($muscle) {
+          $m->where('slug', $muscle);
+        });
+      })
+      ->latest()
+      ->paginate(20)
+      ->withQueryString();
+
+    $muscles = Muscle::orderBy('name')->get();
+
+    return view('workouts.index', compact('workouts', 'muscles'));
   }
 
   public function show(Workout $workout)

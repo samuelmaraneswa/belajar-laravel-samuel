@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("calculateForm")
   const isBodyWeight = window.workoutMeta?.type === 'bodyweight';
 
-  if(!form) return;
+  if(!form) return; 
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();

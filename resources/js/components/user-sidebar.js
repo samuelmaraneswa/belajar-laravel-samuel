@@ -1,5 +1,3 @@
-console.log('user sidebar loaded');
-
 document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("userSidebarToggle")
   const sidebar = document.getElementById("userSidebar")

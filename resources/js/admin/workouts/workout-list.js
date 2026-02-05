@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const grid = document.getElementById('workoutGrid')
   const paginationBox = document.getElementById('pagination')
 
+  if (!grid || !paginationBox) return 
+
   window.workoutState = {
     page: 1,
     search: '',

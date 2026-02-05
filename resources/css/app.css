@@ -123,6 +123,11 @@
     --x: 1px;
     --y: 16px;
   }
+
+  .focus-all {
+    --x: 1px;
+    --y: 40px; 
+  }
 }
 
 /* putihkan muscle sesuai card */
@@ -143,14 +148,6 @@
 .muscle-card[data-muscle="forearms"] .forearms * { fill:#fff !important; }
 .muscle-card[data-muscle="obliques"] .obliques * { fill:#fff !important; }
 .muscle-card[data-muscle="necks"] .necks * { fill:#fff !important; }
-
-/* .scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-} */
 
 .wizard-option {
   border: 1px solid #e5e7eb;
@@ -186,4 +183,24 @@
 .wizard-option[data-disabled="1"] {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.all-muscle svg .chest *,
+.all-muscle svg .back *,
+.all-muscle svg .biceps *,
+.all-muscle svg .triceps *,
+.all-muscle svg .shoulders *,
+.all-muscle svg .core *,
+.all-muscle svg .quads *,
+.all-muscle svg .hamstring *,
+.all-muscle svg .obliques *,
+.all-muscle svg .trapezius *,
+.all-muscle svg .forearms *,
+.all-muscle svg .calves *,
+.all-muscle svg .abductors *,
+.all-muscle svg .adductors *,
+.all-muscle svg .necks *,
+.all-muscle svg .glutes *,
+.all-muscle svg .lower-back * {
+  fill: #ffffff !important;
 }

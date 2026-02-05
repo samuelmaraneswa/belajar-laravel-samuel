@@ -1,5 +1,3 @@
-console.log('admin sidebar loaded');
-
 document.addEventListener("DOMContentLoaded", () => {
 
   /* ===============================

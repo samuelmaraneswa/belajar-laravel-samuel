@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
       path.classList.remove("primary", "secondary")
     })
 
-    const primary = muscles.primary || [];
-    const secondary = muscles.secondary || [];
+    const primary = window.muscles?.primary || [];
+    const secondary = window.muscles?.secondary || [];
 
     primary.forEach(slug => {
       svg.querySelectorAll(`.${slug}`).forEach(el => {

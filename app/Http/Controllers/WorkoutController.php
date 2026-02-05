@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Muscle;
 use App\Models\Workout;
 use App\Models\WorkoutCategory;
+use App\Services\WorkoutCalculator;
 use Illuminate\Http\Request;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
@@ -19,35 +20,63 @@ class WorkoutController extends Controller
         ->when($search, function($q) use ($search){
           $q->where('title', 'like', "%{$search}%");})
         ->latest()
-        ->paginate(3)
+        ->paginate(20)
         ->withQueryString();
     
     return view('workouts.index', compact('workouts'));
   }
 
+  public function show(Workout $workout)
+  {
+    // ambil primary muscle slug
+    $primaryMuscles = $workout->muscles
+      ->where('pivot.role', 'primary')
+      ->pluck('id');
+
+    // similar workouts (exclude current)
+    $similarWorkouts = Workout::with(['category', 'muscles'])
+      ->whereHas('muscles', function ($q) use ($primaryMuscles) {
+        $q->whereIn('muscles.id', $primaryMuscles);
+      })
+      ->where('id', '!=', $workout->id)
+      ->take(6)
+      ->get();
+
+    return view('workouts.show', compact(
+      'workout',
+      'similarWorkouts'
+    ));
+  }
+
   public function suggest(Request $request)
   {
-    $q = $request->query('q');
+    $q = trim($request->query('q'));
 
-    if(!$q){
+    if ($q === '') {
       return response()->json([]);
     }
 
-    return Workout::where('title', 'like', "%{$q}%")->limit(3)->pluck('title');
+    $titles = Workout::where('title', 'like', "%{$q}%")
+      ->orderBy('title')
+      ->limit(20)
+      ->pluck('title')
+      ->values(); // penting
+
+    return response()->json($titles);
   }
 
-  public function show(Workout $workout, Request $request)
+
+  public function calculatePreview(Request $request, Workout $workout)
   {
-    return view('workouts.show', compact('workout'));
+    $data = $request->validate([
+      'gender' => ['required', 'in:male,female'],
+      'age'    => ['required', 'integer', 'min:1'],
+      'weight' => ['required', 'numeric', 'min:1'],
+      'height' => ['required', 'numeric', 'min:1'],
+    ]);
+
+    return response()->json([
+      'levels' => WorkoutCalculator::calculate($data, $workout)
+    ]);
   }
-
-  public function adminIndex()
-  {
-    $workouts = Workout::with('category')
-      ->latest()
-      ->paginate(10);
-
-    return view('admin.workouts.index', compact('workouts'));
-  }
-
 }

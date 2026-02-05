@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
         'updated_at' => '2026-01-14 09:33:15',
       ],
       [
-        'id' => 3,
+        'id' => 2,
         'name' => 'sam',
         'email' => 'samuelmaraneswa60@gmail.com',
         'email_verified_at' => '2026-01-30 09:16:14',
@@ -31,17 +31,7 @@ class UserSeeder extends Seeder
         'updated_at' => '2026-01-30 09:16:14',
       ],
       [
-        'id' => 4,
-        'name' => 'test',
-        'email' => 'test@gmail.com',
-        'email_verified_at' => null,
-        'password' => '$2y$12$6UQujdr15BqfKiLNio9XNecwtDIr8n8r96ynjdscwunR0ZYtQR20i',
-        'role' => 'user',
-        'created_at' => '2026-01-30 22:36:40',
-        'updated_at' => '2026-01-30 22:36:40',
-      ],
-      [
-        'id' => 6,
+        'id' => 3,
         'name' => 'samuel',
         'email' => 'samuelmaraneswa120@gmail.com',
         'email_verified_at' => '2026-01-30 23:32:39',

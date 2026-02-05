@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  const csrf = document.querySelector('meta[name="csrf-token"]').content;
+  const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
 
   const getAudioByReps = (reps) => {
     if (reps <= 8) return new Audio('/audio/beep8.mp3');
@@ -11,7 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.start-btn').forEach(button => {
 
+    // 🔒 hard lock dari server (Blade)
+    if (button.disabled || button.dataset.disabled === '1') return;
+
     button.addEventListener('click', () => {
+
+      // 🔒 prevent double click
+      if (button.disabled) return;
 
       const reps = parseInt(button.dataset.reps);
       if (!reps) return;
@@ -27,13 +33,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let current = 1;
 
+      // 🔒 lock button immediately
       button.disabled = true;
       button.textContent = 'Running...';
+      button.classList.remove('bg-gray-700', 'hover:bg-gray-900');
+      button.classList.add('bg-yellow-500');
 
       counter.classList.remove('hidden');
       counter.textContent = current;
 
-      // 🔊 PLAY AUDIO SEKALI
+      // 🔊 play audio once
       audio.currentTime = 0;
       audio.play();
 
@@ -44,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (current >= reps) {
           clearInterval(interval);
 
-          // 🔥 SAVE TO DB
+          // 💾 save to DB (fire & forget)
           fetch('/workout-sets/complete', {
             method: 'POST',
             headers: {
@@ -57,16 +66,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }),
           });
 
-          // 🔒 LOCK SET
+          // ✅ completed state
           button.textContent = 'Completed';
-          button.classList.remove('bg-gray-900');
-          button.classList.add('bg-green-600');
+          button.classList.remove('bg-yellow-500');
+          button.classList.add('bg-green-600', 'opacity-60', 'cursor-not-allowed');
           button.disabled = true;
+          button.dataset.disabled = '1';
+          button.classList.remove('cursor-pointer', 'hover:bg-gray-900');
+          button.classList.add('cursor-not-allowed');
         }
       }, 1800);
-
     });
-
   });
-
 });

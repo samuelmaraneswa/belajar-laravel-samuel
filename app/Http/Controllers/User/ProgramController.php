@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Models\Program;
 use App\Models\ProgramDay;
 use App\Models\ProgramDayWorkout;
 use App\Models\ProgramDayWorkoutSet;
 use App\Models\Workout;
-use Illuminate\Http\Request;
 use App\Services\ProgramGeneratorService;
 use App\Services\ProgramTemplates;
 use App\Services\WorkoutCalculator;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -52,11 +53,9 @@ class ProgramController extends Controller
       return back()->with('error', 'Program belum tersedia untuk pilihan ini.');
     }
 
-    // ===== PROGRAM TITLE =====
-    $goalLabel = Str::title(str_replace('_', ' ', $profile['goal']));
+    $goalLabel   = Str::title(str_replace('_', ' ', $profile['goal']));
     $programTitle = "{$goalLabel} ({$profile['weight']} → {$profile['target_weight']} kg)";
 
-    // ===== CREATE PROGRAM =====
     $program = Program::create([
       'user_id'       => Auth::id(),
       'title'         => $programTitle,
@@ -70,24 +69,20 @@ class ProgramController extends Controller
       'level'         => $profile['level'],
     ]);
 
-    // ===== CREATE PROGRAM DAYS & WORKOUTS =====
     foreach ($template as $day => $data) {
-
-      $dayTitle = $data['title'] ?? null;
-      $workoutSlugs = $data['workouts'] ?? [];
 
       $programDay = ProgramDay::create([
         'program_id' => $program->id,
         'day'        => $day,
-        'title'      => $dayTitle,
-        'is_rest'    => empty($workoutSlugs),
+        'title'      => $data['title'] ?? null,
+        'is_rest'    => empty($data['workouts']),
       ]);
 
-      if (empty($workoutSlugs)) continue;
+      if (empty($data['workouts'])) continue;
 
       $order = 1;
 
-      foreach ($workoutSlugs as $slug) {
+      foreach ($data['workouts'] as $slug) {
         $workout = Workout::where('slug', $slug)->first();
         if (!$workout) continue;
 
@@ -107,7 +102,7 @@ class ProgramController extends Controller
       }
     }
 
-    return redirect()->route('programs.show', $program);
+    return redirect()->route('user.programs.show', $program);
   }
 
   public function show(Program $program)
@@ -137,7 +132,6 @@ class ProgramController extends Controller
         : 0;
     }
 
-    // ⬇️ HITUNG SETELAH LOOP
     $totalDays = $program->days->count();
 
     $completedDays = collect($dayProgress)
@@ -148,17 +142,19 @@ class ProgramController extends Controller
       ? round(($completedDays / $totalDays) * 100)
       : 0;
 
-    return view('programs.result', [
-      'program'         => $program,
-      'dayProgress'     => $dayProgress,
-      'programProgress' => $programProgress,
-    ]);
+    return view('programs.result', compact(
+      'program',
+      'dayProgress',
+      'programProgress'
+    ));
   }
 
   public function showDay(Program $program, int $day)
   {
+    $this->authorize('view', $program);
+
     $day = $program->days()
-      ->with(['workouts.workout'])
+      ->with('workouts.workout')
       ->where('day', $day)
       ->firstOrFail();
 
@@ -166,10 +162,10 @@ class ProgramController extends Controller
       ->whereIn('program_day_workout_id', $day->workouts->pluck('id'))
       ->get();
 
-    return view('programs.day-show', [
-      'program'       => $program,
-      'day'           => $day,
-      'completedSets' => $completedSets,
-    ]);
+    return view('programs.day-show', compact(
+      'program',
+      'day',
+      'completedSets'
+    ));
   }
 }

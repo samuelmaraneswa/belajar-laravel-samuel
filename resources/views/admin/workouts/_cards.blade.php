@@ -33,12 +33,30 @@
       {{-- CONTENT (FLEX-1) --}}
       <div class="flex-1">
         {{-- CATEGORY --}}
-        <div class="flex items-center gap-2 mb-2">
-          <p class="text-sm text-gray-500">Category workout:</p>
-          <span class="inline-block text-sm bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
-            {{ $workout->category->name ?? '-' }}
+        <div class="flex items-center gap-2 mb-3 text-sm text-gray-600">
+
+          <span class="tracking-wide text-xs text-gray-700">
+            #{{ $workout->category->name ?? 'uncategorized' }}
           </span>
-        </div>
+
+          {{-- SEPARATOR --}}
+          <span class="text-gray-300">|</span>
+
+          {{-- MUSCLES --}}
+          <div class="flex gap-1 flex-nowrap overflow-hidden">
+            @foreach ($workout->muscles as $muscle)
+              <span
+                class="px-1 rounded-full py-0.5 text-xs font-medium
+                {{ $muscle->pivot->role === 'primary'
+                    ? 'bg-red-100 text-red-600'
+                    : 'bg-green-100 text-green-600'
+                }}">
+                {{ $muscle->name }}
+              </span>
+            @endforeach
+          </div>
+
+      </div>
 
         {{-- DESCRIPTION --}}
         <p class="text-gray-600">

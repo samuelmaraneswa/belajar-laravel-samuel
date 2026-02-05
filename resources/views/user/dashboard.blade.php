@@ -23,7 +23,7 @@
           Day {{ $currentDay }} / {{ $totalDays }}
         </p>
 
-        <a href="{{ route('programs.show', $activeProgram) }}"
+        <a href="{{ route('user.programs.show', $activeProgram) }}"
           class="mt-5 inline-flex items-center justify-center
                   rounded-lg bg-indigo-600 px-5 py-2.5
                   text-sm font-medium text-white
@@ -48,7 +48,7 @@
         Buat program latihan 30 hari yang sesuai dengan tujuan dan level kamu.
       </p>
 
-      <a href="{{ route('program.generate') }}"
+      <a href="{{ route('user.programs.create') }}"
         class="inline-flex items-center justify-center
                 px-6 py-3 rounded-lg
                 bg-indigo-600 text-white

@@ -32,7 +32,7 @@
           $progress = $dayProgress[$day->id] ?? 0;
         @endphp
         
-        <a href="{{ route('programs.days.show', [$program, $day->day]) }}"
+        <a href="{{ route('user.programs.days.show', [$program, $day->day]) }}"
           class="flex items-center justify-between
                   border rounded-lg px-5 py-4 bg-white transition
                   {{ $progress >= 100

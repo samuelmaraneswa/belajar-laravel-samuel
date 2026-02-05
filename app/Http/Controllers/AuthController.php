@@ -14,41 +14,19 @@ class AuthController extends Controller
   // =========================
   // LOGIN
   // =========================
-  public function loginForm()
+  public function loginForm(Request $request)
   {
+    $intended = session('url.intended');
+
+    if ($intended && str_contains($intended, '/user/programs/create')) {
+      session()->flash(
+        'info',
+        'Mohon register atau login agar saya dapat meng-generate 30 days workout program Anda.'
+      );
+    }
+
     return view('auth.login');
   }
-
-  // public function login(Request $request)
-  // {
-  //   $credentials = $request->validate([
-  //     'email' => 'required|email',
-  //     'password' => 'required',
-  //   ]);
-
-  //   if (Auth::attempt($credentials)) {
-  //     $request->session()->regenerate();
-
-  //     if (!Auth::user()->email_verified_at) {
-  //       return redirect()->route('verification.notice');
-  //     }
-
-  //     // 🔥 AMANKAN intended (jangan AJAX / JSON endpoint)
-  //     $intended = session('url.intended');
-
-  //     if ($intended && Str::contains($intended, ['/ajax', '/api'])) {
-  //       session()->forget('url.intended');
-  //     }
-
-  //     return Auth::user()->role === 'admin'
-  //       ? redirect()->intended('/admin')
-  //       : redirect()->intended('/');
-  //   }
-
-  //   return back()->withErrors([
-  //     'email' => 'Login gagal, email atau password salah.',
-  //   ]);
-  // }
 
   public function login(Request $request)
   {

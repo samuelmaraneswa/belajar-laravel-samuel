@@ -257,7 +257,7 @@ class WorkoutController extends Controller
         $q->whereHas('contexts', fn($c) => $c->where('slug', $context));
       })
       ->inRandomOrder()
-      ->limit(8)
+      ->limit(9)
       ->get();
 
     return view('admin.workouts.show', compact(
@@ -310,29 +310,6 @@ class WorkoutController extends Controller
 
     return response()->json(['levels' => WorkoutCalculator::calculate($data, $workout)]);
   }
-
-  // public function search(Request $request)
-  // {
-  //   $search  = $request->query('search');
-  //   $context = $request->query('context');
-
-  //   $workouts = Workout::with('category')
-  //     ->when($context, function ($q) use ($context) {
-  //       $q->whereHas(
-  //         'contexts',
-  //         fn($c) =>
-  //         $c->where('slug', $context)
-  //       );
-  //     })
-  //     ->when(
-  //       $search,
-  //       fn($q) =>
-  //       $q->where('title', 'like', "%{$search}%")
-  //     )
-  //     ->get();
-
-  //   return view('admin.workouts._cards', compact('workouts'));
-  // }
 
   public function edit(Workout $workout)
   {

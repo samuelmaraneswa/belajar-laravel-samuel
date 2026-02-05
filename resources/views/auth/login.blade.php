@@ -2,6 +2,13 @@
   <x-auth-card>
     <x-auth-title>Login</x-auth-title>
 
+    {{-- INFO MESSAGE --}}
+    @if (session('info'))
+      <div class="mb-4 rounded-lg bg-yellow-100 text-yellow-800 px-4 py-3 text-sm text-center">
+        {{ session('info') }}
+      </div>
+    @endif
+
     {{-- SUCCESS MESSAGE --}}
     @if (session('success'))
       <div class="mb-4 rounded-lg bg-green-100 text-green-800 px-4 py-3 text-sm text-center">
@@ -17,7 +24,7 @@
     @endif
 
     <x-form action="/login">
-      <x-input label="Email" name="email" type="email" />
+      <x-input label="Email" name="email" type="email" autofocus />
       <x-input label="Password" name="password" type="password" />
 
       <x-button type="submit" class="w-full mt-4">Login</x-button>

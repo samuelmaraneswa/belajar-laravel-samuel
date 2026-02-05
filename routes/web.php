@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\User\ProgramController as UserProgramController;
 use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\WorkoutSetController;
 use App\Models\User;
@@ -23,7 +24,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'registerForm']);
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/workouts', [WorkoutController::class, 'index']);
+// Route::get('/workouts', [WorkoutController::class, 'index']);
 Route::get('/workouts/suggest', [WorkoutController::class, 'suggest']);
 
 Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function() {
@@ -56,17 +57,6 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
     
   Route::post('/workouts/{workout}/calculate', [AdminWorkoutController::class, 'calculate'])->name('admin.workout.calculate');
 });
-
-// ===============================
-// WORKOUT PROGRAM (USER FLOW)
-// ===============================
-Route::get('/programs/generate', [ProgramController::class, 'create'])
-  ->middleware(['auth', 'verified'])
-  ->name('program.generate');
-
-Route::post('/programs/generate', [ProgramController::class, 'store'])
-  ->middleware(['auth', 'verified'])
-  ->name('program.generate.store');
 
 // =======================
 // EMAIL & VERIFIED EMAIL
@@ -121,16 +111,40 @@ Route::get('/dashboard', [UserDashboardController::class, 'index'])
 // =========
 // PROGRAMS 
 // =========
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])
+  ->prefix('user')
+  ->name('user.')
+  ->group(function () {
 
-  Route::get('/programs', [ProgramController::class, 'index'])
-    ->name('programs.index');
+    Route::get('/programs', [UserProgramController::class, 'index'])
+      ->name('programs.index');
 
-  Route::get('/programs/{program}', [ProgramController::class, 'show'])
-    ->name('programs.show');
+    Route::get('/programs/create', [UserProgramController::class, 'create'])
+      ->name('programs.create');
 
-  Route::get('/programs/{program}/days/{day}', [ProgramController::class, 'showDay'])
-    ->name('programs.days.show');
+    Route::post('/programs', [UserProgramController::class, 'store'])
+      ->name('programs.store');
 
-  Route::post('/workout-sets/complete', [WorkoutSetController::class, 'complete']);
-});
+    Route::get('/programs/{program}', [UserProgramController::class, 'show'])
+      ->name('programs.show');
+
+    Route::get('/programs/{program}/days/{day}', [UserProgramController::class, 'showDay'])
+      ->name('programs.days.show');
+  });
+
+Route::post('/workout-sets/complete', [WorkoutSetController::class, 'complete'])
+  ->middleware(['auth', 'verified'])
+  ->name('workout-sets.complete');
+
+// Public workouts
+Route::get('/workouts', [WorkoutController::class, 'index'])
+  ->name('workouts.index');
+
+Route::get('/workouts/{workout:slug}', [WorkoutController::class, 'show'])
+  ->name('workouts.show');
+
+// Public calculate (PREVIEW saja)
+Route::post(
+  '/workouts/{workout:slug}/calculate-preview',
+  [WorkoutController::class, 'calculatePreview']
+)->name('workouts.calculate.preview');

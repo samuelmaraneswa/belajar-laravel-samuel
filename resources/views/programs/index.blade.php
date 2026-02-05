@@ -4,7 +4,7 @@
 
   <div class="grid gap-4">
     @forelse ($programs as $program)
-      <a href="{{ route('programs.show', $program) }}"
+      <a href="{{ route('user.programs.show', $program) }}"
          class="group block rounded-xl border bg-white p-5
                 transition hover:shadow-md hover:border-gray-300">
 

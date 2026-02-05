@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  const form = document.getElementById('wizardForm');
+  if (!form) return;
+
   const rules = {
     age:    { min: 13, max: 70 },
     height: { min: 120, max: 220 },
@@ -37,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   let currentStepIndex = 0;
-  const form = document.getElementById('wizardForm');
 
   // ============================
   // RENDER STEP

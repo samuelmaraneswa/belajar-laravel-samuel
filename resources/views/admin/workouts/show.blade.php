@@ -209,7 +209,7 @@
     </h2>
 
     @include('admin.workouts._cards', [
-      'workouts' => $similarWorkouts
+      'workouts' => $similarWorkouts 
     ])
   </section>
   {{-- Similar End --}}

@@ -10,7 +10,7 @@
 
   <nav class="p-4 space-y-1">
     
-    <x-user.nav-link href="{{ url('/') }}" target="_blank">
+    <x-user.nav-link href="{{ url('/') }}">
       <i class="fa-solid fa-globe w-4"></i>
       <span>View Website</span>
     </x-user.nav-link>
@@ -22,13 +22,13 @@
     </x-user.nav-link>
 
     {{-- My Programs --}}
-    <x-user.nav-link href="/programs" :active="request()->is('programs')">
+    <x-user.nav-link href="/user/programs" :active="request()->is('user.programs.index')">
       <i class="fa-regular fa-calendar w-4"></i>
       <span>My Programs</span>
     </x-user.nav-link>
 
     {{-- Generate --}}
-    <x-user.nav-link href="/programs/generate" :active="request()->is('programs/generate')">
+    <x-user.nav-link href="/user/programs/create" :active="request()->is('user.programs.create')">
       <i class="fa-solid fa-plus w-4"></i>
       <span>Generate Program</span>
     </x-user.nav-link>

@@ -26,17 +26,8 @@
     {{-- USER (selalu kanan) --}}
     <div class="order-3 md:order-3">
       @guest
-        <x-nav-link href="{{ route('login') }}" :active="request()->is('login*')">Login</x-nav-link>
+        <x-nav-link href="{{ route('login') }}" :active="request()->is('login*')" class="text-gray-800">Login</x-nav-link>
       @endguest
-
-      {{-- @auth
-        <form action="{{ route('logout') }}" method="POST" class="inline">
-          @csrf
-          <button type="submit" class="text-gray-700 hover:text-red-600">
-            Logout
-          </button>
-        </form>
-      @endauth --}}
 
       @auth
         <x-form action="{{route('logout')}}" class="inline">

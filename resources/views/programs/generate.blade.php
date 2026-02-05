@@ -1,7 +1,7 @@
 <x-user.layout>
   <form id="wizardForm"
         method="POST"
-        action="{{ route('program.generate.store') }}"
+        action="{{ route('user.programs.store') }}"
         class="max-w-md mx-auto mt-16 space-y-12">
     @csrf
 
@@ -95,4 +95,6 @@
     </section>
 
   </form>
+
+  @vite('resources/js/programs/generateWizard.js')
 </x-user.layout>

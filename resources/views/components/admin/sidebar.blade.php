@@ -8,7 +8,7 @@
 
   <nav class="p-4 space-y-1">
 
-     <x-user.nav-link href="{{ url('/') }}" target="_blank">
+     <x-user.nav-link href="{{ url('/') }}">
       <i class="fa-solid fa-globe w-4"></i>
       <span>View Website</span>
     </x-user.nav-link>

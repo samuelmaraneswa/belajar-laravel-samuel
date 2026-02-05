@@ -24,7 +24,7 @@
 
 @layer components {
   .anchor-link {
-    @apply relative pb-2 text-sm text-gray-500 transition;
+    @apply relative px-1 py-2 text-sm text-gray-500 transition;
   }
 
   .anchor-link.is-active {
@@ -33,8 +33,8 @@
 
   .anchor-link.is-active::after {
     content: '';
-    @apply absolute left-0 -bottom-px h-0.5 w-full bg-gray-900;
-  }
+    @apply absolute left-0 bottom-0 h-0.5 w-full bg-gray-900;
+}
 }
 
 @layer utilities {

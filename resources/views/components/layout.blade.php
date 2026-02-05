@@ -18,11 +18,9 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-  <x-header>
-    {{$slot}}
-  </x-header>
+  <x-header />
 
-  <div class="content">
+  <div {{ $attributes->merge(['class' => 'content']) }}>
     {{$slot}}
   </div>
 </body>

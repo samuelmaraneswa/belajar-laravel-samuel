@@ -32,5 +32,8 @@
   <main {{$attributes->merge(['class' => 'md:ml-64 p-5'])}}>
     {{$slot}}
   </main>
+
+  {{-- SweetAlert (ADMIN ONLY) --}}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

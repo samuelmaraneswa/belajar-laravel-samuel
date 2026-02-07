@@ -3,6 +3,7 @@ import './admin/workouts/muscle-workout';
 import './admin/workouts/workout-calculate';
 import './admin/workouts/WorkoutSearch';
 import './admin/utils/searchSuggestions';
+import './utils/sweetAlert';
 import './components/header';
 import './components/admin-header';
 import './components/admin-sidebar';
@@ -14,3 +15,11 @@ import './components/user-sidebar'
 import './programs/workout-counter';
 import './public/workouts/workout-calculate'
 import './public/utils/searchSuggestions'
+import './admin/blog/blogCategoryModal'
+import './admin/blog/blogCategoryStore'
+import './admin/blog/blogCategoryEdit'
+import './admin/blog/blogCategoryDelete'
+import './admin/blog/blogTemaModal'
+import './admin/blog/blogTemaStore'
+import './admin/blog/blogTemaEdit'
+import './admin/blog/blogTemaDelete'

@@ -4,7 +4,10 @@
   <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
     {{-- HAMBURGER (mobile kiri) --}}
-    <button id="mobileMenuBtn" class="md:hidden order-1 text-xl relative z-50">
+    <button
+      id="mobileMenuBtn"
+      class="md:hidden order-1 text-xl relative z-50
+            w-10 h-9 flex items-center justify-center">
       <i id="menuIcon" class="fa-solid fa-bars"></i>
     </button>
 
@@ -30,16 +33,57 @@
       @endguest
 
       @auth
-        <x-form action="{{route('logout')}}" class="inline">
-          <x-button type="submit">Logout</x-button>
-        </x-form>
-      @endauth
+        @php
+          $dashboardUrl = auth()->user()->role === 'admin'
+            ? route('admin.dashboard')
+            : route('user.dashboard');
+        @endphp
+
+        <div class="relative">
+          {{-- avatar --}}
+          <x-button id="userMenuBtn" class="px-2! py-1!">
+            <img src="{{ auth()->user()->avatar
+              ? asset('storage/'.auth()->user()->avatar)
+              : asset('images/default-avatar.jpg') }}"
+              class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover"
+              alt="Avatar">
+          </x-button>
+
+          {{-- dropdown --}}
+          <div id="userMenu"
+              class="hidden cursor-pointer absolute z-30 right-0 mt-0.5 w-44 bg-white border rounded-lg shadow overflow-hidden">
+            
+            <a href="{{ $dashboardUrl }}"
+              class="block px-4 py-2 text-sm hover:bg-gray-100">
+              Dashboard
+            </a>
+
+            <a href="/profile"
+              class="block px-4 py-2 text-sm hover:bg-gray-100">
+              Profile
+            </a>
+
+            <x-form action="{{ route('logout') }}">
+              <button type="submit"
+                class="w-full cursor-pointer text-left px-4 py-2 text-sm hover:bg-gray-100">
+                Logout
+              </button>
+            </x-form>
+          </div>
+        </div>
+        @endauth
+
     </div>
 
   </div>
 
 </header>
-<div id="mobileOverlay" class="hidden fixed inset-0 bg-black/40 md:hidden"></div>
+
+<div
+  id="mobileOverlay"
+  class="fixed inset-0 bg-black/40 z-40 md:hidden
+         opacity-0 transition-opacity duration-300 hidden">
+</div>
 
 <div id="mobileSidebar" class="fixed top-17.5 left-0 h-[calc(100%-72px)] w-[70%] bg-black hidden md:hidden z-40 p-6 space-y-4">
   <x-nav-link href="/" class="block">Home</x-nav-link>

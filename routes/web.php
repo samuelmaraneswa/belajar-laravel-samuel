@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\BlogPostController;
+use App\Http\Controllers\Admin\BlogTemaController;
 use App\Http\Controllers\Admin\WorkoutController as AdminWorkoutController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -56,6 +59,57 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
     ->name('admin.workout.destroy');
     
   Route::post('/workouts/{workout}/calculate', [AdminWorkoutController::class, 'calculate'])->name('admin.workout.calculate');
+
+  // =====================
+  // BLOG – CATEGORY
+  // =====================
+  Route::get('/blog/categories', [BlogCategoryController::class, 'index'])
+    ->name('admin.blog.categories.index');
+
+  Route::post('/blog/categories', [BlogCategoryController::class, 'store'])
+    ->name('admin.blog.categories.store');
+
+  Route::put('/blog/categories/{blogCategory}', [BlogCategoryController::class, 'update'])
+    ->name('admin.blog.categories.update');
+
+  Route::delete('/blog/categories/{blogCategory}', [BlogCategoryController::class, 'destroy'])
+    ->name('admin.blog.categories.destroy');
+
+  // =====================
+  // BLOG – TEMA
+  // =====================
+  Route::get('/blog/tema', [BlogTemaController::class, 'index'])
+    ->name('admin.blog.tema.index');
+
+  Route::post('/blog/tema', [BlogTemaController::class, 'store'])
+    ->name('admin.blog.tema.store');
+
+  Route::put('/blog/tema/{blogTema}', [BlogTemaController::class, 'update'])
+    ->name('admin.blog.tema.update');
+
+  Route::delete('/blog/tema/{blogTema}', [BlogTemaController::class, 'destroy'])
+    ->name('admin.blog.tema.destroy');
+
+  // =====================
+  // BLOG – POSTS
+  // =====================
+  Route::get('/blog/posts', [BlogPostController::class, 'index'])
+    ->name('admin.blog.posts.index');
+
+  Route::get('/blog/posts/create', [BlogPostController::class, 'create'])
+    ->name('admin.blog.posts.create');
+
+  Route::post('/blog/posts', [BlogPostController::class, 'store'])
+    ->name('admin.blog.posts.store');
+
+  Route::get('/blog/posts/{blogPost}/edit', [BlogPostController::class, 'edit'])
+    ->name('admin.blog.posts.edit');
+
+  Route::put('/blog/posts/{blogPost}', [BlogPostController::class, 'update'])
+    ->name('admin.blog.posts.update');
+
+  Route::delete('/blog/posts/{blogPost}', [BlogPostController::class, 'destroy'])
+    ->name('admin.blog.posts.destroy');
 });
 
 // =======================
@@ -105,7 +159,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 // USER
 // ======
 Route::get('/dashboard', [UserDashboardController::class, 'index'])
-->middleware(['auth', 'verified'])
+->middleware(['auth', 'verified', 'user', 'nocache'])
 ->name('user.dashboard');
 
 // =========

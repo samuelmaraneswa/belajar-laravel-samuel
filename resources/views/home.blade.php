@@ -118,16 +118,10 @@
 
       {{-- VIEW MORE --}}
       <div class="text-center">
-        <a
-          href="{{ url('/workouts') }}"
-          class="inline-flex items-center gap-2
-                px-6 py-3 rounded-xl
-                bg-indigo-600 text-white font-semibold
-                hover:bg-indigo-700 transition"
-        >
-          View All Workouts
-          <span>→</span>
-        </a>
+        <x-action-button href="{{ url('/workouts') }}">
+          View All Workouts <span>→</span>
+        </x-action-button>
+
       </div>
 
     </div>

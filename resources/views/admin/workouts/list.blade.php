@@ -1,207 +1,77 @@
 <x-admin-layout>
-  <div class="max-w-7xl mx-auto font-hanken">
+  <div id="workoutPage">
+    <div class="max-w-7xl mx-auto font-hanken">
 
-    <x-alert type="success" />
+      <x-alert type="success" />
 
-    {{-- Top Section --}}
-    <div class="flex justify-between items-center mb-6">
-      @php
-        $context = request('context');
-        $cleanContext = $context
-          ? str_replace('-workout', '', $context)
-          : null;
+      {{-- Top Section --}}
+      <div class="flex justify-between items-center mb-6">
+        @php
+          $context = request('context');
+          $cleanContext = $context
+            ? str_replace('-workout', '', $context)
+            : null;
 
-        $title = $cleanContext
-          ? Str::title(str_replace('-', ' ', $cleanContext)) . ' Workouts'
-          : 'All Workouts';
+          $title = $cleanContext
+            ? Str::title(str_replace('-', ' ', $cleanContext)) . ' Workouts'
+            : 'All Workouts';
 
-        $titleUrl = $context
-          ? url('/admin/workouts/list?context=' . $context)
-          : url('/admin/workouts/list');
-      @endphp
+          $titleUrl = $context
+            ? url('/admin/workouts/list?context=' . $context)
+            : url('/admin/workouts/list');
+        @endphp
 
-      <div class="hidden sm:block">
-        <a href="{{ $titleUrl }}">
-          <x-admin.page-title :title="$title" class="text-indigo-700 hover:underline" />
+        <div class="hidden sm:block">
+          <a href="{{ $titleUrl }}">
+            <x-admin.page-title :title="$title" class="text-indigo-700 hover:underline" />
+          </a>
+        </div>
+
+        {{-- SEARCH --}}
+        <x-form action="javascript:void(0)" class="flex-1">
+          <div class="flex items-center mx-4 relative">
+            <x-input
+              inline
+              id="search"
+              name="search"
+              placeholder="Cari workout..."
+              autocomplete="off"
+              :unstyled="true"
+              class="w-full h-9 px-4 border rounded-lg"
+            />
+
+            <i id="searchIcon"
+              class="fa-solid fa-magnifying-glass absolute right-3
+                      text-gray-400 cursor-pointer"></i>
+
+            <x-admin.search-suggestions
+              id="suggestions"
+              class="absolute z-50 w-full bg-white border rounded-lg shadow
+                    max-h-50 overflow-y-auto hidden" />
+          </div>
+        </x-form>
+
+        <a href="{{ route('admin.workout.create') }}">
+          <x-button class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
+            <i class="fa fa-plus"></i>
+            <span class="hidden sm:inline pl-1 text-sm">Tambah</span>
+          </x-button>
         </a>
       </div>
 
-      {{-- SEARCH --}}
-      <x-form action="javascript:void(0)" class="flex-1">
-        <div class="flex items-center mx-4 relative">
-          <x-input
-            inline
-            id="search"
-            name="search"
-            placeholder="Cari workout..."
-            autocomplete="off"
-            :unstyled="true"
-            class="w-full h-9 px-4 border rounded-lg"
-          />
+      {{-- Muscle Groups --}}
+      <x-muscle-groups :muscles="$muscles" />
 
-          <i id="searchIcon"
-             class="fa-solid fa-magnifying-glass absolute right-3
-                    text-gray-400 cursor-pointer"></i>
+      {{-- GRID (AJAX INJECT) --}}
+      <div id="workoutGrid"></div>
 
-          <x-admin.search-suggestions
-            id="suggestions"
-            class="absolute z-50 w-full bg-white border rounded-lg shadow
-                   max-h-50 overflow-y-auto hidden" />
-        </div>
-      </x-form>
+      {{-- PAGINATION (AJAX INJECT) --}}
+      <div id="pagination" class="mt-8 flex justify-center"></div>
 
-      <a href="{{ route('admin.workout.create') }}">
-        <x-button class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
-          <i class="fa fa-plus"></i>
-          <span class="hidden sm:inline pl-1 text-sm">Tambah</span>
-        </x-button>
-      </a>
     </div>
-
-    {{-- Muscle Groups --}}
-    <x-muscle-groups :muscles="$muscles" />
-
-    {{-- GRID (AJAX INJECT) --}}
-    <div id="workoutGrid"></div>
-
-    {{-- PAGINATION (AJAX INJECT) --}}
-    <div id="pagination" class="mt-8 flex justify-center"></div>
-
   </div>
 </x-admin-layout>
 
 <script>
   window.workoutContext = "{{ request('context') }}";
 </script>
-
-{{-- 
-<x-admin-layout>
-  <div class="max-w-7xl mx-auto font-hanken">
-
-    <x-alert type="success" />
-
-    <div class="flex justify-between items-center mb-6">
-      @php
-        $context = request('context'); // gym | home | null
-        $cleanContext = $context
-          ? str_replace('-workout', '', $context)
-          : null;
-
-        $title = $cleanContext
-          ? Str::title(str_replace('-', ' ', $cleanContext)) . ' Workouts'
-          : 'All Workouts';
-
-        $titleUrl = $context
-          ? url('/admin/workouts/list?context=' . $context)
-          : url('/admin/workouts/list');
-      @endphp
-
-      <div class="hidden sm:block">
-        <a href="{{ $titleUrl }}">
-          <x-admin.page-title :title="$title" class="text-indigo-700 hover:underline" />
-        </a>
-      </div>
-
-      <x-form action="{{url('/admin/workouts')}}" method="GET" class="flex-1">
-        <div class="flex items-center mx-4 relative">
-
-          <x-input inline id="search" name="search" value="{{request('search')}}" placeholder="Cari workout..." autocomplete="off" :unstyled="true" class="w-full h-9 px-4 border rounded-lg focus:outline-none focus:ring focus:ring-indigo-200" />
-
-          <i
-            id="searchIcon"
-            class="fa-solid fa-magnifying-glass absolute right-3
-                  text-gray-400 cursor-pointer">
-          </i>
-
-          <x-admin.search-suggestions id="suggestions" class="absolute z-50 w-full bg-white border rounded-lg shadow
-         max-h-50 overflow-y-auto hidden" />
-
-        </div>
-      </x-form>
-
-      <a href={{route('admin.workout.create')}}>
-        <x-button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 hover:text-white/90">
-          <i class="fa fa-plus text-lg"></i>
-          <span class="hidden sm:inline pl-1 text-sm">Tambah</span>
-        </x-button>
-      </a>
-    </div>
-
-    <x-muscle-groups :muscles="$muscles" />
-
-    @if ($workouts->isEmpty())
-    <div class="text-center text-gray-500 py-20">
-      Belum ada workout. Tambahkan workout pertama.
-    </div>
-    @else
-    <div id="workoutGrid">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
-
-        @foreach ($workouts as $workout)
-        <x-admin.card class="p-4">
-
-          <h3 class="font-bold text-xl text-gray-800 mb-2">
-            {{ $loop->iteration }}. {{ Str::title($workout->title) }}
-          </h3>
-
-          <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden mb-3">
-            @if ($workout->image_thumb)
-            <img src="{{ asset('storage/'.$workout->image_thumb) }}"
-              class="w-full h-full object-cover scale-115" style="object-position: 40px 50%;">
-            @else
-            <div class="flex items-center justify-center h-full text-gray-400">
-              No Image
-            </div>
-            @endif
-          </div>
-
-          <div class="flex-1">
-            <div class="flex items-center gap-2 mb-2">
-              <p class="text-sm text-gray-500">Category workout:</p>
-              <span class="inline-block text-sm bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">
-                {{ $workout->category->name ?? '-' }}
-              </span>
-            </div>
-
-            <p class="text-gray-600">
-              {{ \Illuminate\Support\Str::limit($workout->description ?? 'Tidak ada deskripsi', 200) }}
-            </p>
-          </div>
-
-          <div class="flex gap-3 mt-auto pt-4 text-sm">
-            <a href="{{ route('admin.workout.show', $workout->slug) }}?context={{ request('context') }}"
-              class="hover:bg-indigo-600 rounded bg-indigo-500 px-3 py-1.5 text-white">
-              View
-            </a>
-            <a href="{{ route('admin.workout.edit', $workout) }}"
-              class="hover:bg-green-600 rounded bg-green-500 px-3 py-1.5 text-white">
-              Edit
-            </a>
-            <form action="{{ route('admin.workout.destroy', $workout) }}"
-                  method="POST"
-                  onsubmit="return confirm('Yakin hapus workout ini?')">
-              @csrf
-              @method('DELETE')
-              <button type="submit"
-                class="hover:bg-red-600 rounded bg-red-500 px-3 py-1.5 text-white cursor-pointer">
-                Delete
-              </button>
-            </form>
-          </div>
-
-        </x-admin.card>
-        @endforeach
-
-      </div>
-    </div>
-
-    <div id="pagination" class="mt-8 flex justify-center"></div>
-    @endif
-
-  </div>
-</x-admin-layout>
-
-<script>
-  window.workoutContext = "{{ request('context') }}";
-</script>
---}}

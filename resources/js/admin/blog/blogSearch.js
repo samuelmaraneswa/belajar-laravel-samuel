@@ -3,8 +3,8 @@ import { initSearchInputIcon } from '../utils/searchInputIcon'
 import { initSearchTrigger } from '../utils/searchTrigger'
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (!document.getElementById('workoutPage')) return
-
+  if (!document.getElementById('blogPage')) return
+  
   const input = document.getElementById('search')
   if (!input) return  
 
@@ -18,22 +18,18 @@ document.addEventListener('DOMContentLoaded', () => {
     input,
     form,
     onSearch(value) {
-      window.workoutState.search = value
-      window.loadWorkouts(1)
+      window.blogState.search = value
+      window.loadPosts(1)
     }
   })
-
-  const urlParams = new URLSearchParams(window.location.search)
-  const muscle = urlParams.get('muscle') || ''
 
   initSearchSuggestions({
     input,
     suggestions,
-    endpoint: `/admin/workouts/suggest?context=${window.workoutContext ?? ''}&muscle=${muscle}`,
+    endpoint: `/admin/blog/posts/suggest`,
     onSelect(value) {
       suggestions.classList.add('hidden')
       input.triggerSearch(value)
     }
   })
-
 })

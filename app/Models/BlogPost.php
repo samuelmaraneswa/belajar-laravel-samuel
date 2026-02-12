@@ -13,6 +13,9 @@ class BlogPost extends Model
     'slug',
     'excerpt',
     'content',
+    'image',
+    'thumb',
+    'video_url',
     'status',
     'published_at',
   ];
@@ -21,13 +24,33 @@ class BlogPost extends Model
     'published_at' => 'datetime',
   ];
 
+  // =====================
+  // RELATIONS
+  // =====================
+
   public function category()
   {
-    return $this->belongsTo(BlogCategory::class, 'category_id');
+    return $this->belongsTo(BlogCategory::class);
   }
 
   public function tema()
   {
-    return $this->belongsTo(BlogTema::class, 'tema_id');
+    return $this->belongsTo(BlogTema::class);
+  }
+
+  // calisthenics / workout detail (conditional)
+  public function workoutDetails()
+  {
+    return $this->hasMany(BlogPostWorkoutDetail::class);
+  }
+
+  public function getRouteKeyName()
+  {
+    return 'slug';
+  }
+
+  public function isCalisthenics()
+  {
+    return $this->category?->slug === 'calisthenics';
   }
 }

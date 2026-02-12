@@ -3,7 +3,7 @@
 
     {{-- SEARCH --}}
     <x-search.form
-      action="/workouts"
+      action="/workouts" 
       placeholder="Cari workout..."
       suggestUrl="/workouts/suggest"
     />

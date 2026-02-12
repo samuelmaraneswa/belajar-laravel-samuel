@@ -21,7 +21,7 @@
           'color' => 'yellow',
         ],
         'calisthenics' => [
-          'icon' => 'person-running',
+          'icon' => 'person-running', 
           'color' => 'red',
         ],
         'gymnastic' => [

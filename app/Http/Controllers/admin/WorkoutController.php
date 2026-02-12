@@ -188,27 +188,6 @@ class WorkoutController extends Controller
       ->with('success', 'Workout berhasil disimpan');
   }
 
-  // public function suggest(Request $request)
-  // {
-  //   $q = $request->query('q');
-  //   $context = $request->query('context');
-
-  //   if (!$q) {
-  //     return response()->json([]);
-  //   }
-
-  //   return Workout::when($context, function ($query) use ($context) {
-  //     $query->whereHas(
-  //       'contexts',
-  //       fn($c) =>
-  //       $c->where('slug', $context)
-  //     );
-  //   })
-  //     ->where('title', 'like', "%{$q}%")
-  //     ->limit(20)
-  //     ->pluck('title');
-  // }
-
   public function suggest(Request $request)
   {
     $q       = $request->query('q');
@@ -305,7 +284,6 @@ class WorkoutController extends Controller
       'muscles'    => Muscle::all(),
     ]);
   }
-
 
   public function update(Request $request, Workout $workout)
   {

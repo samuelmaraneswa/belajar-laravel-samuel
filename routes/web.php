@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\BlogTemaController;
 use App\Http\Controllers\Admin\WorkoutController as AdminWorkoutController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
@@ -26,9 +28,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/register', [AuthController::class, 'registerForm']);
 Route::post('/register', [AuthController::class, 'register']);
-
-// Route::get('/workouts', [WorkoutController::class, 'index']);
-Route::get('/workouts/suggest', [WorkoutController::class, 'suggest']);
 
 Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function() {
   Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -93,6 +92,9 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
   // =====================
   // BLOG – POSTS
   // =====================
+  Route::get('/blog', [BlogController::class, 'index'])
+    ->name('admin.blog.index');
+
   Route::get('/blog/posts', [BlogPostController::class, 'index'])
     ->name('admin.blog.posts.index');
 
@@ -102,14 +104,32 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
   Route::post('/blog/posts', [BlogPostController::class, 'store'])
     ->name('admin.blog.posts.store');
 
-  Route::get('/blog/posts/{blogPost}/edit', [BlogPostController::class, 'edit'])
+  Route::get('/blog/posts/{post}/edit', [BlogPostController::class, 'edit'])
     ->name('admin.blog.posts.edit');
 
   Route::put('/blog/posts/{blogPost}', [BlogPostController::class, 'update'])
     ->name('admin.blog.posts.update');
 
-  Route::delete('/blog/posts/{blogPost}', [BlogPostController::class, 'destroy'])
+  Route::get('/blog/temas', [BlogTemaController::class, 'index'])
+    ->name('admin.blog.temas.index');
+
+  Route::get('/blog/posts/suggest', [BlogPostController::class, 'suggest'])
+    ->name('admin.blog.posts.suggest');
+
+  Route::get('/blog/posts/{post}', [BlogPostController::class, 'show'])
+    ->name('admin.blog.posts.show');
+ 
+  Route::delete('/blog/posts/{post}', [BlogPostController::class, 'destroy'])
     ->name('admin.blog.posts.destroy');
+
+
+  // =====================
+  // BLOG – TEMAS (AJAX)
+  // =====================
+  Route::get(
+    '/blog/categories/{category}/temas',
+    [BlogPostController::class, 'temasByCategory']
+  );
 });
 
 // =======================
@@ -191,6 +211,8 @@ Route::post('/workout-sets/complete', [WorkoutSetController::class, 'complete'])
   ->name('workout-sets.complete');
 
 // Public workouts
+Route::get('/workouts/suggest', [WorkoutController::class, 'suggest']);
+
 Route::get('/workouts', [WorkoutController::class, 'index'])
   ->name('workouts.index');
 
@@ -202,3 +224,13 @@ Route::post(
   '/workouts/{workout:slug}/calculate-preview',
   [WorkoutController::class, 'calculatePreview']
 )->name('workouts.calculate.preview');
+
+// Public blog
+Route::get('/blogs', [PublicBlogController::class, 'index'])
+  ->name('blogs.index');
+
+Route::get('/blogs/suggest', [PublicBlogController::class, 'suggest'])
+  ->name('blogs.suggest');
+
+Route::get('/blogs/{post:slug}', [PublicBlogController::class, 'show'])
+  ->name('blogs.show');

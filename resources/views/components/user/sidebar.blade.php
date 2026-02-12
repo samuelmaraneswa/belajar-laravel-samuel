@@ -1,15 +1,12 @@
-<aside id="userSidebar"
-  class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r
+<aside
+  id="userSidebar"
+  class="fixed left-0 top-14 z-40 w-64 bg-white border-r
          transform -translate-x-full md:translate-x-0
-         transition-transform duration-200">
+         transition-transform duration-200
+         h-[calc(100vh-3.5rem)]"
+>
+  <nav class="h-full p-4 space-y-1 overflow-y-auto">
 
-  {{-- header sidebar --}}
-  <div class="h-14 px-6 flex items-center font-semibold border-b shadow-sm">
-    User Menu
-  </div>
-
-  <nav class="p-4 space-y-1">
-    
     <x-user.nav-link href="{{ url('/') }}">
       <i class="fa-solid fa-globe w-4"></i>
       <span>View Website</span>
@@ -22,13 +19,19 @@
     </x-user.nav-link>
 
     {{-- My Programs --}}
-    <x-user.nav-link href="/user/programs" :active="request()->is('user.programs.index')">
+    <x-user.nav-link
+      href="/user/programs"
+      :active="request()->routeIs('user.programs.index')"
+    >
       <i class="fa-regular fa-calendar w-4"></i>
       <span>My Programs</span>
     </x-user.nav-link>
 
     {{-- Generate --}}
-    <x-user.nav-link href="/user/programs/create" :active="request()->is('user.programs.create')">
+    <x-user.nav-link
+      href="/user/programs/create"
+      :active="request()->routeIs('user.programs.create')"
+    >
       <i class="fa-solid fa-plus w-4"></i>
       <span>Generate Program</span>
     </x-user.nav-link>

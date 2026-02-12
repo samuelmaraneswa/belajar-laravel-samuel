@@ -29,12 +29,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!submenu) return
 
-    // auto open jika sedang di halaman workouts
-    if (window.location.pathname.startsWith('/admin/workouts')) {
+    // auto open submenu berdasarkan URL
+    if (
+      (key === 'workouts' && window.location.pathname.startsWith('/admin/workouts')) ||
+      (key === 'blog' && window.location.pathname.startsWith('/admin/blog'))
+    ) {
       submenu.classList.remove('hidden')
       icon?.classList.add('rotate-180')
     }
-
+    
     toggle.addEventListener('click', () => {
       submenu.classList.toggle('hidden')
       icon?.classList.toggle('rotate-180')

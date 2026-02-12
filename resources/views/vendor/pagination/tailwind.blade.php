@@ -3,31 +3,52 @@
 
         <div class="flex gap-2 items-center justify-between sm:hidden">
 
+            {{-- Previous --}}
             @if ($paginator->onFirstPage())
-                <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-md dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600">
-                    {!! __('pagination.previous') !!}
-                </span>
+                <span class="px-3 py-2 text-sm bg-gray-200 rounded-md">Prev</span>
             @else
-                <a href="{{ $paginator->previousPageUrl() }}" rel="prev" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-700 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-800 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-200">
-                    {!! __('pagination.previous') !!}
+                <a href="{{ $paginator->previousPageUrl() }}"
+                  class="px-3 py-2 text-sm bg-white border rounded-md">
+                    Prev
                 </a>
             @endif
 
+
+            {{-- Dropdown Page --}}
+            <div class="relative w-auto">
+              <button
+                  onclick="togglePageDropdown()"
+                  class="px-4 py-2 text-sm border rounded-md bg-white flex items-center justify-between gap-2 min-w-15"
+              >
+                  {{ $paginator->currentPage() }}
+                  <span class="text-xs">▼</span>
+              </button>
+
+              <div id="pageDropdown"
+                  class="hidden absolute bottom-full mb-2 left-0 w-full max-h-48 overflow-auto bg-white border rounded-md shadow-lg z-50">
+                  @for ($i = 1; $i <= $paginator->lastPage(); $i++)
+                      <a href="{{ $paginator->url($i) }}"
+                        class="block px-4 py-2 text-sm text-center hover:bg-gray-100 {{ $i == $paginator->currentPage() ? 'bg-gray-200 font-semibold' : '' }}">
+                          {{ $i }}
+                      </a>
+                  @endfor
+              </div>
+          </div>
+
+            {{-- Next --}}
             @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" rel="next" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-800 bg-white border border-gray-300 leading-5 rounded-md hover:text-gray-700 focus:outline-none focus:ring ring-gray-300 focus:border-blue-300 active:bg-gray-100 active:text-gray-800 transition ease-in-out duration-150 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:focus:border-blue-700 dark:active:bg-gray-700 dark:active:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-200">
-                    {!! __('pagination.next') !!}
+                <a href="{{ $paginator->nextPageUrl() }}"
+                  class="px-3 py-2 text-sm bg-white border rounded-md">
+                    Next
                 </a>
             @else
-                <span class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 cursor-not-allowed leading-5 rounded-md dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600">
-                    {!! __('pagination.next') !!}
-                </span>
+                <span class="px-3 py-2 text-sm bg-gray-200 rounded-md">Next</span>
             @endif
 
         </div>
 
-        <div class="hidden sm:flex-1 sm:flex sm:gap-2 sm:items-center sm:justify-between">
 
-            
+        <div class="hidden sm:flex-1 sm:flex sm:gap-2 sm:items-center sm:justify-between">
 
             <div>
                 <span class="inline-flex rtl:flex-row-reverse shadow-sm rounded-md">
@@ -95,3 +116,17 @@
         </div>
     </nav>
 @endif
+
+<script>
+function togglePageDropdown() {
+    document.getElementById('pageDropdown')
+        .classList.toggle('hidden');
+}
+
+document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('pageDropdown');
+    if (!e.target.closest('.relative')) {
+        dropdown.classList.add('hidden');
+    }
+});
+</script>

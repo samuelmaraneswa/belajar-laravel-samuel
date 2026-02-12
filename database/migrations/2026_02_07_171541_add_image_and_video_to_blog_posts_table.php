@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::table('blog_posts', function (Blueprint $table) {
-      $table->string('image')->nullable()->after('slug');
-      $table->string('video_url')->nullable()->after('image');
-    });
+      Schema::table('blog_posts', function (Blueprint $table) {
+        $table->string('image')->nullable()->after('slug');
+        $table->string('video_url')->nullable()->after('image');
+      });
     }
 
     /**

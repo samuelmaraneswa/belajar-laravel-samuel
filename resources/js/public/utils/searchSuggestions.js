@@ -64,7 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     timer = setTimeout(async () => {
       try {
-        const res = await fetch(`${endpoint}?q=${encodeURIComponent(q)}`);
+        const currentParams = new URLSearchParams(window.location.search);
+        currentParams.set('q', q);
+
+        const res = await fetch(`${endpoint}?${currentParams.toString()}`);
         const data = await res.json();
 
         if (!Array.isArray(data) || !data.length) {

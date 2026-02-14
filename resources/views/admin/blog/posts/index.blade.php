@@ -35,7 +35,7 @@
               inline
               id="search"
               name="search"
-              placeholder="Cari post..."
+              placeholder="Cari post..." 
               autocomplete="off"
               :unstyled="true"
               class="w-full h-9 px-4 border rounded-lg mr-3"

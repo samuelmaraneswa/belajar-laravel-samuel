@@ -25,6 +25,10 @@ return new class extends Migration
         $table->string('title');
         $table->string('slug')->unique();
 
+        $table->string('thumb')->nullable();
+        $table->string('image')->nullable();
+        $table->string('video_url')->nullable();
+
         $table->text('excerpt')->nullable();   // ringkasan
         $table->longText('content');           // isi journey
 

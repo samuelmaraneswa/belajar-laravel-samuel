@@ -5,7 +5,7 @@
     <x-search.form
       action="/workouts" 
       placeholder="Cari workout..."
-      suggestUrl="/workouts/suggest"
+      suggestUrl="/workouts/suggest" 
     />
 
     {{-- EXPLORE BY MUSCLE GROUP --}}

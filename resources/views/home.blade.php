@@ -121,7 +121,36 @@
         <x-action-button href="{{ url('/workouts') }}">
           View All Workouts <span>→</span>
         </x-action-button>
+      </div>
+    </div>
+  </section>
 
+  {{-- BLOG PREVIEW --}}
+  <section class="bg-gray-100 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {{-- HEADER --}}
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+          Latest Posts
+        </h2>
+        <p class="text-gray-500 max-w-md mx-auto">
+          Learn techniques, progressions, and fitness insights.
+        </p>
+      </div>
+
+      {{-- BLOG CARDS --}}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        @foreach ($latestPosts as $post)
+          <x-blog-card :post="$post" />
+        @endforeach
+      </div>
+
+      {{-- VIEW MORE --}}
+      <div class="text-center">
+        <x-action-button href="{{ url('/blogs') }}">
+          View My Blogs <span>→</span>
+        </x-action-button>
       </div>
 
     </div>

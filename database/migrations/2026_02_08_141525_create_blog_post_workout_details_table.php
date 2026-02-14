@@ -18,12 +18,12 @@ return new class extends Migration
           ->constrained('blog_posts')
           ->cascadeOnDelete();
 
-        $table->string('exercise')->nullable();     // handstand, muscle up
         $table->string('progression')->nullable();  // wall handstand, tuck, dll
 
         $table->integer('sets')->nullable();
         $table->integer('reps')->nullable();
         $table->integer('hold_seconds')->nullable(); // untuk static hold
+        $table->decimal('weight', 5, 2)->nullable();
 
         $table->text('notes')->nullable();           // catatan hari itu
 

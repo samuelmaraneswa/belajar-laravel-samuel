@@ -1,5 +1,5 @@
 <a
-  href="{{ route('blogs.show', $post->slug) }}"
+  href="{{ route('blogs.posts.show', $post->slug) }}"
   class="group block bg-white rounded-2xl overflow-hidden
          border border-indigo-200
          hover:border-indigo-500 hover:shadow-lg

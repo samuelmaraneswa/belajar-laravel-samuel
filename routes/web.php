@@ -7,7 +7,9 @@ use App\Http\Controllers\Admin\BlogTemaController;
 use App\Http\Controllers\Admin\WorkoutController as AdminWorkoutController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\BlogController as PublicBlogController;
+use App\Http\Controllers\BlogPostController as PublicBlogPostController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
@@ -122,7 +124,6 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
   Route::delete('/blog/posts/{post}', [BlogPostController::class, 'destroy'])
     ->name('admin.blog.posts.destroy');
 
-
   // =====================
   // BLOG – TEMAS (AJAX)
   // =====================
@@ -130,6 +131,31 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
     '/blog/categories/{category}/temas',
     [BlogPostController::class, 'temasByCategory']
   );
+
+  // =====================
+  // CALORIE
+  // =====================
+  Route::get('/foods', [FoodController::class, 'index'])
+    ->name('admin.foods.index');
+  
+  Route::get('/foods/create', [FoodController::class, 'create'])
+    ->name('admin.foods.create');
+  
+  Route::post('/foods/create', [FoodController::class, 'store'])
+    ->name('admin.foods.store');
+
+  Route::get('/foods/{food}', [FoodController::class, 'show'])
+    ->name('admin.foods.show');
+
+  Route::get('/foods/{food}/edit', [FoodController::class, 'edit'])
+    ->name('admin.foods.edit');
+  
+  Route::post('/foods/{food}', [FoodController::class, 'update'])
+    ->name('admin.foods.update');
+
+  Route::post('/foods/{food}/destroy', [FoodController::class, 'destroy'])
+    ->name('admin.foods.destroy');
+
 });
 
 // =======================
@@ -225,12 +251,22 @@ Route::post(
   [WorkoutController::class, 'calculatePreview']
 )->name('workouts.calculate.preview');
 
-// Public blog
+// BLOG DASHBOARD (cards: All + Categories)
 Route::get('/blogs', [PublicBlogController::class, 'index'])
   ->name('blogs.index');
+  
+// BLOG POSTS LIST
+Route::get('/blogs/posts', [PublicBlogPostController::class, 'index'])
+  ->name('blogs.posts.index');
 
-Route::get('/blogs/suggest', [PublicBlogController::class, 'suggest'])
+// BLOG AUTOCOMPLETE
+Route::get('/blogs/suggest', [PublicBlogPostController::class, 'suggest'])
   ->name('blogs.suggest');
 
-Route::get('/blogs/{post:slug}', [PublicBlogController::class, 'show'])
-  ->name('blogs.show');
+  // TEMAS BY CATEGORY
+Route::get('/blogs/{category:slug}', [PublicBlogController::class, 'category'])
+    ->name('blogs.category');
+
+// BLOG DETAIL
+Route::get('/blogs/posts/{post:slug}', [PublicBlogPostController::class, 'show'])
+  ->name('blogs.posts.show');

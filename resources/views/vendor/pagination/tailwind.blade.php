@@ -119,12 +119,16 @@
 
 <script>
 function togglePageDropdown() {
-    document.getElementById('pageDropdown')
-        .classList.toggle('hidden');
+    const dropdown = document.getElementById('pageDropdown');
+    if (!dropdown) return; // guard
+
+    dropdown.classList.toggle('hidden');
 }
 
 document.addEventListener('click', function(e) {
     const dropdown = document.getElementById('pageDropdown');
+    if (!dropdown) return; // guard WAJIB
+
     if (!e.target.closest('.relative')) {
         dropdown.classList.add('hidden');
     }

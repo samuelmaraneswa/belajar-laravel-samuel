@@ -9,7 +9,7 @@ import './components/admin-header';
 import './components/admin-sidebar';
 import './components/instructions'
 import './components/anchor-menu'
-import './admin/utils/pagination'
+import './admin/utils/pagination' 
 import './admin/workouts/workout-list'
 import './components/user-sidebar'
 import './programs/workout-counter';
@@ -26,3 +26,4 @@ import './admin/blog/blogTemaDelete'
 import './admin/blog/calisthenicsProgession'
 import './admin/blog/blogLoader'
 import './admin/blog/blogSearch'
+import './admin/foods/foodView'

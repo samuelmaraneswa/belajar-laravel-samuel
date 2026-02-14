@@ -2,63 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BlogPost;
 use App\Models\BlogCategory;
-use Illuminate\Http\Request;
+use App\Models\BlogTema;
+use App\Models\BlogPost;
 
 class BlogController extends Controller
 {
-  public function index(Request $request)
+  // =========================
+  // BLOG DASHBOARD (CATEGORIES)
+  // =========================
+  public function index()
   {
-    $search   = $request->query('search');
-    $category = $request->query('category');
+    $totalPosts = BlogPost::count();
 
-    $posts = BlogPost::with(['category', 'tema'])
-      ->when($search, function ($q) use ($search) {
-        $q->where('title', 'like', "%{$search}%");
-      })
-      ->when($category, function ($q) use ($category) {
-        $q->whereHas('category', function ($c) use ($category) {
-          $c->where('slug', $category);
-        });
-      })
-      ->latest()
-      ->paginate(12)
-      ->withQueryString();
-
-    $categories = BlogCategory::orderBy('name')->get();
-
-    return view('blog.posts.index', compact('posts', 'categories'));
-  }
-
-  public function show(BlogPost $post)
-  {
-    $similarPosts = BlogPost::with(['category'])
-      ->where('category_id', $post->category_id)
-      ->where('id', '!=', $post->id)
-      ->take(6)
+    $categories = BlogCategory::withCount('posts')
+      ->orderBy('name')
       ->get();
 
-    return view('blog.posts.show', compact(
-      'post',
-      'similarPosts'
+    return view('blog.index', compact(
+      'totalPosts',
+      'categories'
     ));
   }
 
-  public function suggest(Request $request)
+  // =========================
+  // TEMAS BY CATEGORY
+  // =========================
+  public function category(BlogCategory $category)
   {
-    $q = trim($request->query('q'));
+    $temas = BlogTema::where('category_id', $category->id)
+      ->withCount('posts')
+      ->orderBy('name')
+      ->get();
 
-    if ($q === '') {
-      return response()->json([]);
-    }
-
-    $titles = BlogPost::where('title', 'like', "%{$q}%")
-      ->orderBy('title')
-      ->limit(20)
-      ->pluck('title')
-      ->values();
-
-    return response()->json($titles);
+    return view('blog.temas.index', compact(
+      'category',
+      'temas'
+    ));
   }
 }

@@ -3,13 +3,13 @@
 
     {{-- SEARCH --}}
     <x-search.form
-      action="/blogs"
+      action="/blogs/posts"
       placeholder="Cari artikel..."
-      suggestUrl="/blog/suggest"
+      suggestUrl="/blogs/suggest"
     />
 
     {{-- CONTENT --}}
-    @if ($posts->isEmpty())
+    @if ($posts->isEmpty()) 
       <div class="text-center text-gray-500 py-20">
         Belum ada artikel.
       </div>

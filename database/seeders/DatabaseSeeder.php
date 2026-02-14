@@ -33,5 +33,18 @@ class DatabaseSeeder extends Seeder
     
     // 4️⃣ Dependent (FK ke workout)
     $this->call(WorkoutInstructionSeeder::class);
+
+    // ========================
+    // 6️⃣ BLOG MODULE
+    // ========================
+    $this->call(BlogCategorySeeder::class);
+    $this->call(BlogTemaSeeder::class);
+    $this->call(BlogPostSeeder::class);
+    $this->call(BlogPostWorkoutDetailSeeder::class);
+    
+    // ========================
+    // 6️⃣ Foods
+    // ========================
+    $this->call(FoodSeeder::class);
   }
 }

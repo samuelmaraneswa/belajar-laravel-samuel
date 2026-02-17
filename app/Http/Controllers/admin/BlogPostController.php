@@ -296,5 +296,5 @@ class BlogPostController extends Controller
       ->pluck('title');
 
     return response()->json($posts);
-  }
+  } 
 }

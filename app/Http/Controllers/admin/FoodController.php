@@ -18,11 +18,23 @@ class FoodController extends Controller
     $search = $request->query('search');
 
     $foods = Food::query()
-      ->when($search, function ($query) use ($search) {
-        $query->where('name', 'like', "%{$search}%");
-      })
+      ->when(
+        $search,
+        fn($q) =>
+        $q->where('name', 'like', "%{$search}%")
+      )
       ->latest()
-      ->paginate(10);
+      ->paginate(20);
+
+    if ($request->ajax()) {
+      return response()->json([
+        'html' => view('admin.foods.partials._table', compact('foods'))->render(),
+        'pagination' => [
+          'page' => $foods->currentPage(),
+          'last' => $foods->lastPage(), // ← HARUS last
+        ]
+      ]);
+    }
 
     return view('admin.foods.index', compact('foods', 'search'));
   }
@@ -96,13 +108,13 @@ class FoodController extends Controller
         $image = $manager->read($request->file('image'));
 
         // Resize max width 210px (aspect ratio tetap)
-        $image->scale(width: 210);
+        $image->scale(width: 800);
 
         $filename = Str::uuid() . '.webp';
         $path = 'foods/' . $filename;
 
         $image
-          ->toWebp(75)
+          ->toWebp(90)
           ->save(storage_path('app/public/' . $path));
 
         $imagePath = $path;
@@ -217,13 +229,13 @@ class FoodController extends Controller
         $manager = new ImageManager(new Driver());
         $image = $manager->read($request->file('image'));
 
-        $image->scale(width: 210);
+        $image->scale(width: 800);
 
         $filename = Str::uuid() . '.webp';
         $path = 'foods/' . $filename;
 
         $image
-          ->toWebp(75)
+          ->toWebp(90)
           ->save(storage_path('app/public/' . $path));
 
         $imagePath = $path;
@@ -268,5 +280,14 @@ class FoodController extends Controller
     return redirect()
       ->route('admin.foods.index')
       ->with('success', 'Food berhasil dinonaktifkan.');
+  }
+
+  public function suggest(Request $request)
+  {
+    $q = $request->query('q');
+
+    return Food::where('name', 'like', "%{$q}%")
+      ->limit(20)
+      ->pluck('name');
   }
 }

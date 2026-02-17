@@ -1,136 +1,63 @@
 <x-admin-layout>
-  <div class="max-w-6xl mx-auto font-hanken">
+  <div id="foodPage">
+    <div class="max-w-6xl mx-auto font-hanken">
 
-    {{-- PAGE TITLE --}}
-    <x-admin.page-title title="Foods Management" />
+      {{-- PAGE TITLE --}}
+      <x-admin.page-title title="Foods Management" />
 
-    {{-- SEARCH + ADD --}}
-    <div class="mt-6 mb-8 flex items-center justify-between gap-4">
+      {{-- SEARCH + ADD --}}
+      <div class="mt-6 mb-8 flex items-center justify-between gap-4">
 
-      <x-form action="{{ route('admin.foods.index') }}" method="GET" class="flex-1">
-        <div class="relative w-full">
-          <x-input
-            inline
-            name="search"
-            value="{{ $search }}"
-            placeholder="Cari makanan..."
-            autocomplete="off"
-            :unstyled="true"
-            class="w-full h-10 px-4 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-          <button type="submit"
-            class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-indigo-600">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </div>
-      </x-form>
+        {{-- SEARCH --}}
+        <x-form action="javascript:void(0)" class="flex-1">
+          <div class="relative w-full">
 
-      <a href="{{ route('admin.foods.create') }}">
-        <x-button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-          <i class="fa fa-plus"></i>
-          <span class="hidden sm:inline pl-1 text-sm">Tambah</span>
-        </x-button>
-      </a>
+            <x-input
+              inline
+              id="search"
+              name="search"
+              placeholder="Cari makanan..."
+              autocomplete="off"
+              :unstyled="true"
+              class="w-full h-10 px-4 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
 
-    </div>
+            <i
+              id="searchIcon"
+              class="fa-solid fa-magnifying-glass absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
+            ></i>
 
-    @if(session('success'))
-      <div class="mb-4 px-4 py-3 bg-green-100 text-green-700 rounded-lg">
-        {{ session('success') }}
+            <x-admin.search-suggestions
+              id="suggestions"
+              class="absolute z-50 w-full bg-white border rounded-lg shadow mt-0.5
+                    max-h-60 overflow-y-auto hidden"
+            />
+
+          </div>
+        </x-form>
+
+        <a href="{{ route('admin.foods.create') }}">
+          <x-button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+            <i class="fa fa-plus"></i>
+            <span class="hidden sm:inline pl-1 text-sm">Tambah</span>
+          </x-button>
+        </a>
+
       </div>
-    @endif
 
-    {{-- TABLE --}}
-    <div class="bg-white rounded-xl shadow overflow-x-auto">
+      @if(session('success'))
+        <div class="mb-4 px-4 py-3 bg-green-100 text-green-700 rounded-lg">
+          {{ session('success') }}
+        </div>
+      @endif
 
-      <table class="w-full table-auto text-xs sm:text-base">
+      <div id="tableWrapper">
+        @include('admin.foods.partials._table')
+      </div>
 
-        <thead class="bg-gray-50 border-b">
-          <tr class="text-left">
-            <th class="px-6 py-3 whitespace-nowrap">No</th>
-            <th class="px-6 py-3 whitespace-nowrap">Name</th>
-            <th class="px-6 py-3 whitespace-nowrap">Status</th>
-            <th class="px-6 py-3 text-center whitespace-nowrap">Actions</th>
-          </tr>
-        </thead>
-
-        <tbody class="divide-y">
-
-          @forelse($foods as $index => $food)
-            <tr class="hover:bg-gray-50">
-
-              <td class="px-6 py-4 whitespace-nowrap">
-                {{ $foods->firstItem() + $index }}
-              </td>
-
-              <td class="px-6 py-4 font-medium text-gray-800 whitespace-nowrap">
-                {{ $food->name }}
-              </td>
-
-              <td class="px-6 py-4 whitespace-nowrap">
-                @if($food->is_active)
-                  <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded">
-                    Active
-                  </span>
-                @else
-                  <span class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded">
-                    Inactive
-                  </span>
-                @endif
-              </td>
-
-              <td class="py-4 text-center whitespace-nowrap space-x-1">
-
-                <button
-                  class="view-food inline-flex items-center justify-center h-6 px-1 sm:h-7 sm:px-2 text-xs sm:text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
-                  data-id="{{ $food->id }}"
-                >
-                  View
-                </button>
-
-                <a href="{{ route('admin.foods.edit', $food) }}"
-                  class="inline-flex items-center justify-center h-6 px-1 sm:h-7 sm:px-2 text-xs sm:text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600">
-                  Edit
-                </a>
-
-                <form
-                  action="{{ route('admin.foods.destroy', $food) }}"
-                  method="POST"
-                  class="inline"
-                >
-                  @csrf
-
-                  <button
-                    type="submit"
-                    class="inline-flex items-center justify-center h-6 px-1 sm:h-7 sm:px-2 text-xs sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 cursor-pointer"
-                    onclick="return confirm('Nonaktifkan data ini?')"
-                  >
-                    Delete
-                  </button>
-                </form>
-
-              </td>
-
-            </tr>
-          @empty
-            <tr>
-              <td colspan="4" class="px-6 py-6 text-center text-gray-500">
-                Data tidak ditemukan.
-              </td>
-            </tr>
-          @endforelse
-
-        </tbody>
-
-      </table>
+      <div id="pagination" class="mt-8 flex justify-center"></div>
 
     </div>
-
-    {{-- PAGINATION --}}
-    <div class="mt-6">
-      {{ $foods->links() }}
-    </div>
-
   </div>
 </x-admin-layout>
 

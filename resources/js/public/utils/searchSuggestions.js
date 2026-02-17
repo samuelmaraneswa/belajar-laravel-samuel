@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (index >= 0) {
         e.preventDefault();
         fillFromActive();
-      }
+      } 
       closeSuggestions();
       input.form.submit();
     }

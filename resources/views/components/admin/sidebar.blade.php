@@ -100,5 +100,45 @@
         </x-admin.nav-link>
       </div>
     </div>
+
+    {{-- FOODS --}}
+<div>
+  <div class="flex items-center justify-between rounded
+    {{ request()->routeIs('admin.foods.*') ? 'bg-gray-100' : 'hover:bg-gray-100' }}">
+    
+    <x-admin.nav-link
+      href="{{ route('admin.foods.index') }}"
+      :active="false"
+      class="flex-1"
+    >
+      Foods
+    </x-admin.nav-link>
+
+    <button type="button" data-submenu-toggle="foods" class="ml-2 p-2">
+      <i data-submenu-icon class="fa-solid fa-chevron-down text-xs transition-transform"></i>
+    </button>
+  </div>
+
+  <div data-submenu="foods" class="ml-4 mt-1 space-y-1 border-l pl-3 hidden">
+
+    <x-admin.nav-link
+      href="{{ route('admin.foods.index') }}"
+      :active="request()->routeIs('admin.foods.index')"
+      class="text-sm"
+    >
+      All Foods
+    </x-admin.nav-link>
+
+    <x-admin.nav-link
+      href="{{ route('admin.foods.create') }}"
+      :active="request()->routeIs('admin.foods.create')"
+      class="text-sm"
+    >
+      Add Food
+    </x-admin.nav-link>
+
+  </div>
+</div>
+
   </nav>
 </aside>

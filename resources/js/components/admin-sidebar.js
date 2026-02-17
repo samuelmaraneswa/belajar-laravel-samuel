@@ -32,7 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // auto open submenu berdasarkan URL
     if (
       (key === 'workouts' && window.location.pathname.startsWith('/admin/workouts')) ||
-      (key === 'blog' && window.location.pathname.startsWith('/admin/blog'))
+      (key === 'blog' && window.location.pathname.startsWith('/admin/blog')) ||
+      (key === 'foods' && window.location.pathname.startsWith('/admin/foods'))
     ) {
       submenu.classList.remove('hidden')
       icon?.classList.add('rotate-180')

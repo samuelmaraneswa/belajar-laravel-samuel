@@ -96,7 +96,7 @@
   </section>
 
   {{-- WORKOUT PREVIEW --}}
-  <section class="bg-gray-50 py-16">
+  <section class="bg-gray-50 py-10 sm:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       {{-- HEADER --}}
@@ -110,7 +110,7 @@
       </div>
 
       {{-- CARDS --}}
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 sm:mb-10">
         @foreach ($workouts as $workout)
           <x-workout-card :workout="$workout" />
         @endforeach
@@ -118,15 +118,59 @@
 
       {{-- VIEW MORE --}}
       <div class="text-center">
-        <x-action-button href="{{ url('/workouts') }}">
+        <x-action-button href="{{ url('/workouts') }}" class="">
           View All Workouts <span>→</span>
         </x-action-button>
       </div>
     </div>
   </section>
 
+  {{-- FOODS PREVIEW --}}
+  <section class="bg-gray-200 py-10 sm:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {{-- HEADER --}}
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+          Food Nutrition Database
+        </h2>
+        <p class="text-gray-500 max-w-md mx-auto">
+          Check calories, macros, and micronutrients of your favorite foods.
+        </p>
+      </div>
+
+      {{-- FOOD CARDS --}}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        @foreach ($foods as $food)
+          <div class="bg-gray-50 border rounded-xl p-5 hover:shadow transition">
+            <h3 class="font-semibold text-gray-800 mb-2">
+              {{ $food->name }}
+            </h3>
+
+            <p class="text-sm text-gray-600">
+              {{ $food->nutrition->calories_kcal ?? '-' }} kcal
+            </p>
+
+            <a href="{{ url('/foods') }}"
+              class="text-sm text-indigo-600 hover:underline mt-3 inline-block">
+              View Details →
+            </a>
+          </div>
+        @endforeach
+      </div>
+
+      {{-- VIEW MORE --}}
+      <div class="text-center">
+        <x-action-button href="{{ url('/foods') }}">
+          Explore All Foods <span>→</span>
+        </x-action-button>
+      </div>
+
+    </div>
+  </section>
+
   {{-- BLOG PREVIEW --}}
-  <section class="bg-gray-100 py-16">
+  <section class="bg-white py-10 sm:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       {{-- HEADER --}}

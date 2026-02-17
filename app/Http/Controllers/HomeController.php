@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
+use App\Models\Food;
 use App\Models\Workout;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,12 @@ class HomeController extends Controller
       ->take(3)
       ->get();
 
-    return view('home', compact('workouts', 'latestPosts'));
+    $foods = Food::with('nutrition')
+      ->where('is_active', true)
+      ->latest()
+      ->take(3)
+      ->get();
+
+    return view('home', compact('workouts', 'latestPosts', 'foods'));
   }
 }

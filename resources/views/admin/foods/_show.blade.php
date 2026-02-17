@@ -1,8 +1,9 @@
 @php
   $nutrition = $food->nutrition;
+  $baseServing = (int) ($nutrition->serving_base_gram ?? 100);
 @endphp
 
-<div class="space-y-6">
+<div class="space-y-2">
 
   {{-- TITLE --}}
   <div>
@@ -10,10 +11,27 @@
       {{ $food->name }}
     </h2>
 
-    <p class="text-sm text-gray-500">
-      Serving Size:
-      {{ $nutrition->serving_base_gram ?? 100 }} gram
-    </p>
+    <div class="mt-2 flex items-center gap-2 text-sm overflow-x-auto flex-nowrap pb-2">
+      <span class="text-gray-500 whitespace-nowrap">Serving Size:</span>
+
+      <input
+        type="number"
+        id="servingInput"
+        value="{{ $baseServing }}"
+        class="w-20 border rounded px-2 py-1 text-sm"
+      >
+
+      <span>gr</span>
+
+      <button
+        type="button"
+        id="calculateBtn"
+        class="px-3 py-1.5 bg-gray-300 text-black rounded text-xs hover:bg-gray-400 cursor-pointer"
+      >
+        Calculate
+      </button>
+      <p class="text-sm text-red-700 whitespace-nowrap">&larr; Choose your serving size.</p>
+    </div>
   </div>
 
   <hr>
@@ -49,158 +67,218 @@
     {{-- ENERGY --}}
     <div class="flex justify-between font-semibold border-b border-gray-300">
       <span>Energi</span>
-      <span>{{ $nutrition->calories_kcal ?? '-' }} kcal</span>
+      <span data-base="{{ $nutrition->calories_kcal ?? 0 }}">
+        {{ $nutrition->calories_kcal ?? '-' }} kcal
+      </span>
     </div>
 
     {{-- FAT --}}
-    <div class="flex justify-between font-semibold  border-b border-gray-300">
+    <div class="flex justify-between font-semibold border-b border-gray-300">
       <span>Lemak</span>
-      <span>{{ $nutrition->fat_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->fat_g ?? 0 }}">
+        {{ $nutrition->fat_g ?? '-' }} g
+      </span>
     </div>
 
     <div class="ml-4 flex justify-between border-b border-gray-300">
       <span>Lemak Jenuh</span>
-      <span>{{ $nutrition->saturated_fat_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->saturated_fat_g ?? 0 }}">
+        {{ $nutrition->saturated_fat_g ?? '-' }} g
+      </span>
     </div>
 
     <div class="ml-4 flex justify-between border-b border-gray-300">
       <span>Lemak tak Jenuh Ganda</span>
-      <span>{{ $nutrition->polyunsaturated_fat_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->polyunsaturated_fat_g ?? 0 }}">
+        {{ $nutrition->polyunsaturated_fat_g ?? '-' }} g
+      </span>
     </div>
 
     <div class="ml-4 flex justify-between border-b border-gray-300">
       <span>Lemak tak Jenuh Tunggal</span>
-      <span>{{ $nutrition->monounsaturated_fat_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->monounsaturated_fat_g ?? 0 }}">
+        {{ $nutrition->monounsaturated_fat_g ?? '-' }} g
+      </span>
     </div>
 
     <div class="ml-4 flex justify-between border-b border-gray-300">
       <span>Trans Fat</span>
-      <span>{{ $nutrition->trans_fat_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->trans_fat_g ?? 0 }}">
+        {{ $nutrition->trans_fat_g ?? '-' }} g
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Kolesterol</span>
-      <span>{{ $nutrition->cholesterol_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->cholesterol_mg ?? 0 }}">
+        {{ $nutrition->cholesterol_mg ?? '-' }} mg
+      </span>
     </div>
 
     {{-- PROTEIN --}}
     <div class="flex justify-between font-semibold border-b border-gray-300">
       <span>Protein</span>
-      <span>{{ $nutrition->protein_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->protein_g ?? 0 }}">
+        {{ $nutrition->protein_g ?? '-' }} g
+      </span>
     </div>
 
     {{-- CARBS --}}
     <div class="flex justify-between font-semibold border-b border-gray-300">
       <span>Karbohidrat</span>
-      <span>{{ $nutrition->carbs_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->carbs_g ?? 0 }}">
+        {{ $nutrition->carbs_g ?? '-' }} g
+      </span>
     </div>
 
     <div class="ml-4 flex justify-between border-b border-gray-300">
       <span>Serat</span>
-      <span>{{ $nutrition->fiber_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->fiber_g ?? 0 }}">
+        {{ $nutrition->fiber_g ?? '-' }} g
+      </span>
     </div>
 
     <div class="ml-4 flex justify-between border-b border-gray-300">
       <span>Gula</span>
-      <span>{{ $nutrition->sugar_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->sugar_g ?? 0 }}">
+        {{ $nutrition->sugar_g ?? '-' }} g
+      </span>
     </div>
 
     {{-- WATER & ALCOHOL --}}
     <div class="flex justify-between border-b border-gray-300">
       <span>Air</span>
-      <span>{{ $nutrition->water_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->water_g ?? 0 }}">
+        {{ $nutrition->water_g ?? '-' }} g
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Alkohol</span>
-      <span>{{ $nutrition->alcohol_g ?? '-' }} g</span>
+      <span data-base="{{ $nutrition->alcohol_g ?? 0 }}">
+        {{ $nutrition->alcohol_g ?? '-' }} g
+      </span>
     </div>
 
     {{-- MINERALS --}}
     <div class="flex justify-between border-b border-gray-300">
       <span>Sodium</span>
-      <span>{{ $nutrition->sodium_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->sodium_mg ?? 0 }}">
+        {{ $nutrition->sodium_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Kalium</span>
-      <span>{{ $nutrition->potassium_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->potassium_mg ?? 0 }}">
+        {{ $nutrition->potassium_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Kalsium</span>
-      <span>{{ $nutrition->calcium_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->calcium_mg ?? 0 }}">
+        {{ $nutrition->calcium_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Zat Besi</span>
-      <span>{{ $nutrition->iron_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->iron_mg ?? 0 }}">
+        {{ $nutrition->iron_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Magnesium</span>
-      <span>{{ $nutrition->magnesium_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->magnesium_mg ?? 0 }}">
+        {{ $nutrition->magnesium_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Zinc</span>
-      <span>{{ $nutrition->zinc_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->zinc_mg ?? 0 }}">
+        {{ $nutrition->zinc_mg ?? '-' }} mg
+      </span>
     </div>
 
     {{-- VITAMINS --}}
     <div class="flex justify-between border-b border-gray-300">
       <span>Vitamin A</span>
-      <span>{{ $nutrition->vitamin_a_mcg ?? '-' }} mcg</span>
+      <span data-base="{{ $nutrition->vitamin_a_mcg ?? 0 }}">
+        {{ $nutrition->vitamin_a_mcg ?? '-' }} mcg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Vitamin B1</span>
-      <span>{{ $nutrition->vitamin_b1_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->vitamin_b1_mg ?? 0 }}">
+        {{ $nutrition->vitamin_b1_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Vitamin B2</span>
-      <span>{{ $nutrition->vitamin_b2_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->vitamin_b2_mg ?? 0 }}">
+        {{ $nutrition->vitamin_b2_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Vitamin B3</span>
-      <span>{{ $nutrition->vitamin_b3_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->vitamin_b3_mg ?? 0 }}">
+        {{ $nutrition->vitamin_b3_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Vitamin B6</span>
-      <span>{{ $nutrition->vitamin_b6_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->vitamin_b6_mg ?? 0 }}">
+        {{ $nutrition->vitamin_b6_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Vitamin B12</span>
-      <span>{{ $nutrition->vitamin_b12_mcg ?? '-' }} mcg</span>
+      <span data-base="{{ $nutrition->vitamin_b12_mcg ?? 0 }}">
+        {{ $nutrition->vitamin_b12_mcg ?? '-' }} mcg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Vitamin C</span>
-      <span>{{ $nutrition->vitamin_c_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->vitamin_c_mg ?? 0 }}">
+        {{ $nutrition->vitamin_c_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Vitamin D</span>
-      <span>{{ $nutrition->vitamin_d_mcg ?? '-' }} mcg</span>
+      <span data-base="{{ $nutrition->vitamin_d_mcg ?? 0 }}">
+        {{ $nutrition->vitamin_d_mcg ?? '-' }} mcg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Vitamin E</span>
-      <span>{{ $nutrition->vitamin_e_mg ?? '-' }} mg</span>
+      <span data-base="{{ $nutrition->vitamin_e_mg ?? 0 }}">
+        {{ $nutrition->vitamin_e_mg ?? '-' }} mg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Vitamin K</span>
-      <span>{{ $nutrition->vitamin_k_mcg ?? '-' }} mcg</span>
+      <span data-base="{{ $nutrition->vitamin_k_mcg ?? 0 }}">
+        {{ $nutrition->vitamin_k_mcg ?? '-' }} mcg
+      </span>
     </div>
 
     <div class="flex justify-between border-b border-gray-300">
       <span>Folat</span>
-      <span>{{ $nutrition->folate_mcg ?? '-' }} mcg</span>
+      <span data-base="{{ $nutrition->folate_mcg ?? 0 }}">
+        {{ $nutrition->folate_mcg ?? '-' }} mcg
+      </span>
     </div>
 
   </div>

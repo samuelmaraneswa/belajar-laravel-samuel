@@ -1,3 +1,5 @@
+import { initFoodServingCalculator } from "../../utils/foodServingCalculator";
+
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('foodModal');
   const modalBox = document.getElementById('modalBox');
@@ -43,6 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const html = await res.text();
 
       modalContent.innerHTML = html;
+
+      initFoodServingCalculator(modalContent);
+
       openModal();
     } catch (err) {
       console.error(err);

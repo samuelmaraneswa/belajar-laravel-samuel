@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     body.classList.add("overflow-hidden");
 
     icon.classList.remove("fa-bars");
-    icon.classList.add("fa-xmark", "text-white");
+    icon.classList.add("fa-xmark", "text-red-600");
   }
 
   function closeMenu() {
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     body.classList.remove("overflow-hidden");
 
     icon.classList.add("fa-bars");
-    icon.classList.remove("fa-xmark", "text-white");
+    icon.classList.remove("fa-xmark", "text-red-600");
 
     // tunggu animasi selesai baru hidden
     setTimeout(() => {

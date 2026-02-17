@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\BlogPostController as PublicBlogPostController;
+use App\Http\Controllers\FoodController as PublicFoodController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
@@ -135,6 +136,9 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
   // =====================
   // CALORIE
   // =====================
+  Route::get('/foods/suggest', [FoodController::class, 'suggest'])
+    ->name('admin.foods.suggest');
+
   Route::get('/foods', [FoodController::class, 'index'])
     ->name('admin.foods.index');
   
@@ -155,7 +159,6 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
 
   Route::post('/foods/{food}/destroy', [FoodController::class, 'destroy'])
     ->name('admin.foods.destroy');
-
 });
 
 // =======================
@@ -270,3 +273,9 @@ Route::get('/blogs/{category:slug}', [PublicBlogController::class, 'category'])
 // BLOG DETAIL
 Route::get('/blogs/posts/{post:slug}', [PublicBlogPostController::class, 'show'])
   ->name('blogs.posts.show');
+
+
+// FOODS
+Route::get('/foods', [PublicFoodController::class, 'index']);
+Route::get('/foods/suggest', [PublicFoodController::class, 'suggest']);
+Route::get('/foods/{slug}/data', [PublicFoodController::class, 'data']);

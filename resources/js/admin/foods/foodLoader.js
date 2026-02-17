@@ -1,6 +1,8 @@
 import { renderPagination } from '../utils/pagination'
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (!document.getElementById('foodPage')) return;
+
   const container = document.getElementById('tableWrapper')
   const paginationBox = document.getElementById('pagination')
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogPostController;
@@ -159,6 +160,18 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
 
   Route::post('/foods/{food}/destroy', [FoodController::class, 'destroy'])
     ->name('admin.foods.destroy');
+
+  // Articles (AJAX CRUD)
+  Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+  Route::get('/articles/list', [ArticleController::class, 'list'])->name('articles.list'); // ajax table
+  Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
+  Route::post('/articles/cleanup-temp', [ArticleController::class, 'cleanupTemp']);
+  Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
+  Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
+  Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show'); // modal view
+  Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
+  Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+  Route::post('/articles/upload-image', [ArticleController::class, 'uploadImage']);
 });
 
 // =======================

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\BlogPost;
 use App\Models\Food;
 use App\Models\Workout;
@@ -26,6 +27,11 @@ class HomeController extends Controller
       ->take(3)
       ->get();
 
-    return view('home', compact('workouts', 'latestPosts', 'foods'));
+    $latestArticles = Article::where('status', 'published')
+      ->latest()
+      ->take(3)
+      ->get();
+
+    return view('home', compact('workouts', 'latestPosts', 'foods', 'latestArticles'));
   }
 }

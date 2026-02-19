@@ -1,7 +1,7 @@
 <header class="sticky top-0 z-50 bg-white shadow">
 
   {{-- BAR ATAS --}}
-  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
 
     {{-- HAMBURGER (mobile kiri) --}}
     <button
@@ -21,7 +21,7 @@
       <x-nav-link href="/" :active="request()->is('/')">Home</x-nav-link>
       <x-nav-link href="/blogs" :active="request()->is('blogs*')">Blogs</x-nav-link>
       <x-nav-link href="/workouts" :active="request()->is('workouts*')">Workouts</x-nav-link>
-      <x-nav-link href="/artikels" :active="request()->is('artikels*')">Artikels</x-nav-link>
+      <x-nav-link href="/articles" :active="request()->is('articles*')">Articles</x-nav-link>
       <x-nav-link href="/meals" :active="request()->is('meals*')">Meals</x-nav-link>
       <x-nav-link href="/foods" :active="request()->is('foods*')">Calorie</x-nav-link>
     </nav>
@@ -89,7 +89,7 @@
   <x-nav-link href="/" class="block">Home</x-nav-link>
   <x-nav-link href="/blogs" class="block">Blogs</x-nav-link>
   <x-nav-link href="/workouts" class="block" :active="request()->is('workouts*')">Workouts</x-nav-link>
-  <x-nav-link href="/artikels" class="block" :active="request()->is('artikels*')">Artikels</x-nav-link>
+  <x-nav-link href="/articles" class="block" :active="request()->is('articles*')">Articles</x-nav-link>
   <x-nav-link href="/meals" class="block" :active="request()->is('meals*')">Meals</x-nav-link>
   <x-nav-link href="/foods" class="block" :active="request()->is('foods*')">Calorie</x-nav-link>
 </div>

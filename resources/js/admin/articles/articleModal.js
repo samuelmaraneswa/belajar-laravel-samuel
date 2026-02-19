@@ -7,16 +7,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalContent = document.getElementById('modalContent')
   const closeBtn = document.getElementById('closeArticleModal')
   const addBtn = document.getElementById('addArticleBtn')
+  const tableWrapper = document.getElementById('tableWrapper')
+
+  /* =======================================================
+     🎨 SMOOTH MODAL OPEN / CLOSE
+  ======================================================= */
 
   function openModal() {
     modal.classList.remove('hidden')
     modal.classList.add('flex')
+
+    // reset scroll ke atas
+    const scrollArea = modal.querySelector('.overflow-y-auto')
+    if (scrollArea) scrollArea.scrollTop = 0
+
     document.body.classList.add('overflow-hidden')
+
+    // smooth animation
+    modal.style.opacity = 0
+    modal.style.transition = 'opacity 200ms ease'
+
+    requestAnimationFrame(() => {
+      modal.style.opacity = 1
+    })
   }
 
   async function closeModal(cleanup = true) {
 
-    // 🔥 Hapus semua temp jika bukan karena save
     if (cleanup) {
       try {
         await fetch('/admin/articles/cleanup-temp', {
@@ -34,11 +51,48 @@ document.addEventListener('DOMContentLoaded', () => {
       tinymce.remove('#articleContent')
     }
 
-    modal.classList.add('hidden')
-    modal.classList.remove('flex')
-    modalContent.innerHTML = ''
-    document.body.classList.remove('overflow-hidden')
+    modal.style.opacity = 0
+
+    setTimeout(() => {
+      modal.classList.add('hidden')
+      modal.classList.remove('flex')
+      modalContent.innerHTML = ''
+      document.body.classList.remove('overflow-hidden')
+    }, 200)
   }
+
+  /* =======================================================
+     🎯 VALIDATION
+  ======================================================= */
+
+  function showValidationErrors(errors) {
+    document.querySelectorAll('.error-text').forEach(el => el.remove())
+
+    for (const field in errors) {
+      const input = document.querySelector(`[name="${field}"]`)
+      if (!input) continue
+
+      const div = document.createElement('div')
+      div.className = 'error-text text-red-500 text-sm mt-1'
+      div.innerText = errors[field][0]
+
+      input.parentNode.appendChild(div)
+    }
+  }
+
+  /* =======================================================
+     🔄 REFRESH TABLE
+  ======================================================= */
+
+  async function refreshTable() {
+    if (typeof window.loadArticles === 'function') {
+      window.loadArticles(window.articleState.page || 1)
+    }
+  }
+
+  /* =======================================================
+     ✍️ TINYMCE
+  ======================================================= */
 
   function initTiny() {
     if (typeof tinymce === 'undefined') return
@@ -50,12 +104,18 @@ document.addEventListener('DOMContentLoaded', () => {
       height: 400,
       menubar: false,
       branding: false,
-      plugins: 'link image lists code',
+      plugins: 'link image lists code table table advlist fontsize fontfamily lineheight',
       toolbar:
-        'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image | code',
+        'undo redo | fontfamily fontsize lineheight | bold italic | alignleft aligncenter alignright | bullist numlist | link image table | code',
 
-      images_upload_url: '/admin/articles/upload-image',
-      automatic_uploads: true,
+      setup: function (editor) {
+        editor.on('keydown', function (e) {
+          if (e.key === 'Tab') {
+            e.preventDefault()
+            editor.execCommand('InsertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;')
+          }
+        })
+      },
 
       images_upload_handler: async (blobInfo) => {
         const formData = new FormData()
@@ -69,57 +129,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const data = await response.json()
         return data.location
-      },
-
-      content_style: `
-        body {
-          font-family: sans-serif;
-          max-width: 100%;
-          overflow-x: hidden;
-        }
-      `
+      }
     })
   }
 
-  // OPEN CREATE
+  /* =======================================================
+     ➕ CREATE
+  ======================================================= */
+
   addBtn?.addEventListener('click', async () => {
     const res = await fetch('/admin/articles/create')
-    const html = await res.text()
-
-    modalContent.innerHTML = html
+    modalContent.innerHTML = await res.text()
     openModal()
-
-    requestAnimationFrame(() => {
-      initTiny()
-    })
+    requestAnimationFrame(initTiny)
   })
 
-  // 🔥 OPEN EDIT
-  document.addEventListener('click', async (e) => {
+  /* =======================================================
+     ✏️ EDIT
+  ======================================================= */
 
+  document.addEventListener('click', async (e) => {
     const button = e.target.closest('.edit-article')
     if (!button) return
 
     const id = button.dataset.id
-
-    try {
-      const res = await fetch(`/admin/articles/${id}/edit`)
-      const html = await res.text()
-
-      modalContent.innerHTML = html
-      openModal()
-
-      requestAnimationFrame(() => {
-        initTiny()
-      })
-
-    } catch (err) {
-      console.error('Gagal load edit form:', err)
-    }
-
+    const res = await fetch(`/admin/articles/${id}/edit`)
+    modalContent.innerHTML = await res.text()
+    openModal()
+    requestAnimationFrame(initTiny)
   })
 
-  // 🔥 SUBMIT AJAX (CREATE + UPDATE)
+  /* =======================================================
+     💾 SUBMIT (CREATE + UPDATE)
+  ======================================================= */
+
   modalContent.addEventListener('submit', async function (e) {
 
     if (e.target.id !== 'articleForm') return
@@ -133,31 +176,30 @@ document.addEventListener('DOMContentLoaded', () => {
       formData.set('content', editor.getContent())
     }
 
-    const id = formData.get('id') // 🔥 cek apakah edit
-
-    let url = '/admin/articles'
-    let method = 'POST'
-
-    if (id) {
-      url = `/admin/articles/${id}`
-      formData.append('_method', 'PUT') // Laravel spoof
-    }
+    const url = form.getAttribute('action')
 
     try {
 
       const response = await fetch(url, {
-        method: 'POST', // tetap POST, karena kita pakai _method
+        method: 'POST',
         headers: {
           'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         },
         body: formData
       })
 
+      if (!response.ok) {
+        const errorData = await response.json()
+        showValidationErrors(errorData.errors)
+        return
+      }
+
       const data = await response.json()
 
       if (data.success) {
         await closeModal(false)
-        location.reload()
+        await refreshTable()
+        notifySuccess('Data berhasil disimpan')
       }
 
     } catch (err) {
@@ -166,40 +208,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
   })
 
-  // CLOSE BUTTON (X)
-  closeBtn?.addEventListener('click', () => closeModal(true))
+  /* =======================================================
+     🗑 DELETE
+  ======================================================= */
 
-  // CLOSE OUTSIDE
-  modal?.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal(true)
-  })
+  document.addEventListener('submit', async function (e) {
 
-  // CLOSE ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-      closeModal(true)
+    const form = e.target.closest('.delete-form')
+    if (!form) return
+
+    e.preventDefault()
+
+    const confirmed = await notifyConfirm({
+      title: 'Yakin hapus?',
+      text: 'Data tidak bisa dikembalikan'
+    })
+
+    if (!confirmed.isConfirmed) return
+
+    const url = form.getAttribute('action')
+
+    try {
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: new FormData(form)
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        await refreshTable()
+        notifySuccess('Data berhasil dihapus')
+      }
+
+    } catch (err) {
+      notifyError('Gagal menghapus data')
     }
+
   })
 
-  // 🔥 OPEN VIEW (AJAX SHOW)
-  document.addEventListener('click', async (e) => {
+  /* =======================================================
+     👁 VIEW
+  ======================================================= */
 
+  document.addEventListener('click', async (e) => {
     const button = e.target.closest('.view-article')
     if (!button) return
 
     const id = button.dataset.id
+    const res = await fetch(`/admin/articles/${id}`)
+    modalContent.innerHTML = await res.text()
+    openModal()
+  })
 
-    try {
-      const res = await fetch(`/admin/articles/${id}`)
-      const html = await res.text()
+  closeBtn?.addEventListener('click', () => closeModal(true))
 
-      modalContent.innerHTML = html
-      openModal()
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal(true)
+  })
 
-    } catch (err) {
-      console.error('Gagal load article:', err)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeModal(true)
     }
-
   })
 
 })

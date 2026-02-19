@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\WorkoutController as AdminWorkoutController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FoodController;
+use App\Http\Controllers\ArticleController as PublicArticleController;
 use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\BlogPostController as PublicBlogPostController;
 use App\Http\Controllers\FoodController as PublicFoodController;
@@ -163,14 +164,14 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
 
   // Articles (AJAX CRUD)
   Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-  Route::get('/articles/list', [ArticleController::class, 'list'])->name('articles.list'); // ajax table
+  Route::get('/articles/suggest', [ArticleController::class, 'suggest']);
   Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
   Route::post('/articles/cleanup-temp', [ArticleController::class, 'cleanupTemp']);
   Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
-  Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
-  Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show'); // modal view
-  Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('articles.update');
-  Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+  Route::get('/articles/{article:id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
+  Route::put('/articles/{article:id}', [ArticleController::class, 'update'])->name('articles.update');
+  Route::delete('/articles/{article:id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
+  Route::get('/articles/{article:id}', [ArticleController::class, 'show'])->name('articles.show'); 
   Route::post('/articles/upload-image', [ArticleController::class, 'uploadImage']);
 });
 
@@ -292,3 +293,15 @@ Route::get('/blogs/posts/{post:slug}', [PublicBlogPostController::class, 'show']
 Route::get('/foods', [PublicFoodController::class, 'index']);
 Route::get('/foods/suggest', [PublicFoodController::class, 'suggest']);
 Route::get('/foods/{slug}/data', [PublicFoodController::class, 'data']);
+
+// ARTICLES LIST
+Route::get('/articles', [PublicArticleController::class, 'index'])
+  ->name('articles.index');
+
+// ARTICLES AUTOCOMPLETE
+Route::get('/articles/suggest', [PublicArticleController::class, 'suggest'])
+  ->name('articles.suggest');
+
+// ARTICLE DETAIL
+Route::get('/articles/{article:slug}', [PublicArticleController::class, 'show'])
+  ->name('public.articles.show');

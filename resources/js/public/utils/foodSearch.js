@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchIcon = document.getElementById('searchFoodIcon');
   const clearIcon = document.getElementById('clearFoodIcon');
   const message = document.getElementById('foodNotFound');
+  const img = document.getElementById('foodImage');
 
   if (!input || !box || !searchIcon || !clearIcon) return;
 
@@ -87,6 +88,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (message) message.classList.add('hidden');
 
       updateTable(food.nutrition);
+      
+      if (img) {
+        if (food.image) {
+          img.src = `/storage/${food.image}`;
+          img.alt = food.name;
+          img.classList.remove('hidden');
+        } else {
+          img.src = '';
+          img.classList.add('hidden');
+        }
+      }
 
       // 🔥 Set title
       document.getElementById('foodTitleSummary').textContent = food.name;
@@ -168,6 +180,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const servingInput = document.getElementById('servingInput');
     if (servingInput) servingInput.value = '';
+
+    const img = document.getElementById('foodImage');
+    if (img) {
+      img.src = '';
+      img.classList.add('hidden');
+    }
 
     const defaults = {
       summary_kal: '-',
@@ -312,6 +330,12 @@ document.addEventListener('DOMContentLoaded', () => {
   clearIcon.addEventListener('click', () => {
     if (message) message.classList.add('hidden');
 
+    const img = document.getElementById('foodImage');
+    if (img) {
+      img.src = '';
+      img.classList.add('hidden');
+    }
+
     input.value = '';
     input.dataset.slug = '';
     toggleIcons();
@@ -356,6 +380,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 🔥 update tabel
         updateTable(food.nutrition);
+        
+        if (img) {
+          if (food.image) {
+            img.src = `/storage/${food.image}`;
+            img.alt = food.name;
+            img.classList.remove('hidden');
+          } else {
+            img.src = '';
+            img.classList.add('hidden');
+          }
+        }
 
         // 🔥 update title
         document.getElementById('foodTitleSummary').textContent = food.name;

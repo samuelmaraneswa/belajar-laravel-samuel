@@ -169,6 +169,37 @@
     </div>
   </section>
 
+  {{-- ARTICLES PREVIEW --}}
+  <section class="bg-white py-10 sm:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {{-- HEADER --}}
+      <div class="text-center mb-10">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+          Latest Articles
+        </h2>
+        <p class="text-gray-500 max-w-md mx-auto">
+          Read insights, guides, and fitness knowledge.
+        </p>
+      </div>
+
+      {{-- ARTICLE CARDS --}}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        @foreach ($latestArticles as $article)
+          <x-public.article-card :article="$article" />
+        @endforeach
+      </div>
+
+      {{-- VIEW MORE --}}
+      <div class="text-center">
+        <x-action-button href="{{ url('/articles') }}">
+          View All Articles <span>→</span>
+        </x-action-button>
+      </div>
+
+    </div>
+  </section>
+
   {{-- BLOG PREVIEW --}}
   <section class="bg-white py-10 sm:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

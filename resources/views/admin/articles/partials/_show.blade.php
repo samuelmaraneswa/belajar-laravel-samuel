@@ -25,7 +25,7 @@
   @endif
 
   {{-- CONTENT --}}
-  <div class="prose max-w-none">
+  <div class="prose max-w-none [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6">
     {!! $article->content !!}
   </div>
 

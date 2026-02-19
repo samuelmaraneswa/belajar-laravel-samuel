@@ -15,4 +15,9 @@ class Article extends Model
     'video',
     'status',
   ];
+
+  public function getRouteKeyName()
+  {
+    return 'slug';
+  }
 }

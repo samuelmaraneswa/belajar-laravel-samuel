@@ -1,11 +1,11 @@
 <div class="bg-white rounded-xl shadow overflow-x-auto">
-  <table class="w-full text-sm">
+  <table class="w-full min-w-150 text-sm whitespace-nowrap">
 
     <thead class="bg-gray-50 border-b">
       <tr>
-        <th class="px-6 py-3">No</th>
-        <th class="px-6 py-3">Title</th>
-        <th class="px-6 py-3">Status</th>
+        <th class="px-6 py-3 text-left">No</th>
+        <th class="px-6 py-3 text-left">Title</th>
+        <th class="px-6 py-3 text-left">Status</th>
         <th class="px-6 py-3 text-center">Actions</th>
       </tr>
     </thead>
@@ -14,7 +14,7 @@
       @forelse($articles as $index => $article)
         <tr class="border-b hover:bg-gray-50">
 
-          <td class="px-6 py-4">
+          <td class="px-6 py-4 whitespace-nowrap">
             {{ $articles->firstItem() + $index }}
           </td>
 
@@ -44,6 +44,22 @@
               data-id="{{ $article->id }}">
               Edit
             </button>
+
+            {{-- DELETE --}}
+            <form 
+              action="{{ route('articles.destroy', $article) }}"
+              method="POST"
+              class="inline-block delete-form"
+            >
+              @csrf
+              @method('DELETE')
+
+              <button
+                type="submit"
+                class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded cursor-pointer">
+                Delete
+              </button>
+            </form>
 
           </td>
 

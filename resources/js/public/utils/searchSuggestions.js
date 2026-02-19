@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!q || !endpoint) {
       closeSuggestions();
-      return;
+      return; 
     }
 
     timer = setTimeout(async () => {

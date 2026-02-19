@@ -2,11 +2,19 @@
   {{ isset($article) ? 'Edit Article' : 'Create Article' }}
 </h2>
 
-<form id="articleForm" method="POST" class="space-y-5" enctype="multipart/form-data">
+<form 
+  id="articleForm"
+  method="POST"
+  action="{{ isset($article) 
+      ? route('articles.update', $article) 
+      : route('articles.store') }}"
+  class="space-y-5"
+  enctype="multipart/form-data"
+>
   @csrf
 
-  @if(isset($article))
-    <input type="hidden" name="id" value="{{ $article->id }}">
+   @if(isset($article))
+    @method('PUT')
   @endif
 
   {{-- TITLE --}}

@@ -16,7 +16,7 @@
       <div class="flex justify-end">
         <x-button
           type="submit"
-          class="bg-indigo-600 text-white hover:bg-indigo-700">
+          class="bg-indigo-600 text-white hover:bg-indigo-700 hover:text-white">
           Update
         </x-button>
       </div>

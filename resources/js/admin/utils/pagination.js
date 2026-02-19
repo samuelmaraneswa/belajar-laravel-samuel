@@ -22,7 +22,7 @@ export function renderPagination({ container, pagination, onPageChange }) {
   // PREV
   html += `
     <button data-page="${page - 1}" ${page === 1 ? 'disabled' : ''}
-      class="page-btn mx-1 px-3 py-1 rounded
+      class="page-btn mx-1 px-3 py-1 rounded cursor-pointer
       ${page === 1 ? 'bg-gray-100 text-gray-400' : 'bg-gray-200 hover:bg-gray-300'}">
       Prev
     </button>
@@ -37,7 +37,7 @@ export function renderPagination({ container, pagination, onPageChange }) {
   for (let i = start; i <= end; i++) {
     html += `
       <button data-page="${i}"
-        class="page-btn mx-1 px-3 py-1 rounded
+        class="page-btn mx-1 px-3 py-1 rounded cursor-pointer
         ${i === page ? 'bg-indigo-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}">
         ${i}
       </button>
@@ -52,7 +52,7 @@ export function renderPagination({ container, pagination, onPageChange }) {
   // NEXT
   html += `
     <button data-page="${page + 1}" ${page === last ? 'disabled' : ''}
-      class="page-btn mx-1 px-3 py-1 rounded
+      class="page-btn mx-1 px-3 py-1 rounded cursor-pointer
       ${page === last ? 'bg-gray-100 text-gray-400' : 'bg-gray-200 hover:bg-gray-300'}">
       Next
     </button>

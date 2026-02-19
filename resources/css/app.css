@@ -205,3 +205,19 @@
   fill: #ffffff !important;
 }
 
+/* ===== ARTICLE TABLE STYLE ===== */
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.prose table,
+.prose th,
+.prose td {
+  border: 1px solid #ccc;
+}
+
+.prose th,
+.prose td {
+  padding: 8px;
+}

@@ -89,6 +89,16 @@
           </div>
 
         </div>
+
+        <div class="mt-10">
+          <img
+            id="foodImage"
+            src=""
+            alt=""
+            class="w-full h-48 object-cover rounded-lg hidden border border-b-indigo-700"
+          >
+        </div>
+
       </div>
 
       {{-- ================= LEFT : INFORMASI GIZI ================= --}}

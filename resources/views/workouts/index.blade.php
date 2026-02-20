@@ -23,7 +23,7 @@
         @endforeach
       </div>
 
-      <div class="mb-20 flex justify-center">
+      <div class="mb-12 flex justify-center">
         {{ $workouts->onEachSide(1)->links('pagination::tailwind') }}
       </div>
     @endif

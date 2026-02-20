@@ -5,7 +5,7 @@
   <x-hr />
 
   {{-- Anchor Menu --}}
-  <nav data-anchor-menu class="sticky top-0 bg-gray-300 z-30 mt-3 -mx-7 px-7">
+  <nav data-anchor-menu class="sticky top-16 bg-gray-300 z-30 mt-3 -mx-7 px-7">
     <div class="flex justify-center sm:justify-start gap-4 sm:gap-6">
       <a href="#description" data-anchor-link class="anchor-link">Deskripsi</a>
       <a href="#instructions" data-anchor-link class="anchor-link">Instruksi</a>

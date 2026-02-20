@@ -46,5 +46,10 @@ class DatabaseSeeder extends Seeder
     // 6️⃣ Foods
     // ========================
     $this->call(FoodSeeder::class);
+    
+    // ========================
+    // 6️⃣ Articles
+    // ========================
+    $this->call(ArticleSeeder::class);
   }
 }

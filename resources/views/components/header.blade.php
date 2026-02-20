@@ -85,7 +85,7 @@
          opacity-0 transition-opacity duration-300 hidden">
 </div>
 
-<div id="mobileSidebar" class="fixed top-17.5 left-0 h-[calc(100%-72px)] w-[70%] bg-black hidden md:hidden z-40 p-6 space-y-4">
+<div id="mobileSidebar" class="fixed top-16 left-0 h-[calc(100%-72px)] w-[70%] bg-black hidden md:hidden z-40 p-6 space-y-4">
   <x-nav-link href="/" class="block">Home</x-nav-link>
   <x-nav-link href="/blogs" class="block">Blogs</x-nav-link>
   <x-nav-link href="/workouts" class="block" :active="request()->is('workouts*')">Workouts</x-nav-link>

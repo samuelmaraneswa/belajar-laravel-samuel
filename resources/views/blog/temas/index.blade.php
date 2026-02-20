@@ -1,6 +1,6 @@
 <x-layout :title="$category->name">
 
-  <div class="max-w-7xl mx-auto mt-8 px-4 sm:px-8 font-hanken">
+  <div class="max-w-7xl mx-auto mt-8 px-4 sm:px-8 font-hanken mb-10">
 
     {{-- TITLE --}}
     <div class="mb-14">

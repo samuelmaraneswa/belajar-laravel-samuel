@@ -1,5 +1,5 @@
 <x-layout title="Blogs">
-  <div class="max-w-7xl mx-auto mt-8 px-4 sm:px-8 font-hanken">
+  <div class="max-w-7xl mx-auto mt-8 px-4 sm:px-8 font-hanken mb-10">
 
     <h1 class="text-2xl font-semibold text-gray-800 mb-14">
       Welcome to my Blogs. 

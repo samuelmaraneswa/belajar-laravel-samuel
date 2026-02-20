@@ -29,7 +29,7 @@ class BlogPostController extends Controller
         });
       })
       ->latest()
-      ->paginate(12)
+      ->paginate(30)
       ->withQueryString();
 
     $categories = BlogCategory::orderBy('name')->get();

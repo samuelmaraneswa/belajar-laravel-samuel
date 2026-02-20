@@ -2,7 +2,7 @@
     <img 
         src="{{ asset('images/logo.png') }}" 
         alt="Logo"
-        class="h-12 sm:h-16 w-auto object-contain"
+        class="h-8 sm:h-12 w-auto object-contain"
     >
 
     {{-- Mobile: Workout saja --}}

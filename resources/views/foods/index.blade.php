@@ -55,13 +55,25 @@
 
         <div class="flex items-center gap-2 text-sm mb-2">
           <span>Serving:</span>
-          <input type="number" id="servingInput" value="" class="w-20 border rounded px-2 py-1">
-          <span>gr</span>
-          <button id="calculateBtn"
+
+          <input 
+            type="number"
+            id="servingInput"
+            value=""
+            step="1"
+            min="1"
+            data-base=""
+            class="w-20 border rounded px-2 py-1"
+          >
+
+          <span id="servingUnit">-</span>
+
+          <button id="calculateBtn" 
             class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">
             Calculate
           </button>
         </div>
+
         <p class="text-xs text-red-600 mb-4 flex items-center gap-1">
           Choose your serving size here ↑
         </p>

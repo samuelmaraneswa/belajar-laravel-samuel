@@ -43,11 +43,6 @@ class DatabaseSeeder extends Seeder
     $this->call(BlogPostWorkoutDetailSeeder::class);
     
     // ========================
-    // 6️⃣ Foods
-    // ========================
-    $this->call(FoodSeeder::class);
-    
-    // ========================
     // 6️⃣ Articles
     // ========================
     $this->call(ArticleSeeder::class);

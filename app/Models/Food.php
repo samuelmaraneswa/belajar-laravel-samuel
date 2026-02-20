@@ -15,6 +15,9 @@ class Food extends Model
     'description',
     'image',
     'is_active',
+    'serving_base_value',
+    'serving_unit',
+    'density',
   ];
 
   /**

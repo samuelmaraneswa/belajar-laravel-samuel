@@ -19,9 +19,6 @@ return new class extends Migration
         ->cascadeOnDelete()
         ->unique(); // 1 food = 1 nutrition
 
-      // Base serving
-      $table->decimal('serving_base_gram', 8, 2)->default(100);
-
       /*
       |--------------------------------------------------------------------------
       | Macronutrients

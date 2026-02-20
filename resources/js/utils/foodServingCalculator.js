@@ -5,9 +5,10 @@ export function initFoodServingCalculator(scope = document) {
 
   if (!input || !button) return
 
-  const baseServing = parseFloat(input.value)
-
   function calculate() {
+
+    const baseServing = parseFloat(input.dataset.base)
+    if (isNaN(baseServing)) return
 
     const serving = parseFloat(input.value)
     if (!serving || serving <= 0) return
@@ -19,27 +20,21 @@ export function initFoodServingCalculator(scope = document) {
       const base = parseFloat(el.dataset.base)
       if (isNaN(base)) return
 
-      let unit = ''
-      if (el.textContent.includes('mg')) unit = ' mg'
-      else if (el.textContent.includes('mcg')) unit = ' mcg'
-      else if (el.textContent.includes('kcal')) unit = ' kcal'
-      else unit = ' g'
+      const unit = el.dataset.unit || ''
 
       let newValue = (base * ratio).toFixed(2)
 
-      el.textContent = newValue + unit
+      el.textContent = newValue + (unit ? ` ${unit}` : '')
     })
   }
 
-  // CLICK BUTTON
+  // ⬇ PENTING: pasang listener tanpa cek baseServing di luar
   button.addEventListener('click', calculate)
 
-  // PRESS ENTER
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       calculate()
     }
   })
-
 }

@@ -54,8 +54,9 @@ class FoodController extends Controller
       'image' => 'nullable|image|max:10048',
       'is_active' => 'nullable|boolean',
 
-      // nutrition
-      'serving_base_gram' => 'required|numeric|min:1',
+      'serving_base_value' => 'required|numeric|min:0.01',
+      'serving_unit' => 'required|string|in:g,ml,pcs,tbsp,tsp',
+      'density' => 'nullable|numeric|min:0',
 
       'calories_kcal' => 'nullable|numeric|min:0',
       'protein_g' => 'nullable|numeric|min:0',
@@ -96,18 +97,11 @@ class FoodController extends Controller
 
       $imagePath = null;
 
-      /*
-        |--------------------------------------------------------------------------
-        | Resize Image (1 file only)
-        |--------------------------------------------------------------------------
-        */
       if ($request->hasFile('image')) {
 
         $manager = new ImageManager(new Driver());
-
         $image = $manager->read($request->file('image'));
 
-        // Resize max width 210px (aspect ratio tetap)
         $image->scale(width: 800);
 
         $filename = Str::uuid() . '.webp';
@@ -131,6 +125,11 @@ class FoodController extends Controller
         'description' => $validated['description'] ?? null,
         'image' => $imagePath,
         'is_active' => $request->boolean('is_active'),
+
+        // NEW FIELDS
+        'serving_base_value' => $validated['serving_base_value'],
+        'serving_unit' => $validated['serving_unit'],
+        'density' => $validated['density'] ?? null,
       ]);
 
       /*
@@ -140,7 +139,15 @@ class FoodController extends Controller
         */
       $food->nutrition()->create(
         collect($validated)
-          ->except(['name', 'description', 'image', 'is_active'])
+          ->except([
+            'name',
+            'description',
+            'image',
+            'is_active',
+            'serving_base_value',
+            'serving_unit',
+            'density'
+          ])
           ->toArray()
       );
     });
@@ -168,12 +175,15 @@ class FoodController extends Controller
   {
     $validated = $request->validate([
 
+      // foods
       'name' => 'required|string|max:255',
       'description' => 'nullable|string',
       'image' => 'nullable|image|max:10048',
       'is_active' => 'nullable|boolean',
 
-      'serving_base_gram' => 'required|numeric|min:1',
+      'serving_base_value' => 'required|numeric|min:0.01',
+      'serving_unit' => 'required|string|in:g,ml,pcs,tbsp,tsp',
+      'density' => 'nullable|numeric|min:0',
 
       'calories_kcal' => 'nullable|numeric|min:0',
       'protein_g' => 'nullable|numeric|min:0',
@@ -212,16 +222,15 @@ class FoodController extends Controller
 
     DB::transaction(function () use ($validated, $request, $food) {
 
-      $imagePath = $food->image; // default pakai lama
+      $imagePath = $food->image;
 
       /*
         |--------------------------------------------------------------------------
-        | Replace Image (if new uploaded)
+        | Replace Image
         |--------------------------------------------------------------------------
         */
       if ($request->hasFile('image')) {
 
-        // Hapus gambar lama jika ada
         if ($food->image && Storage::disk('public')->exists($food->image)) {
           Storage::disk('public')->delete($food->image);
         }
@@ -252,6 +261,11 @@ class FoodController extends Controller
         'description' => $validated['description'] ?? null,
         'image' => $imagePath,
         'is_active' => $request->boolean('is_active'),
+
+        // NEW FIELDS
+        'serving_base_value' => $validated['serving_base_value'],
+        'serving_unit' => $validated['serving_unit'],
+        'density' => $validated['density'] ?? null,
       ]);
 
       /*
@@ -261,7 +275,15 @@ class FoodController extends Controller
         */
       $food->nutrition()->update(
         collect($validated)
-          ->except(['name', 'description', 'image', 'is_active'])
+          ->except([
+            'name',
+            'description',
+            'image',
+            'is_active',
+            'serving_base_value',
+            'serving_unit',
+            'density'
+          ])
           ->toArray()
       );
     });

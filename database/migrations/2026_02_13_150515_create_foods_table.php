@@ -20,6 +20,18 @@ return new class extends Migration
       $table->text('description')->nullable();
       $table->string('image')->nullable();
 
+      /*
+    |--------------------------------------------------------------------------
+    | Serving Configuration (Natural Serving Based)
+    |--------------------------------------------------------------------------
+    */
+      $table->decimal('serving_base_value', 8, 2);
+      $table->string('serving_unit', 20);
+      // contoh: g, ml, pcs, tbsp, tsp
+
+      $table->decimal('density', 8, 4)->nullable();
+      // optional: hanya dipakai jika ingin konversi ml -> gram
+
       $table->boolean('is_active')->default(true);
 
       $table->timestamps();

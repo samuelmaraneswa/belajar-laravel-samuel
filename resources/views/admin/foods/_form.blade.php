@@ -42,6 +42,66 @@
     </label>
   </div>
 
+  {{-- =========================
+  | SERVING CONFIGURATION
+  ========================= --}}
+  <div class="mt-8 border-t pt-6 space-y-6">
+
+    <h3 class="text-lg font-semibold text-gray-800">
+      Serving Configuration
+    </h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+      {{-- Serving Base Value --}}
+      <x-input
+        label="Serving Base Value"
+        name="serving_base_value"
+        type="number"
+        step="0.01"
+        value="{{ old('serving_base_value', $food->serving_base_value ?? 100) }}"
+      />
+
+      {{-- Serving Unit --}}
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Serving Unit
+        </label>
+        <select
+          name="serving_unit"
+          id="serving_unit"
+          class="w-full border rounded-lg px-3 py-2 text-sm"
+        >
+          @php
+            $unit = old('serving_unit', $food->serving_unit ?? 'g');
+          @endphp
+
+          <option value="g" {{ $unit === 'g' ? 'selected' : '' }}>Gram (g)</option>
+          <option value="ml" {{ $unit === 'ml' ? 'selected' : '' }}>Milliliter (ml)</option>
+          <option value="pcs" {{ $unit === 'pcs' ? 'selected' : '' }}>Piece (pcs)</option>
+          <option value="tbsp" {{ $unit === 'tbsp' ? 'selected' : '' }}>Tablespoon (tbsp)</option>
+          <option value="tsp" {{ $unit === 'tsp' ? 'selected' : '' }}>Teaspoon (tsp)</option>
+        </select>
+      </div>
+
+      {{-- Density (only for ml) --}}
+      <div id="densityWrapper">
+        <x-input
+          label="Density (g/ml)"
+          name="density"
+          type="number"
+          step="0.0001"
+          value="{{ old('density', $food->density ?? '') }}"
+        />
+        <p class="text-xs text-gray-500 mt-1">
+          Required only for volume-based foods (ml).
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
 
 {{-- =========================
@@ -52,15 +112,6 @@
   <h3 class="text-lg font-semibold text-gray-800">
     Nutrition Information
   </h3>
-
-  {{-- Serving --}}
-  <x-input
-    label="Base Serving (gram)"
-    name="serving_base_gram"
-    type="number"
-    step="0.01"
-    value="{{ old('serving_base_gram', $food->nutrition->serving_base_gram ?? 100) }}"
-  />
 
   {{-- MACRONUTRIENTS --}}
   <div>

@@ -76,6 +76,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const food = await res.json();
 
+      const servingInput = document.getElementById('servingInput');
+      const servingUnit = document.getElementById('servingUnit');
+
+      if (servingInput) {
+        servingInput.value = food.serving_base_value;
+        servingInput.dataset.base = food.serving_base_value;
+      }
+
+      if (servingUnit) {
+        servingUnit.textContent = food.serving_unit;
+      }
+
       if (!food || !food.nutrition) {
         if (message) {
           message.textContent =
@@ -103,14 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // 🔥 Set title
       document.getElementById('foodTitleSummary').textContent = food.name;
       document.getElementById('foodTitleDetail').textContent = food.name;
-
-      // 🔥 Set default serving 100
-      const servingInput = document.getElementById('servingInput');
-      if (servingInput) {
-        servingInput.value = 100;
-      }
-
-      initFoodServingCalculator(document);
 
     } catch {
       if (message) {
@@ -396,9 +400,18 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('foodTitleSummary').textContent = food.name;
         document.getElementById('foodTitleDetail').textContent = food.name;
 
-        // 🔥 set default serving 100
+        // 🔥 serving size
         const servingInput = document.getElementById('servingInput');
-        if (servingInput) servingInput.value = 100;
+        const servingUnit = document.getElementById('servingUnit');
+
+        if (servingInput) {
+          servingInput.value = food.serving_base_value;
+          servingInput.dataset.base = food.serving_base_value;
+        }
+
+        if (servingUnit) {
+          servingUnit.textContent = food.serving_unit;
+        }
 
         // 🔥 Smooth scroll ke atas (mobile friendly)
         window.scrollTo({
@@ -412,4 +425,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
   });
+
+  initFoodServingCalculator(document);
 });

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\WorkoutController as AdminWorkoutController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FoodController;
+use App\Http\Controllers\Admin\MealCategoryController;
 use App\Http\Controllers\ArticleController as PublicArticleController;
 use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\BlogPostController as PublicBlogPostController;
@@ -173,6 +174,21 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
   Route::delete('/articles/{article:id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
   Route::get('/articles/{article:id}', [ArticleController::class, 'show'])->name('articles.show'); 
   Route::post('/articles/upload-image', [ArticleController::class, 'uploadImage']);
+
+  // =====================
+  // MEALS – CATEGORY
+  // =====================
+  Route::get('/meals/categories', [MealCategoryController::class, 'index'])
+    ->name('admin.meal.categories.index');
+
+  Route::post('/meals/categories', [MealCategoryController::class, 'store'])
+    ->name('admin.meal.categories.store');
+
+  Route::put('/meals/categories/{mealCategory}', [MealCategoryController::class, 'update'])
+    ->name('admin.meal.categories.update');
+
+  Route::delete('/meals/categories/{mealCategory}', [MealCategoryController::class, 'destroy'])
+    ->name('admin.meal.categories.destroy');
 });
 
 // =======================

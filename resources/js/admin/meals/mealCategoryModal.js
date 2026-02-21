@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  if (!document.querySelector('[data-page="blog-category"]')) return;
-  
+  // ✅ Guard: hanya jalan di halaman meal category
+  if (!document.querySelector('[data-page="meal-category"]')) return;
+
   const modal = document.getElementById('category-modal');
   const modalContent = document.getElementById('category-modal-content');
   const openBtn = document.getElementById('btn-create-category');
@@ -9,18 +10,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!modal || !modalContent || !openBtn || !closeBtn) return;
 
-  window.openModal = function () {
+  // ===== OPEN MODAL =====
+  window.openMealCategoryModal = function () {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 
     requestAnimationFrame(() => {
       modalContent.classList.remove('scale-95', 'opacity-0');
       modalContent.classList.add('scale-100', 'opacity-100');
-    }); 
+    });
   };
 
-  // ⬇️ JADIKAN GLOBAL
-  window.closeModal = function () {
+  // ===== CLOSE MODAL =====
+  window.closeMealCategoryModal = function () {
     modalContent.classList.add('scale-95', 'opacity-0');
     modalContent.classList.remove('scale-100', 'opacity-100');
 
@@ -30,14 +32,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 200);
   };
 
+  // ===== EVENT LISTENERS =====
   openBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    openModal();
+    window.openMealCategoryModal();
   });
 
-  closeBtn.addEventListener('click', window.closeModal);
+  closeBtn.addEventListener('click', window.closeMealCategoryModal);
 
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) window.closeModal();
+    if (e.target === modal) window.closeMealCategoryModal();
   });
+
 });

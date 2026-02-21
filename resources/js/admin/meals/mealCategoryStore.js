@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ✅ Guard
+  if (!document.querySelector('[data-page="meal-category"]')) return;
+
   const form = document.getElementById('category-form');
   if (!form) return;
 
@@ -8,12 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const mode = form.dataset.mode || 'create';
     const formData = new FormData(form);
 
-    // ✅ TENTUKAN HTTP METHOD SEBENARNYA
     const httpMethod = mode === 'edit' ? 'PUT' : 'POST';
 
     try {
       const response = await fetch(form.action, {
-        method: httpMethod, 
+        method: httpMethod,
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           'Accept': 'application/json',
@@ -31,8 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // reset & close modal
       form.reset();
       form.dataset.mode = 'create';
-      form.action = '/admin/blog/categories'; // ⬅️ KEMBALIKAN KE CREATE
-      window.closeModal?.();
+      form.action = '/admin/meals/categories'; // ✅ kembali ke create
+      window.closeMealCategoryModal?.();
       notifySuccess(result.message);
 
       // hapus empty state
@@ -57,4 +60,5 @@ document.addEventListener("DOMContentLoaded", () => {
       notifyError('Terjadi kesalahan saat menyimpan data');
     }
   });
+
 });

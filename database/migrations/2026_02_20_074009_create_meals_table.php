@@ -14,7 +14,6 @@ return new class extends Migration
       Schema::create('meals', function (Blueprint $table) {
         $table->id();
 
-        // Relasi
         $table->foreignId('category_id')
           ->constrained('meal_categories')
           ->cascadeOnDelete();
@@ -24,21 +23,12 @@ return new class extends Migration
           ->constrained('meal_goals')
           ->nullOnDelete();
 
-        // Basic Info
         $table->string('title');
         $table->string('slug')->unique();
         $table->text('description');
 
-        // Nutrition (per serving)
-        $table->integer('calories');
-        $table->integer('protein'); // gram
-        $table->integer('carbs');   // gram
-        $table->integer('fats');    // gram
+        $table->integer('prep_time')->nullable();
 
-        // Estimasi
-        $table->integer('prep_time')->nullable(); // menit
-
-        // Media
         $table->string('image')->nullable();
         $table->string('video_url')->nullable();
 

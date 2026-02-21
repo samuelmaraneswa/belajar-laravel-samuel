@@ -1,5 +1,5 @@
 <x-layout title="Foods">
-  <div class="max-w-7xl mx-auto mt-6 px-4 sm:px-8 font-hanken">
+  <div class="max-w-7xl mx-auto my-6 px-4 sm:px-8 font-hanken">
 
     {{-- ================= SEARCH AJAX ================= --}}
     <form id="foodSearchForm">
@@ -69,7 +69,7 @@
           <span id="servingUnit">-</span>
 
           <button id="calculateBtn" 
-            class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400">
+            class="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400 font-semibold cursor-pointer">
             Calculate
           </button>
         </div>
@@ -262,7 +262,6 @@
             </button>
           @endforeach
         </div>
-
       </div>
 
     </div>

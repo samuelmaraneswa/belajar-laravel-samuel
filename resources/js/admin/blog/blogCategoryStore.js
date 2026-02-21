@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById('category-form');
+
+  const container = document.querySelector('[data-page="blog-category"]');
+  if (!container) return;
+
+  const form = document.getElementById('blog-category-form');
   if (!form) return;
 
   form.addEventListener('submit', async (e) => {
@@ -7,13 +11,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const mode = form.dataset.mode || 'create';
     const formData = new FormData(form);
-
-    // ✅ TENTUKAN HTTP METHOD SEBENARNYA
     const httpMethod = mode === 'edit' ? 'PUT' : 'POST';
 
     try {
       const response = await fetch(form.action, {
-        method: httpMethod, 
+        method: httpMethod,
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           'Accept': 'application/json',
@@ -28,33 +30,33 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // reset & close modal
-      form.reset();
-      form.dataset.mode = 'create';
-      form.action = '/admin/blog/categories'; // ⬅️ KEMBALIKAN KE CREATE
-      window.closeModal?.();
-      notifySuccess(result.message);
-
-      // hapus empty state
-      document.getElementById('empty-category')?.remove();
-
-      const tbody = document.getElementById('category-table-body');
+      const tbody = document.getElementById('blog-category-table-body');
+      document.getElementById('blog-empty-category')?.remove();
 
       if (mode === 'create') {
-        // INSERT ROW
         tbody?.insertAdjacentHTML('afterbegin', result.html);
       } else {
-        // REPLACE ROW
-        const id = form.getAttribute('data-id');
-        const oldRow = document.querySelector(`tr[data-id="${id}"]`);
+        const id = form.getAttribute('data-id'); // ✅ ambil dulu sebelum reset
+        const oldRow = document.querySelector(`tr[data-blog-id="${id}"]`);
         if (oldRow) {
           oldRow.outerHTML = result.html;
         }
       }
 
+      // ✅ reset & close modal setelah replace/insert
+      form.reset();
+      form.dataset.mode = 'create';
+      form.action = '/admin/blog/categories';
+      form.removeAttribute('data-id');
+
+      window.closeBlogCategoryModal?.();
+      notifySuccess(result.message);
+
     } catch (error) {
       console.error(error);
       notifyError('Terjadi kesalahan saat menyimpan data');
     }
+
   });
+
 });

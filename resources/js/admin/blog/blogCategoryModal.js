@@ -1,26 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  if (!document.querySelector('[data-page="blog-category"]')) return;
-  
-  const modal = document.getElementById('category-modal');
-  const modalContent = document.getElementById('category-modal-content');
-  const openBtn = document.getElementById('btn-create-category');
-  const closeBtn = document.getElementById('btn-close-modal');
+  const container = document.querySelector('[data-page="blog-category"]');
+  if (!container) return;
+
+  const modal = document.getElementById('blog-category-modal');
+  const modalContent = document.getElementById('blog-category-modal-content');
+  const openBtn = document.getElementById('btn-create-blog-category');
+  const closeBtn = document.getElementById('blog-btn-close-modal');
 
   if (!modal || !modalContent || !openBtn || !closeBtn) return;
 
-  window.openModal = function () {
+  window.openBlogCategoryModal = function () {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 
     requestAnimationFrame(() => {
       modalContent.classList.remove('scale-95', 'opacity-0');
       modalContent.classList.add('scale-100', 'opacity-100');
-    }); 
+    });
   };
 
-  // ⬇️ JADIKAN GLOBAL
-  window.closeModal = function () {
+  window.closeBlogCategoryModal = function () {
     modalContent.classList.add('scale-95', 'opacity-0');
     modalContent.classList.remove('scale-100', 'opacity-100');
 
@@ -32,12 +32,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   openBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    openModal();
+    window.openBlogCategoryModal();
   });
 
-  closeBtn.addEventListener('click', window.closeModal);
+  closeBtn.addEventListener('click', window.closeBlogCategoryModal);
 
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) window.closeModal();
+    if (e.target === modal) window.closeBlogCategoryModal();
   });
+
 });

@@ -1,8 +1,12 @@
 document.addEventListener('click', async (e) => {
-  const btn = e.target.closest('.btn-delete');
+
+  const container = document.querySelector('[data-page="blog-category"]');
+  if (!container) return;
+
+  const btn = e.target.closest('.blog-btn-delete');
   if (!btn) return;
 
-  const id = btn.dataset.id;
+  const id = btn.dataset.blogId;
   if (!id) return;
 
   const confirm = await notifyConfirm({
@@ -22,7 +26,7 @@ document.addEventListener('click', async (e) => {
     const response = await fetch(`/admin/blog/categories/${id}`, {
       method: 'DELETE',
       headers: {
-        'X-CSRF-TOKEN': token,        // ⬅️ INI KUNCI NYA
+        'X-CSRF-TOKEN': token,
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': 'application/json',
       },
@@ -35,14 +39,14 @@ document.addEventListener('click', async (e) => {
       return;
     }
 
-    document.querySelector(`tr[data-id="${id}"]`)?.remove();
+    document.querySelector(`tr[data-blog-id="${id}"]`)?.remove();
     notifySuccess(result.message);
 
-    const tbody = document.getElementById('category-table-body');
+    const tbody = document.getElementById('blog-category-table-body');
 
     if (tbody && tbody.children.length === 0) {
       tbody.innerHTML = `
-        <tr id="empty-category">
+        <tr id="blog-empty-category">
           <td colspan="3" class="px-4 py-4 text-center text-gray-500">
             Belum ada blog category.
           </td>
@@ -54,4 +58,5 @@ document.addEventListener('click', async (e) => {
     console.error(error);
     notifyError('Terjadi kesalahan saat menghapus data');
   }
+
 });

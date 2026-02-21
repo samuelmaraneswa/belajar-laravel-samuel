@@ -1,12 +1,16 @@
 document.addEventListener('click', (e) => {
-  const btn = e.target.closest('.btn-edit');
+
+  const container = document.querySelector('[data-page="blog-category"]');
+  if (!container) return;
+
+  const btn = e.target.closest('.blog-btn-edit');
   if (!btn) return;
 
-  const form = document.getElementById('category-form');
+  const form = document.getElementById('blog-category-form');
   if (!form) return;
 
   // ambil data dari tombol
-  const id = btn.dataset.id;
+  const id = btn.dataset.blogId;
   const name = btn.dataset.name;
   const description = btn.dataset.description || '';
   const isActive = btn.dataset.active === '1';
@@ -22,15 +26,12 @@ document.addEventListener('click', (e) => {
   form.querySelector('input[name="is_active"]').checked = isActive;
 
   // ubah judul modal
-  const title = document.getElementById('category-modal-title');
+  const title = document.getElementById('blog-category-modal-title');
   if (title) title.textContent = 'Edit Blog Category';
 
   // buka modal
-  if (typeof window.openModal === 'function') {
-    window.openModal();
-  } else {
-    // fallback kalau openModal tidak global
-    document.getElementById('category-modal')?.classList.remove('hidden');
-    document.getElementById('category-modal')?.classList.add('flex');
+  if (typeof window.openBlogCategoryModal === 'function') {
+    window.openBlogCategoryModal();
   }
+
 });

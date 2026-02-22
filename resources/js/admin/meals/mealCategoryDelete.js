@@ -1,12 +1,12 @@
 document.addEventListener('click', async (e) => {
 
-  // ✅ Guard
-  if (!document.querySelector('[data-page="meal-category"]')) return;
+  const container = document.querySelector('[data-page="meals-category"]');
+  if (!container) return;
 
-  const btn = e.target.closest('.btn-delete');
+  const btn = e.target.closest('.meals-btn-delete');
   if (!btn) return;
 
-  const id = btn.dataset.id;
+  const id = btn.dataset.mealsId;
   if (!id) return;
 
   const confirm = await notifyConfirm({
@@ -39,15 +39,15 @@ document.addEventListener('click', async (e) => {
       return;
     }
 
-    document.querySelector(`tr[data-id="${id}"]`)?.remove();
+    document.querySelector(`tr[data-meals-id="${id}"]`)?.remove();
     notifySuccess(result.message);
 
-    const tbody = document.getElementById('category-table-body');
+    const tbody = document.getElementById('meals-category-table-body');
 
     if (tbody && tbody.children.length === 0) {
       tbody.innerHTML = `
-        <tr id="empty-category">
-          <td colspan="4" class="px-4 py-4 text-center text-gray-500">
+        <tr id="meals-empty-category">
+          <td colspan="3" class="px-4 py-4 text-center text-gray-500">
             Belum ada meal category.
           </td>
         </tr>

@@ -1,17 +1,17 @@
 document.addEventListener('click', async (e) => {
 
-  const container = document.querySelector('[data-page="blog-tema"]');
+  const container = document.querySelector('[data-page="meal-goals"]');
   if (!container) return;
 
-  const btn = e.target.closest('.blog-btn-delete-tema');
+  const btn = e.target.closest('.meal-btn-delete-goal');
   if (!btn) return;
 
-  const id = btn.dataset.temaId;
+  const id = btn.dataset.goalId;
   if (!id) return;
 
   const confirm = await notifyConfirm({
-    title: 'Hapus tema?',
-    text: 'Tema ini akan dihapus permanen',
+    title: 'Hapus goal?',
+    text: 'Goal ini akan dihapus permanen',
     confirmText: 'Hapus',
     cancelText: 'Batal',
   });
@@ -23,7 +23,7 @@ document.addEventListener('click', async (e) => {
       .querySelector('meta[name="csrf-token"]')
       .getAttribute('content');
 
-    const response = await fetch(`/admin/blog/tema/${id}`, {
+    const response = await fetch(`/admin/meals/goals/${id}`, {
       method: 'DELETE',
       headers: {
         'X-CSRF-TOKEN': token,
@@ -40,16 +40,16 @@ document.addEventListener('click', async (e) => {
     }
 
     // hapus row
-    document.querySelector(`tr[data-tema-id="${id}"]`)?.remove();
+    document.querySelector(`tr[data-goal-id="${id}"]`)?.remove();
     notifySuccess(result.message);
 
     // empty state
-    const tbody = document.getElementById('blog-tema-table-body');
+    const tbody = document.getElementById('meal-goal-table-body');
     if (tbody && tbody.children.length === 0) {
       tbody.innerHTML = `
-        <tr id="blog-empty-tema">
-          <td colspan="4" class="px-4 py-4 text-center text-gray-500">
-            Belum ada blog tema.
+        <tr id="meal-empty-goal">
+          <td colspan="3" class="px-4 py-4 text-center text-gray-500">
+            Belum ada meal goal.
           </td>
         </tr>
       `;

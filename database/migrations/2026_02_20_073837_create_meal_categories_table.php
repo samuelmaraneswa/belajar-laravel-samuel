@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('meal_categories', function (Blueprint $table) {
-      $table->id();
-      $table->string('name');
-      $table->string('slug')->unique();
-      $table->text('description')->nullable();
-      $table->timestamps();
-    });
+      Schema::create('meal_categories', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->string('slug')->unique();
+        $table->text('description')->nullable();
+        $table->timestamps();
+      });
     }
 
     /**

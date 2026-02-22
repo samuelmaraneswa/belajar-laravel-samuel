@@ -1,5 +1,5 @@
 <tr
-  data-id="{{ $tema->id }}"
+  data-tema-id="{{ $tema->id }}"
   class="odd:bg-white even:bg-gray-100 hover:bg-gray-100 transition"
 >
   {{-- CATEGORY --}}
@@ -20,9 +20,9 @@
   {{-- ACTION --}}
   <td class="px-4 py-3 text-center space-x-8">
     <button
-      class="text-indigo-600 hover:text-indigo-800 btn-edit-tema cursor-pointer"
+      class="text-indigo-600 hover:text-indigo-800 blog-btn-edit-tema cursor-pointer"
       title="Edit"
-      data-id="{{ $tema->id }}"
+      data-tema-id="{{ $tema->id }}"
       data-category="{{ $tema->category_id }}"
       data-name="{{ $tema->name }}"
       data-description="{{ $tema->description }}"
@@ -32,9 +32,9 @@
     </button>
 
     <button
-      class="text-red-600 hover:text-red-800 btn-delete-tema cursor-pointer"
+      class="text-red-600 hover:text-red-800 blog-btn-delete-tema cursor-pointer"
       title="Delete"
-      data-id="{{ $tema->id }}"
+      data-tema-id="{{ $tema->id }}"
     >
       <i class="fa-solid fa-trash"></i>
     </button>

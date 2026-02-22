@@ -1,8 +1,8 @@
 <x-admin-layout>
-  <div id="articlePage">
+  <div data-page="meals-items">
     <div class="max-w-6xl mx-auto font-hanken">
 
-      <x-admin.page-title title="Articles Management" />
+      <x-admin.page-title title="Meals Management" />
 
       {{-- SEARCH + ADD --}}
       <div class="mt-6 mb-8 flex items-center justify-between gap-4">
@@ -15,7 +15,7 @@
               inline
               id="search"
               name="search"
-              placeholder="Cari artikel..."
+              placeholder="Cari meal..."
               autocomplete="off"
               :unstyled="true"
               class="w-full h-10 px-4 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -29,14 +29,14 @@
             <x-admin.search-suggestions
               id="suggestions"
               class="absolute z-50 w-full bg-white border rounded-lg shadow mt-0.5
-                    max-h-60 overflow-y-auto hidden"
+                     max-h-60 overflow-y-auto hidden"
             />
 
           </div>
         </x-form>
 
         <button
-          id="addArticleBtn"
+          id="addMealBtn"
           class="px-4 py-2 cursor-pointer bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
         >
           <i class="fa fa-plus"></i>
@@ -45,10 +45,12 @@
 
       </div>
 
+      {{-- TABLE --}}
       <div id="tableWrapper">
-        @include('admin.articles.partials._table')
+        @include('admin.meals.items.partials._table')
       </div>
 
+      {{-- PAGINATION --}}
       <div id="pagination" class="mt-8 flex justify-center"></div>
 
     </div>
@@ -56,28 +58,24 @@
 </x-admin-layout>
 
 
-{{-- MODAL FIXED VERSION --}}
-<div id="articleModal"
+{{-- MODAL --}}
+<div id="mealModal"
      class="fixed inset-0 bg-black/50 hidden z-50">
 
   <div class="absolute inset-0 flex items-center justify-center p-4">
 
     <div class="bg-white w-full max-w-3xl rounded-xl relative">
 
-      <button id="closeArticleModal"
+      <button id="closeMealModal"
         class="absolute -top-3 -right-3 bg-black text-white w-6 h-6 rounded-full text-xs cursor-pointer">
         ✕
       </button>
 
-      {{-- SCROLL AREA --}}
       <div class="max-h-[90vh] overflow-y-auto p-6">
-        <div id="modalContent"></div>
+        <div id="mealModalContent"></div>
       </div>
 
     </div>
- 
+
   </div>
 </div>
-
-
-<script src="https://cdn.tiny.cloud/1/ye0cq1ux7lwbtxhgegqsrec3njnn3qluy7z13re2nz2kf0n8/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>

@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const container = document.querySelector('[data-page="meals-category"]');
+  const container = document.querySelector('[data-page="meal-goals"]');
   if (!container) return;
 
-  const modal = document.getElementById('meals-category-modal');
-  const modalContent = document.getElementById('meals-category-modal-content');
-  const openBtn = document.getElementById('btn-create-meals-category');
-  const closeBtn = document.getElementById('meals-btn-close-modal');
+  const modal = document.getElementById('meal-goal-modal');
+  const modalContent = document.getElementById('meal-goal-modal-content');
+  const openBtn = document.getElementById('btn-create-meal-goal');
+  const closeBtn = document.getElementById('meal-btn-close-goal-modal');
 
   if (!modal || !modalContent || !openBtn || !closeBtn) return;
 
   // OPEN
-  window.openMealsCategoryModal = function () {
+  window.openMealGoalModal = function () {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // CLOSE
-  window.closeMealsCategoryModal = function () {
+  window.closeMealGoalModal = function () {
     modalContent.classList.add('scale-95', 'opacity-0');
     modalContent.classList.remove('scale-100', 'opacity-100');
 
@@ -34,13 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   openBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    window.openMealsCategoryModal();
+    window.openMealGoalModal();
   });
 
-  closeBtn.addEventListener('click', window.closeMealsCategoryModal);
+  closeBtn.addEventListener('click', window.closeMealGoalModal);
 
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) window.closeMealsCategoryModal();
+    if (e.target === modal) window.closeMealGoalModal();
   });
 
 });

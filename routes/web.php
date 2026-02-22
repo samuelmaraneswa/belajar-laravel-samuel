@@ -10,6 +10,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\MealCategoryController;
+use App\Http\Controllers\Admin\MealController;
+use App\Http\Controllers\Admin\MealGoalController;
+use App\Http\Controllers\Admin\MealItemController;
 use App\Http\Controllers\ArticleController as PublicArticleController;
 use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\BlogPostController as PublicBlogPostController;
@@ -189,6 +192,52 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
 
   Route::delete('/meals/categories/{mealCategory}', [MealCategoryController::class, 'destroy'])
     ->name('admin.meal.categories.destroy');
+
+  // =====================
+  // MEALS – GOALS
+  // =====================
+  Route::get('/meals/goals', [MealGoalController::class, 'index'])
+    ->name('admin.meals.goals.index');
+
+  Route::post('/meals/goals', [MealGoalController::class, 'store'])
+    ->name('admin.meals.goals.store');
+
+  Route::put('/meals/goals/{mealGoal}', [MealGoalController::class, 'update'])
+    ->name('admin.meals.goals.update');
+
+  Route::delete('/meals/goals/{mealGoal}', [MealGoalController::class, 'destroy'])
+    ->name('admin.meals.goals.destroy');
+
+  // =====================
+  // MEALS – DASHBOARD (Cards)
+  // =====================
+  Route::get('/meals', [MealController::class, 'index'])
+    ->name('admin.meals.index');
+
+
+  // =====================
+  // MEALS – ITEMS (CRUD)
+  // =====================
+  Route::get('/meals/items', [MealItemController::class, 'index'])
+    ->name('admin.meals.items.index');
+
+  Route::get('/meals/items/create', [MealItemController::class, 'create'])
+    ->name('admin.meals.items.create');
+    
+  Route::post('/meals/items', [MealItemController::class, 'store'])
+    ->name('admin.meals.items.store');
+    
+  Route::get('/meals/items/{meal}', [MealItemController::class, 'show'])
+    ->name('admin.meals.items.show');
+    
+  Route::get('/meals/items/{meal}/edit', [MealItemController::class, 'edit'])
+    ->name('admin.meals.items.edit');
+
+  Route::put('/meals/items/{meal}', [MealItemController::class, 'update'])
+    ->name('admin.meals.items.update');
+
+  Route::delete('/meals/items/{meal}', [MealItemController::class, 'destroy'])
+    ->name('admin.meals.items.destroy');
 });
 
 // =======================

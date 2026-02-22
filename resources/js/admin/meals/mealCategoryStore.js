@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ✅ Guard
-  if (!document.querySelector('[data-page="meal-category"]')) return;
+  const container = document.querySelector('[data-page="meals-category"]');
+  if (!container) return;
 
-  const form = document.getElementById('category-form');
+  const form = document.getElementById('meals-category-form');
   if (!form) return;
 
   form.addEventListener('submit', async (e) => {
@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const mode = form.dataset.mode || 'create';
     const formData = new FormData(form);
-
     const httpMethod = mode === 'edit' ? 'PUT' : 'POST';
 
     try {
@@ -31,29 +30,27 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // reset & close modal
-      form.reset();
-      form.dataset.mode = 'create';
-      form.action = '/admin/meals/categories'; // ✅ kembali ke create
-      window.closeMealCategoryModal?.();
-      notifySuccess(result.message);
-
-      // hapus empty state
-      document.getElementById('empty-category')?.remove();
-
-      const tbody = document.getElementById('category-table-body');
+      const tbody = document.getElementById('meals-category-table-body');
+      document.getElementById('meals-empty-category')?.remove();
 
       if (mode === 'create') {
-        // INSERT ROW
         tbody?.insertAdjacentHTML('afterbegin', result.html);
       } else {
-        // REPLACE ROW
-        const id = form.getAttribute('data-id');
-        const oldRow = document.querySelector(`tr[data-id="${id}"]`);
+        const id = form.getAttribute('data-id'); // ambil dulu sebelum reset
+        const oldRow = document.querySelector(`tr[data-meals-id="${id}"]`);
         if (oldRow) {
           oldRow.outerHTML = result.html;
         }
       }
+
+      // reset setelah replace
+      form.reset();
+      form.dataset.mode = 'create';
+      form.action = '/admin/meals/categories';
+      form.removeAttribute('data-id');
+
+      window.closeMealsCategoryModal?.();
+      notifySuccess(result.message);
 
     } catch (error) {
       console.error(error);

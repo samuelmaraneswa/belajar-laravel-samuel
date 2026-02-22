@@ -1,12 +1,16 @@
 document.addEventListener('click', (e) => {
-  const btn = e.target.closest('.btn-edit-tema');
+
+  const container = document.querySelector('[data-page="blog-tema"]');
+  if (!container) return;
+
+  const btn = e.target.closest('.blog-btn-edit-tema');
   if (!btn) return;
 
-  const form = document.getElementById('tema-form');
+  const form = document.getElementById('blog-tema-form');
   if (!form) return;
 
-  // ambil data dari tombol
-  const id = btn.dataset.id;
+  // ambil data
+  const id = btn.dataset.temaId;
   const categoryId = btn.dataset.category;
   const name = btn.dataset.name;
   const description = btn.dataset.description || '';
@@ -23,15 +27,13 @@ document.addEventListener('click', (e) => {
   form.querySelector('textarea[name="description"]').value = description;
   form.querySelector('input[name="is_active"]').checked = isActive;
 
-  // ubah judul modal
-  const title = document.getElementById('tema-modal-title');
+  // ubah title
+  const title = document.getElementById('blog-tema-modal-title');
   if (title) title.textContent = 'Edit Blog Tema';
 
   // buka modal
-  if (typeof window.openTemaModal === 'function') {
-    window.openTemaModal();
-  } else {
-    document.getElementById('tema-modal')?.classList.remove('hidden');
-    document.getElementById('tema-modal')?.classList.add('flex');
+  if (typeof window.openBlogTemaModal === 'function') {
+    window.openBlogTemaModal();
   }
+
 });

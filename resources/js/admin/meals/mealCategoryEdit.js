@@ -1,16 +1,16 @@
 document.addEventListener('click', (e) => {
 
-  // ✅ Guard: hanya untuk meal category page
-  if (!document.querySelector('[data-page="meal-category"]')) return;
+  const container = document.querySelector('[data-page="meals-category"]');
+  if (!container) return;
 
-  const btn = e.target.closest('.btn-edit');
+  const btn = e.target.closest('.meals-btn-edit');
   if (!btn) return;
 
-  const form = document.getElementById('category-form');
+  const form = document.getElementById('meals-category-form');
   if (!form) return;
 
-  // ambil data dari tombol
-  const id = btn.dataset.id;
+  // ambil data
+  const id = btn.dataset.mealsId;
   const name = btn.dataset.name;
   const description = btn.dataset.description || '';
 
@@ -23,17 +23,13 @@ document.addEventListener('click', (e) => {
   form.querySelector('input[name="name"]').value = name;
   form.querySelector('textarea[name="description"]').value = description;
 
-  // ubah judul modal
-  const title = document.getElementById('category-modal-title');
+  // ubah title
+  const title = document.getElementById('meals-category-modal-title');
   if (title) title.textContent = 'Edit Meal Category';
 
   // buka modal
-  if (typeof window.openMealCategoryModal === 'function') {
-    window.openMealCategoryModal();
-  } else {
-    const modal = document.getElementById('category-modal');
-    modal?.classList.remove('hidden');
-    modal?.classList.add('flex');
+  if (typeof window.openMealsCategoryModal === 'function') {
+    window.openMealsCategoryModal();
   }
 
 });

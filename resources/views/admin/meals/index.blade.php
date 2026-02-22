@@ -1,0 +1,1 @@
+<x-admin-layout>card-card meals</x-admin-layout>

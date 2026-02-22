@@ -1,13 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById('tema-modal');
-  const modalContent = document.getElementById('tema-modal-content');
-  const openBtn = document.getElementById('btn-create-tema');
-  const closeBtn = document.getElementById('btn-close-tema-modal');
+
+  const container = document.querySelector('[data-page="blog-tema"]');
+  if (!container) return;
+
+  const modal = document.getElementById('blog-tema-modal');
+  const modalContent = document.getElementById('blog-tema-modal-content');
+  const openBtn = document.getElementById('btn-create-blog-tema');
+  const closeBtn = document.getElementById('blog-btn-close-tema-modal');
 
   if (!modal || !modalContent || !openBtn || !closeBtn) return;
 
-  // OPEN (GLOBAL)
-  window.openTemaModal = function () {
+  // OPEN
+  window.openBlogTemaModal = function () {
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 
@@ -17,8 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // CLOSE (GLOBAL)
-  window.closeTemaModal = function () {
+  // CLOSE
+  window.closeBlogTemaModal = function () {
     modalContent.classList.add('scale-95', 'opacity-0');
     modalContent.classList.remove('scale-100', 'opacity-100');
 
@@ -30,12 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   openBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    window.openTemaModal();
+    window.openBlogTemaModal();
   });
 
-  closeBtn.addEventListener('click', window.closeTemaModal);
+  closeBtn.addEventListener('click', window.closeBlogTemaModal);
 
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) window.closeTemaModal();
+    if (e.target === modal) window.closeBlogTemaModal();
   });
+
 });

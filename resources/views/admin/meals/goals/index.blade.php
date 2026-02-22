@@ -1,29 +1,26 @@
 <x-admin-layout>
-  <div data-page="blog-tema">
-    <div class="">
+  <div data-page="meal-goals">
+    <div>
 
       {{-- HEADER --}}
       <div class="flex items-center justify-between">
-        <h1 class="text-xl md:text-2xl font-bold">Blog Tema</h1>
+        <h1 class="text-xl md:text-2xl font-bold">Meal Goals</h1>
 
         <x-action-button
-          id="btn-create-blog-tema"
+          id="btn-create-meal-goal"
           class="cursor-pointer
                 px-3.5! py-2.5! text-sm
                 sm:px-5 sm:py-3 sm:text-base">
           <span class="sm:hidden">+ Add</span>
-          <span class="hidden sm:inline">+ Add Tema</span>
+          <span class="hidden sm:inline">+ Add Goal</span>
         </x-action-button>
       </div>
 
-      {{-- TEMA TABLE --}}
+      {{-- TABLE --}}
       <div class="mt-4 overflow-x-auto border border-gray-500 rounded-lg">
         <table class="min-w-max w-full border-collapse">
           <thead class="bg-indigo-500 text-white">
             <tr>
-              <th class="px-4 py-3 text-left text-base font-semibold whitespace-nowrap">
-                Category
-              </th>
               <th class="px-4 py-3 text-left text-base font-semibold whitespace-nowrap">
                 Name
               </th>
@@ -36,13 +33,13 @@
             </tr>
           </thead>
 
-          <tbody id="blog-tema-table-body">
-            @forelse ($temas as $tema)
-              @include('admin.blog.tema._row', ['tema' => $tema])
+          <tbody id="meal-goal-table-body">
+            @forelse ($goals as $goal)
+              @include('admin.meals.goals._row', ['goal' => $goal])
             @empty
-              <tr id="blog-empty-tema">
-                <td colspan="4" class="px-4 py-4 text-center text-gray-500">
-                  Belum ada blog tema.
+              <tr id="meal-empty-goal">
+                <td colspan="3" class="px-4 py-4 text-center text-gray-500">
+                  Belum ada meal goal.
                 </td>
               </tr>
             @endforelse
@@ -52,53 +49,37 @@
 
     </div>
 
-    {{-- CREATE / EDIT TEMA MODAL --}}
+    {{-- CREATE / EDIT MODAL --}}
     <div
-      id="blog-tema-modal"
+      id="meal-goal-modal"
       class="fixed inset-0 z-50 p-6 sm:p-0 hidden items-center justify-center
             bg-black/50 backdrop-blur-sm
             transition-opacity duration-200"
     >
       <div
-        id="blog-tema-modal-content"
+        id="meal-goal-modal-content"
         class="bg-white rounded-xl w-full max-w-md p-6
               transform transition-all duration-200
               scale-95 opacity-0"
       >
-        <h2 id="blog-tema-modal-title" class="text-xl font-bold mb-4">
-          Add Blog Tema
+        <h2 id="meal-goal-modal-title" class="text-xl font-bold mb-4">
+          Add Meal Goal
         </h2>
 
         <x-form
-          action="{{ route('admin.blog.tema.store') }}"
+          action="{{ route('admin.meals.goals.store') }}"
           method="POST"
-          id="blog-tema-form"
+          id="meal-goal-form"
           data-mode="create"
         >
 
           {{-- ID untuk EDIT --}}
-          <input type="hidden" name="tema-id" id="blog-tema-id">
-
-          {{-- CATEGORY --}}
-          <div class="mb-4">
-            <label class="block text-sm mb-1 text-gray-600">Category</label>
-            <select
-              name="category_id"
-              class="w-full border rounded px-3 py-2 border-gray-300 focus:outline-none focus:ring"
-            >
-              <option value="">-- Pilih Category --</option>
-              @foreach ($categories as $category)
-                <option value="{{ $category->id }}">
-                  {{ $category->name }}
-                </option>
-              @endforeach
-            </select>
-          </div>
+          <input type="hidden" name="goal-id" id="meal-goal-id">
 
           <x-input
             label="Name"
             name="name"
-            placeholder="Handstand"
+            placeholder="Bulking"
             autocomplete="off"
           />
 
@@ -106,17 +87,11 @@
             label="Description"
             name="description"
             rows="3"
-            placeholder="Journey handstand"
-          />
-
-          <x-checkbox
-            name="is_active"
-            label="Active"
-            :checked="true"
+            placeholder="High calorie meal focus"
           />
 
           <div class="flex justify-end gap-2 pt-4">
-            <x-button id="blog-btn-close-tema-modal">
+            <x-button id="meal-btn-close-goal-modal">
               Cancel
             </x-button>
 
@@ -131,5 +106,4 @@
       </div>
     </div>
   </div>
-
 </x-admin-layout>

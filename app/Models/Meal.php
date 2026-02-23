@@ -37,4 +37,9 @@ class Meal extends Model
       ->withPivot('quantity')
       ->withTimestamps();
   }
+
+  public function steps()
+  {
+    return $this->hasMany(\App\Models\MealStep::class);
+  }
 }

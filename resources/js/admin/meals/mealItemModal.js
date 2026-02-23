@@ -10,12 +10,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!modal || !modalContent || !openBtn || !closeBtn) return;
 
-  // OPEN (load form first, then show modal)
-  openBtn.addEventListener('click', async (e) => {
-    e.preventDefault();
+  // =========================
+  // OPEN
+  // =========================
+  window.openMealItemModal = async function () {
 
     try {
       const response = await fetch('/admin/meals/items/create');
+
+      if (!response.ok) throw new Error('Failed load form');
+
       const html = await response.text();
 
       modalContent.innerHTML = html;
@@ -29,12 +33,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
     } catch (error) {
-      console.error('Gagal load form:', error);
+      console.error('Load form error:', error);
     }
-  });
+  };
 
+  // =========================
   // CLOSE
-  function closeModal() {
+  // =========================
+  window.closeMealItemModal = function () {
+
     modalContent.classList.add('scale-95', 'opacity-0');
     modalContent.classList.remove('scale-100', 'opacity-100');
 
@@ -43,12 +50,22 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.classList.remove('flex');
       modalContent.innerHTML = '';
     }, 200);
-  }
+  };
 
-  closeBtn.addEventListener('click', closeModal);
+  // =========================
+  // EVENTS
+  // =========================
+  openBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.openMealItemModal();
+  });
+
+  closeBtn.addEventListener('click', window.closeMealItemModal);
 
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
+    if (e.target === modal) {
+      window.closeMealItemModal();
+    }
   });
 
 });

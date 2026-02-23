@@ -53,6 +53,23 @@
     type="file"
     accept="image/*"
   />
+  @if(isset($meal) && $meal->image)
+    <div class="-mt-3">
+
+      <div class="text-xs text-gray-500 break-all mb-1">
+        Old image: storage/{{ $meal->image }}
+      </div>
+
+      <div class="w-40">
+        <img 
+          src="{{ asset('storage/' . $meal->image) }}" 
+          class="rounded border"
+          alt="Current Image"
+        >
+      </div>
+
+    </div>
+  @endif
 
   {{-- VIDEO URL --}}
   <x-input
@@ -78,7 +95,46 @@
       </button>
     </div>
 
-    <div id="meals-ingredients-list" class="space-y-3"></div>
+    <div id="meals-ingredients-list" class="space-y-3">
+
+      @if(isset($meal) && $meal->foods->count())
+        @foreach($meal->foods as $index => $food)
+          <div class="meals-ingredient-item p-3 border rounded bg-white">
+
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-medium">Ingredient</span>
+              <button type="button"
+                class="meals-remove-ingredient text-red-500 text-sm cursor-pointer">
+                ✕
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+              <select name="ingredients[{{ $index }}][food_id]"
+                      class="border rounded px-3 py-2">
+                <option value="">-- Pilih Food --</option>
+                @foreach($foods as $f)
+                  <option value="{{ $f->id }}"
+                    {{ $f->id == $food->id ? 'selected' : '' }}>
+                    {{ $f->name }}
+                  </option>
+                @endforeach
+              </select>
+
+              <input type="number"
+                step="0.01"
+                name="ingredients[{{ $index }}][quantity]"
+                value="{{ $food->pivot->quantity }}"
+                class="border rounded px-3 py-2" />
+
+            </div>
+
+          </div>
+        @endforeach
+      @endif
+
+    </div>
 
     {{-- TEMPLATE --}}
     <template id="meals-ingredient-template">
@@ -134,7 +190,36 @@
       </button>
     </div>
 
-    <div id="meals-steps-list" class="space-y-3"></div>
+    <div id="meals-steps-list" class="space-y-3">
+
+      @if(isset($meal) && $meal->steps->count())
+        @foreach($meal->steps->sortBy('step_number') as $index => $step)
+          <div class="meals-step-item p-3 border rounded bg-white">
+
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-medium">
+                Step {{ $step->step_number }}
+              </span>
+              <button type="button"
+                class="meals-remove-step text-red-500 text-sm cursor-pointer">
+                ✕
+              </button>
+            </div>
+
+            <input type="hidden"
+              name="steps[{{ $index }}][step_number]"
+              value="{{ $step->step_number }}">
+
+            <input type="text"
+              name="steps[{{ $index }}][instruction]"
+              value="{{ $step->instruction }}"
+              class="w-full border rounded px-3 py-2" />
+
+          </div>
+        @endforeach
+      @endif
+
+    </div>
 
     {{-- TEMPLATE --}}
     <template id="meals-step-template">
@@ -152,12 +237,10 @@
           name="steps[__INDEX__][step_number]"
           value="__STEP_NUMBER__">
 
-        <textarea
+        <input type="text"
           name="steps[__INDEX__][instruction]"
-          rows="3"
-          placeholder="Tuliskan langkah memasak..."
           class="w-full border rounded px-3 py-2"
-        ></textarea>
+          placeholder="Contoh: Tumis bawang hingga harum" />
 
       </div>
     </template>

@@ -1,8 +1,9 @@
 <x-layout>
+  {{-- Workout 30days section --}}
   <section
     class="relative w-full bg-cover bg-center"
     style="
-      min-height: calc(100vh - 71px);
+      min-height: calc(102vh - 71px);
       background-image: url('{{ asset('images/generate-background.jpg') }}');
     "
   >

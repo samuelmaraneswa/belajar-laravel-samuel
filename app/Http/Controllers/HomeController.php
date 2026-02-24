@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\BlogPost;
 use App\Models\Food;
+use App\Models\Meal;
 use App\Models\Workout;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,11 @@ class HomeController extends Controller
       ->take(3)
       ->get();
 
-    return view('home', compact('workouts', 'latestPosts', 'foods', 'latestArticles'));
+    $latestMeals = Meal::with(['category', 'goal'])
+      ->latest()
+      ->take(3)
+      ->get();
+
+    return view('home', compact('workouts', 'latestPosts', 'foods', 'latestArticles', 'latestMeals'));
   }
 }

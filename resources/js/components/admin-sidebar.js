@@ -33,7 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (
       (key === 'workouts' && window.location.pathname.startsWith('/admin/workouts')) ||
       (key === 'blog' && window.location.pathname.startsWith('/admin/blog')) ||
-      (key === 'foods' && window.location.pathname.startsWith('/admin/foods'))
+      (key === 'foods' && window.location.pathname.startsWith('/admin/foods')) ||
+      (key === 'meals' && window.location.pathname.startsWith('/admin/meals'))
     ) {
       submenu.classList.remove('hidden')
       icon?.classList.add('rotate-180')

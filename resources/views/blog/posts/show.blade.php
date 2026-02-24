@@ -102,6 +102,21 @@
 
     </div>
 
+    {{-- ================= SIMILAR POSTS ================= --}}
+    @if($similarPosts->count())
+      <div class="mt-16">
+        <h2 class="text-xl font-semibold mb-6">
+          Similar Articles
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          @foreach($similarPosts as $similar)
+            <x-blog-card :post="$similar" />
+          @endforeach
+        </div>
+      </div>
+    @endif
+
   </div>
 
 </x-layout>

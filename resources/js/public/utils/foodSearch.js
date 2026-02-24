@@ -405,8 +405,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const servingUnit = document.getElementById('servingUnit');
 
         if (servingInput) {
-          servingInput.value = food.serving_base_value;
-          servingInput.dataset.base = food.serving_base_value;
+          servingInput.value = Number(food.serving_base_value);
+          servingInput.dataset.base = Number(food.serving_base_value);
         }
 
         if (servingUnit) {

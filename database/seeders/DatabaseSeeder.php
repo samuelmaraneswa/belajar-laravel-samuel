@@ -51,5 +51,13 @@ class DatabaseSeeder extends Seeder
     // 6️⃣ Articles
     // ========================
     $this->call(ArticleSeeder::class);
+
+    $this->call([
+      MealCategorySeeder::class,
+      MealGoalSeeder::class,
+      MealSeeder::class,
+      MealFoodSeeder::class,
+      MealStepSeeder::class,
+    ]);
   }
 }

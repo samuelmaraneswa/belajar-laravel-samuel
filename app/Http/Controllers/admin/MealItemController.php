@@ -21,14 +21,27 @@ class MealItemController extends Controller
   {
     $query = Meal::with(['category', 'goal']);
 
-    // Search by title
+    // 🔎 Filter category
+    if ($request->filled('category')) {
+      $query->whereHas('category', function ($q) use ($request) {
+        $q->where('slug', $request->category);
+      });
+    }
+
+    // 🎯 Filter goal
+    if ($request->filled('goal')) {
+      $query->whereHas('goal', function ($q) use ($request) {
+        $q->where('slug', $request->goal);
+      });
+    }
+
+    // 🔎 Search by title
     if ($request->filled('search')) {
       $query->where('title', 'like', '%' . $request->search . '%');
     }
 
     $meals = $query->latest()->paginate(30);
 
-    // AJAX request (for table refresh)
     if ($request->ajax()) {
       return response()->json([
         'html' => view('admin.meals.items.partials._table', compact('meals'))->render(),
@@ -64,27 +77,28 @@ class MealItemController extends Controller
       'description' => 'required|string',
       'prep_time' => 'nullable|integer',
       'image' => 'nullable|image|max:2048',
+
       'ingredients' => 'required|array|min:1',
+      'ingredients.*.food_id' => 'required|exists:foods,id',
+      'ingredients.*.quantity' => 'required|numeric|min:0.01',
+
       'steps' => 'required|array|min:1',
+      'steps.*.step_number' => 'required|integer|min:1',
+      'steps.*.instruction' => 'required|string',
     ]);
 
     DB::beginTransaction();
 
     try {
 
-      $imagePath = null;
-
       // =====================
       // UPLOAD IMAGE + THUMB
       // =====================
       $imagePath = null;
-      $thumbPath = null;
 
       if ($request->hasFile('image')) {
 
         $imageFile = $request->file('image');
-
-        // simpan original
         $imagePath = $imageFile->store('meals', 'public');
 
         $manager = new ImageManager(new Driver());
@@ -102,10 +116,7 @@ class MealItemController extends Controller
         $thumbPath = 'meals/thumb/' .
           pathinfo($imagePath, PATHINFO_FILENAME) . '.webp';
 
-        $thumb = clone $image;
-
-        $thumb
-          ->toWebp(70)
+        $image->toWebp(70)
           ->save(storage_path('app/public/' . $thumbPath));
       }
 
@@ -127,6 +138,9 @@ class MealItemController extends Controller
       // SAVE INGREDIENTS
       // =====================
       foreach ($request->ingredients as $ingredient) {
+
+        if (empty($ingredient['food_id'])) continue;
+
         $meal->foods()->attach($ingredient['food_id'], [
           'quantity' => $ingredient['quantity'],
         ]);
@@ -136,6 +150,7 @@ class MealItemController extends Controller
       // SAVE STEPS
       // =====================
       foreach ($request->steps as $step) {
+
         MealStep::create([
           'meal_id' => $meal->id,
           'step_number' => $step['step_number'],
@@ -144,6 +159,13 @@ class MealItemController extends Controller
       }
 
       DB::commit();
+
+      // =====================
+      // REFRESH TABLE DATA
+      // =====================
+      $meals = Meal::with(['category', 'goal'])
+        ->latest()
+        ->paginate(30);
 
       return response()->json([
         'success' => true,
@@ -156,6 +178,7 @@ class MealItemController extends Controller
     } catch (\Exception $e) {
 
       DB::rollBack();
+
       return response()->json([
         'success' => false,
         'message' => 'Gagal menyimpan meal.'
@@ -192,8 +215,14 @@ class MealItemController extends Controller
       'description' => 'required|string',
       'prep_time' => 'nullable|integer',
       'image' => 'nullable|image|max:2048',
+
       'ingredients' => 'required|array|min:1',
+      'ingredients.*.food_id' => 'required|exists:foods,id',
+      'ingredients.*.quantity' => 'required|numeric|min:0.01',
+
       'steps' => 'required|array|min:1',
+      'steps.*.step_number' => 'required|integer|min:1',
+      'steps.*.instruction' => 'required|string',
     ]);
 
     DB::beginTransaction();
@@ -201,24 +230,25 @@ class MealItemController extends Controller
     try {
 
       $imagePath = $meal->image;
-      $thumbPath = null;
 
       // =====================
       // REPLACE IMAGE
       // =====================
       if ($request->hasFile('image')) {
 
-        // Hapus gambar lama
-        if ($meal->image && file_exists(storage_path('app/public/' . $meal->image))) {
-          unlink(storage_path('app/public/' . $meal->image));
+        if ($meal->image) {
+
+          $oldImage = storage_path('app/public/' . $meal->image);
+          if (file_exists($oldImage)) unlink($oldImage);
+
+          $oldThumb = storage_path(
+            'app/public/meals/thumb/' .
+              pathinfo($meal->image, PATHINFO_FILENAME) . '.webp'
+          );
+
+          if (file_exists($oldThumb)) unlink($oldThumb);
         }
 
-        $oldThumb = 'meals/thumb/' . pathinfo($meal->image, PATHINFO_FILENAME) . '.webp';
-        if (file_exists(storage_path('app/public/' . $oldThumb))) {
-          unlink(storage_path('app/public/' . $oldThumb));
-        }
-
-        // Upload baru
         $imageFile = $request->file('image');
         $imagePath = $imageFile->store('meals', 'public');
 
@@ -236,8 +266,7 @@ class MealItemController extends Controller
         $thumbPath = 'meals/thumb/' .
           pathinfo($imagePath, PATHINFO_FILENAME) . '.webp';
 
-        $image
-          ->toWebp(70)
+        $image->toWebp(70)
           ->save(storage_path('app/public/' . $thumbPath));
       }
 
@@ -260,6 +289,9 @@ class MealItemController extends Controller
       $syncData = [];
 
       foreach ($request->ingredients as $ingredient) {
+
+        if (empty($ingredient['food_id'])) continue;
+
         $syncData[$ingredient['food_id']] = [
           'quantity' => $ingredient['quantity'],
         ];
@@ -273,6 +305,7 @@ class MealItemController extends Controller
       $meal->steps()->delete();
 
       foreach ($request->steps as $step) {
+
         MealStep::create([
           'meal_id' => $meal->id,
           'step_number' => $step['step_number'],
@@ -301,6 +334,108 @@ class MealItemController extends Controller
       return response()->json([
         'success' => false,
         'message' => 'Gagal memperbarui meal.'
+      ], 500);
+    }
+  }
+
+  public function foodSuggest(Request $request)
+  {
+    $q = trim($request->q);
+
+    if (!$q) {
+      return response()->json([]);
+    }
+
+    $foods = Food::where('name', 'like', "%{$q}%")
+      ->orderBy('name')
+      ->limit(10)
+      ->get(['id', 'name']);
+
+    return response()->json($foods);
+  }
+
+  public function suggest(Request $request)
+  {
+    $query = Meal::query();
+
+    if ($request->filled('category')) {
+      $query->whereHas('category', function ($q) use ($request) {
+        $q->where('slug', $request->category);
+      });
+    }
+
+    if ($request->filled('goal')) {
+      $query->whereHas('goal', function ($q) use ($request) {
+        $q->where('slug', $request->goal);
+      });
+    }
+
+    if ($request->filled('q')) {
+      $query->where('title', 'like', '%' . $request->q . '%');
+    }
+
+    return response()->json(
+      $query->limit(20)->pluck('title')
+    );
+  }
+
+  public function destroy(\App\Models\Meal $meal)
+  {
+    DB::beginTransaction();
+
+    try {
+
+      // =====================
+      // HAPUS IMAGE + THUMB
+      // =====================
+      if ($meal->image) {
+
+        $imagePath = storage_path('app/public/' . $meal->image);
+
+        if (file_exists($imagePath)) {
+          unlink($imagePath);
+        }
+
+        $thumbPath = storage_path('app/public/meals/thumb/' .
+          pathinfo($meal->image, PATHINFO_FILENAME) . '.webp');
+
+        if (file_exists($thumbPath)) {
+          unlink($thumbPath);
+        }
+      }
+
+      // =====================
+      // HAPUS RELASI
+      // =====================
+      $meal->foods()->detach();
+      $meal->steps()->delete();
+
+      // =====================
+      // HAPUS MEAL
+      // =====================
+      $meal->delete();
+
+      DB::commit();
+
+      $meals = \App\Models\Meal::with(['category', 'goal'])
+        ->latest()
+        ->get();
+
+      return response()->json([
+        'success' => true,
+        'message' => 'Meal berhasil dihapus.',
+        'html' => view(
+          'admin.meals.items.partials._table',
+          compact('meals')
+        )->render()
+      ]);
+    } catch (\Exception $e) {
+
+      DB::rollBack();
+
+      return response()->json([
+        'success' => false,
+        'message' => 'Gagal menghapus meal.'
       ], 500);
     }
   }

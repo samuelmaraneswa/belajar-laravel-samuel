@@ -24,7 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.classList.remove('hidden');
       modal.classList.add('flex');
 
-      // 🔥 TAMBAHKAN INI
+      // ✅ ambil wrapper scroll setelah modal aktif
+      const scrollWrapper = document.getElementById('mealModalScroll');
+      if (scrollWrapper) {
+        scrollWrapper.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
       requestAnimationFrame(() => {
         modalContent.classList.remove('scale-95', 'opacity-0');
         modalContent.classList.add('scale-100', 'opacity-100');

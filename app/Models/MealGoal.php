@@ -11,4 +11,9 @@ class MealGoal extends Model
     'slug',
     'description',
   ];
+
+  public function meals()
+  {
+    return $this->hasMany(Meal::class, 'goal_id');
+  }
 }

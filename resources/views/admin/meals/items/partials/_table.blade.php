@@ -44,6 +44,7 @@
             </button>
 
             <button
+              type="button"
               class="meals-delete-item cursor-pointer inline-flex items-center justify-center h-6 px-1 sm:h-7 sm:px-2 text-xs sm:text-sm bg-red-500 text-white rounded hover:bg-red-600"
               data-meals-id="{{ $meal->id }}"
             >

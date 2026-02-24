@@ -11,14 +11,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const form = e.target;
     const formData = new FormData(form);
-    if (form.action.match(/\/\d+$/)) {
-      formData.append('_method', 'PUT');
+
+    // =========================
+    // VALIDASI FRONTEND
+    // =========================
+    const invalidIngredient = form.querySelectorAll('.meal-food-id-hidden');
+
+    for (let input of invalidIngredient) {
+      const wrapper = input.closest('.meals-ingredient-item');
+      const qty = wrapper.querySelector('input[type="number"]');
+
+      if (!input.value || !qty.value) {
+        notifyError('Silakan pilih ingredient dan isi quantity.');
+        return;
+      }
     }
 
     try {
 
+      // =========================
+      // DETECT CREATE / UPDATE
+      // =========================
+      const isEdit = /\/\d+$/.test(form.action);
+
       const response = await fetch(form.action, {
-        method: 'POST',
+        method: isEdit ? 'PUT' : 'POST',
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
           'Accept': 'application/json',
@@ -33,12 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // 🔥 replace full table dari response
+      // =========================
+      // UPDATE TABLE
+      // =========================
       if (result.html) {
         document.getElementById('tableWrapper').innerHTML = result.html;
       }
-
-      form.reset();
 
       window.closeMealItemModal?.();
       notifySuccess(result.message);

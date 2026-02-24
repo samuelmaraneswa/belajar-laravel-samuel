@@ -49,9 +49,13 @@ export function initSearchSuggestions({
     controller = new AbortController()
 
     try{
-      const url = endpoint.includes('?')
-        ? `${endpoint}&q=${encodeURIComponent(q)}`
-        : `${endpoint}?q=${encodeURIComponent(q)}`
+      const baseUrl = typeof endpoint === 'function'
+      ? endpoint()
+      : endpoint
+
+    const url = baseUrl.includes('?')
+      ? `${baseUrl}&q=${encodeURIComponent(q)}`
+      : `${baseUrl}?q=${encodeURIComponent(q)}`
 
       const res = await fetch(url, {
         signal: controller.signal

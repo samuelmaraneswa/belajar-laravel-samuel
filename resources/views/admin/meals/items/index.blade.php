@@ -71,7 +71,7 @@
         ✕
       </button>
 
-      <div class="max-h-[90vh] overflow-y-auto p-6">
+      <div id="mealModalScroll" class="max-h-[90vh] overflow-y-auto p-6">
         <div id="mealModalContent"></div>
       </div>
 

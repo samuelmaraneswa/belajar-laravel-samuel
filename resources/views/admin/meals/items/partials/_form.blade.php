@@ -39,7 +39,7 @@
 
   {{-- PREP TIME --}}
   <x-input
-    label="Preparation Time (minutes)"
+    label="Total Time (minutes)"
     name="prep_time"
     type="number"
     placeholder="Contoh: 45"
@@ -83,7 +83,7 @@
       INGREDIENTS (meal_food)
   ========================================== --}}
   <div id="meals-ingredients-section"
-       class="p-4 border rounded-lg bg-gray-50">
+      class="p-4 border rounded-lg bg-gray-50">
 
     <div class="flex justify-between items-center mb-3">
       <h3 class="font-semibold">Ingredients</h3>
@@ -97,6 +97,7 @@
 
     <div id="meals-ingredients-list" class="space-y-3">
 
+      {{-- EDIT MODE --}}
       @if(isset($meal) && $meal->foods->count())
         @foreach($meal->foods as $index => $food)
           <div class="meals-ingredient-item p-3 border rounded bg-white">
@@ -111,17 +112,25 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-              <select name="ingredients[{{ $index }}][food_id]"
-                      class="border rounded px-3 py-2">
-                <option value="">-- Pilih Food --</option>
-                @foreach($foods as $f)
-                  <option value="{{ $f->id }}"
-                    {{ $f->id == $food->id ? 'selected' : '' }}>
-                    {{ $f->name }}
-                  </option>
-                @endforeach
-              </select>
+              {{-- 🔥 AUTOCOMPLETE FOOD --}}
+              <div class="relative">
 
+                <input type="text"
+                  class="meal-food-search-input border rounded px-3 py-2 w-full"
+                  value="{{ $food->name }}"
+                  placeholder="Cari food..."
+                  autocomplete="off" />
+
+                <input type="hidden"
+                  name="ingredients[{{ $index }}][food_id]"
+                  value="{{ $food->id }}"
+                  class="meal-food-id-hidden" />
+
+                <div class="meal-food-suggestions absolute z-50 bg-white border rounded shadow top-full w-full hidden"></div>
+
+              </div>
+
+              {{-- QUANTITY --}}
               <input type="number"
                 step="0.01"
                 name="ingredients[{{ $index }}][quantity]"
@@ -136,7 +145,7 @@
 
     </div>
 
-    {{-- TEMPLATE --}}
+    {{-- TEMPLATE (CREATE + ADD NEW) --}}
     <template id="meals-ingredient-template">
       <div class="meals-ingredient-item p-3 border rounded bg-white">
 
@@ -150,16 +159,23 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-          <select name="ingredients[__INDEX__][food_id]"
-                  class="border rounded px-3 py-2">
-            <option value="">-- Pilih Food --</option>
-            @foreach($foods as $food)
-              <option value="{{ $food->id }}">
-                {{ $food->name }}
-              </option>
-            @endforeach
-          </select>
+          {{-- 🔥 AUTOCOMPLETE FOOD --}}
+          <div class="relative">
 
+            <input type="text"
+              class="meal-food-search-input border rounded px-3 py-2 w-full"
+              placeholder="Cari food..."
+              autocomplete="off" />
+
+            <input type="hidden"
+              name="ingredients[__INDEX__][food_id]"
+              class="meal-food-id-hidden" />
+
+            <div class="meal-food-suggestions absolute z-50 bg-white border rounded shadow top-full w-full hidden"></div>
+
+          </div>
+
+          {{-- QUANTITY --}}
           <input type="number"
             step="0.01"
             name="ingredients[__INDEX__][quantity]"
@@ -172,7 +188,6 @@
     </template>
 
   </div>
-
 
   {{-- =========================================
       STEPS (meal_steps)

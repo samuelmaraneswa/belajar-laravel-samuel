@@ -18,6 +18,8 @@ use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\BlogPostController as PublicBlogPostController;
 use App\Http\Controllers\FoodController as PublicFoodController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MealController as PublicMealController;
+use App\Http\Controllers\MealItemController as PublicMealItemController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\User\ProgramController as UserProgramController;
@@ -226,7 +228,13 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
     
   Route::post('/meals/items', [MealItemController::class, 'store'])
     ->name('admin.meals.items.store');
-    
+
+  Route::get('/meals/foods/suggest', [MealItemController::class, 'foodSuggest'])
+    ->name('admin.meals.foods.suggest');
+
+  Route::get('/meals/items/suggest',[MealItemController::class, 'suggest'])
+    ->name('admin.meals.items.suggest');
+
   Route::get('/meals/items/{meal}', [MealItemController::class, 'show'])
     ->name('admin.meals.items.show');
     
@@ -370,3 +378,20 @@ Route::get('/articles/suggest', [PublicArticleController::class, 'suggest'])
 // ARTICLE DETAIL
 Route::get('/articles/{article:slug}', [PublicArticleController::class, 'show'])
   ->name('public.articles.show');
+
+// =======================
+// MEALS – PUBLIC
+// =======================
+
+// Meals dashboard (All + Categories)
+Route::get('/meals', [PublicMealController::class, 'index'])
+  ->name('meals.index');
+
+Route::get('/meals/items', [PublicMealItemController::class, 'index'])
+  ->name('meals.items.index');
+
+Route::get('/meals/items/{meal:slug}', [PublicMealItemController::class, 'show'])
+  ->name('meals.items.show');
+
+Route::get('/meals/suggest', [PublicMealItemController::class, 'suggest'])
+  ->name('meals.suggest');

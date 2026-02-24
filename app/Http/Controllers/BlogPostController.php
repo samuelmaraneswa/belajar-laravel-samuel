@@ -37,18 +37,31 @@ class BlogPostController extends Controller
     return view('blog.posts.index', compact('posts', 'categories'));
   }
 
-  public function show(BlogPost $post)
+  public function show(Request $request, BlogPost $post)
   {
-    $similarPosts = BlogPost::with(['category'])
-      ->where('category_id', $post->category_id)
+    $category = $request->query('category');
+    $tema     = $request->query('tema');
+
+    $similarPosts = BlogPost::with(['category', 'tema'])
       ->where('id', '!=', $post->id)
+
+      ->when($category, function ($q) use ($category) {
+        $q->whereHas('category', function ($c) use ($category) {
+          $c->where('slug', $category);
+        });
+      })
+
+      ->when($tema, function ($q) use ($tema) {
+        $q->whereHas('tema', function ($t) use ($tema) {
+          $t->where('slug', $tema);
+        });
+      })
+
+      ->latest()
       ->take(6)
       ->get();
 
-    return view('blog.posts.show', compact(
-      'post',
-      'similarPosts'
-    ));
+    return view('blog.posts.show', compact('post', 'similarPosts'));
   }
 
   public function suggest(Request $request)

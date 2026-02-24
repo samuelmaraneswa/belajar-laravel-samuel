@@ -17,19 +17,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch('/admin/meals/items/create');
-
       if (!response.ok) throw new Error('Failed load form');
 
       const html = await response.text();
-
       modalContent.innerHTML = html;
 
       modal.classList.remove('hidden');
       modal.classList.add('flex');
 
+      // ✅ reset scroll setelah modal tampil
       requestAnimationFrame(() => {
-        modalContent.classList.remove('scale-95', 'opacity-0');
-        modalContent.classList.add('scale-100', 'opacity-100');
+        const scrollWrapper = document.getElementById('mealModalScroll');
+        if (scrollWrapper) scrollWrapper.scrollTop = 0;
       });
 
     } catch (error) {
@@ -42,14 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   window.closeMealItemModal = function () {
 
-    modalContent.classList.add('scale-95', 'opacity-0');
-    modalContent.classList.remove('scale-100', 'opacity-100');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    modalContent.innerHTML = '';
 
-    setTimeout(() => {
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      modalContent.innerHTML = '';
-    }, 200);
+    const scrollWrapper = document.getElementById('mealModalScroll');
+    if (scrollWrapper) scrollWrapper.scrollTop = 0;
   };
 
   // =========================
@@ -64,6 +61,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
+      window.closeMealItemModal();
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'meals-btn-cancel') {
+      e.preventDefault();
+      window.closeMealItemModal();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
       window.closeMealItemModal();
     }
   });

@@ -1,9 +1,10 @@
 <a
-  href="{{ route('blogs.posts.show', [
-      $post->slug,
+  href="{{ route('meals.items.show', [
+      'meal' => $meal->slug,
       'category' => request('category'),
-      'tema' => request('tema'),
+      'goal' => request('goal'),
   ]) }}"
+  
   class="group block bg-white rounded-2xl overflow-hidden
          border border-indigo-200
          hover:border-indigo-500 hover:shadow-lg
@@ -12,10 +13,10 @@
 
   {{-- IMAGE --}}
   <div class="aspect-video bg-gray-100 overflow-hidden">
-    @if ($post->image)
+    @if ($meal->image)
       <img
-        src="{{ asset('storage/'.$post->image) }}"
-        alt="{{ $post->title }}"
+        src="{{ asset('storage/'.$meal->image) }}"
+        alt="{{ $meal->title }}"
         class="w-full h-full object-cover
                transition-transform duration-300
                group-hover:scale-105"
@@ -32,21 +33,21 @@
 
     {{-- TITLE --}}
     <h3 class="font-semibold text-lg text-gray-800 line-clamp-2">
-      {{ $post->title }}
+      {{ $meal->title }}
     </h3>
 
-    {{-- META (CATEGORY | TEMA | DATE) --}}
+    {{-- META (CATEGORY | GOAL | DATE) --}}
     <div class="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
 
       {{-- CATEGORY --}}
       <span class="uppercase tracking-wide">
-        #{{ $post->category->name ?? 'blog' }}
+        #{{ $meal->category->name ?? 'meal' }}
       </span>
 
-      @if ($post->tema)
+      @if ($meal->goal)
         <span class="text-gray-300">|</span>
         <span>
-          {{ $post->tema->name }}
+          {{ $meal->goal->name }}
         </span>
       @endif
 
@@ -54,14 +55,14 @@
 
       {{-- DATE --}}
       <span>
-        {{ $post->created_at->format('d M Y') }}
+        {{ $meal->created_at->format('d M Y') }}
       </span>
 
     </div>
 
     {{-- EXCERPT --}}
     <p class="text-sm text-gray-600 line-clamp-3">
-      {{ Str::limit(strip_tags($post->content), 120) }}
+      {{ Str::limit(strip_tags($meal->description), 120) }}
     </p>
 
   </div>

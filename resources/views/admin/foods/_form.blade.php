@@ -81,6 +81,9 @@
           <option value="pcs" {{ $unit === 'pcs' ? 'selected' : '' }}>Piece (pcs)</option>
           <option value="tbsp" {{ $unit === 'tbsp' ? 'selected' : '' }}>Tablespoon (tbsp)</option>
           <option value="tsp" {{ $unit === 'tsp' ? 'selected' : '' }}>Teaspoon (tsp)</option>
+          <option value="butir" {{ $unit === 'butir' ? 'selected' : '' }}>Butir (butir)</option>
+          <option value="tongkol" {{ $unit === 'tongkol' ? 'selected' : '' }}>Tongkol (tongkol)</option>
+          <option value="siung" {{ $unit === 'siung' ? 'selected' : '' }}>Siung (siung)</option>
         </select>
       </div>
 

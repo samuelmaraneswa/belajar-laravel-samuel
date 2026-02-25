@@ -15,10 +15,18 @@
       Dashboard
     </x-admin.nav-link>
 
-    <x-admin.nav-link href="{{ route('admin.users.index') }}"
-          :active="false"
-          class="flex-1">
+    <x-admin.nav-link 
+        href="{{ route('admin.users.index') }}"
+        :active="request()->routeIs('admin.users.*')"
+        class="flex-1">
       Users
+    </x-admin.nav-link>
+
+    <x-admin.nav-link 
+        href="{{ route('admin.programs.index') }}"
+        :active="request()->routeIs('admin.programs.*')"
+        class="flex-1">
+      Programs
     </x-admin.nav-link>
 
     {{-- WORKOUTS --}}

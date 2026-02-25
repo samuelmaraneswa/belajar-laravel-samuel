@@ -7,10 +7,20 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
+
+  public function index()
+  {
+    /** @var User $user */
+    $user = Auth::user();
+
+    return view('user.profile.index', compact('user'));
+  }
+
   public function edit()
   {
     /** @var User $user */
@@ -39,8 +49,13 @@ class ProfileController extends Controller
     $user->name = $validated['name'];
     $user->email = $validated['email'];
 
-    // Avatar
     if ($request->hasFile('avatar')) {
+
+      // hapus avatar lama jika ada
+      if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+        Storage::disk('public')->delete($user->avatar);
+      }
+
       $path = $request->file('avatar')->store('avatars', 'public');
       $user->avatar = $path;
     }
@@ -52,6 +67,7 @@ class ProfileController extends Controller
 
     $user->save();
 
-    return back()->with('success', 'Profile berhasil diperbarui.');
+    return redirect()->route('profile.index')
+      ->with('success', 'Profile berhasil diperbarui.');
   }
 }

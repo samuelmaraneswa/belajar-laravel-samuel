@@ -2,11 +2,11 @@
   <form id="wizardForm"
         method="POST"
         action="{{ route('user.programs.store') }}"
-        class="max-w-md mx-auto mt-16 space-y-12">
+        class="max-w-md mx-auto space-y-6">
     @csrf
 
     @if (session('error'))
-      <div id="programError" class="mb-4 p-3 text-sm text-red-700 bg-red-100 rounded">
+      <div id="programError" class="p-3 text-sm text-red-700 bg-red-100 rounded">
         {{ session('error') }}
       </div>
     @endif
@@ -21,6 +21,13 @@
     <input type="hidden" name="target_weight">
     <input type="hidden" name="level">
 
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm">
+      <p class="text-center font-semibold text-blue-800 mb-2">
+        🚀 Fitur yang masih tersedia:
+      </p>
+      <p class="text-center text-sm -mt-1">Goal: <strong>Muscle Gain</strong>, Place: <strong>Gym</strong>, Gender: <strong>Male/Female</strong>, Age: <strong>18 - 35</strong>, Height: <strong>155 - 175</strong>, Weight: <strong>55 - 70</strong>, Target Weight: <strong>65 - 85</strong>, Level: <strong>Beginner</strong></p>
+    </div>
+    
     {{-- STEP 1 : GOAL --}}
     <section data-step="goal">
       <h1 class="text-2xl font-bold text-center mb-6">What is your goal?</h1>

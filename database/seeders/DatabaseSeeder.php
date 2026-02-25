@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
   {
     // 1️⃣ User & Auth
     $this->call(AdminUserSeeder::class);
-    $this->call(UserSeeder::class);
 
     // 2️⃣ Master Data (tidak punya FK)
     $this->call(MuscleSeeder::class);

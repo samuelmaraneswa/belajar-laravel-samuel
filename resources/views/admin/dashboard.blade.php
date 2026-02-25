@@ -3,6 +3,8 @@
 
     <x-admin.stat-card title="Workouts" value="{{ $totalWorkouts }}" icon="dumbbell" color="indigo" href="/admin/workouts" />
 
+    <x-admin.stat-card title="Programs" value="{{ $totalPrograms }}" icon="clipboard-list" color="blue" href="/admin/programs" />
+    
     <x-admin.stat-card title="Articles" value="{{ $totalArticles }}" icon="newspaper" color="blue" href="/admin/articles" />
 
     <x-admin.stat-card title="Users" value="{{ $totalUsers }}" icon="users" color="green" href="/admin/users" />

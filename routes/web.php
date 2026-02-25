@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\MealCategoryController;
 use App\Http\Controllers\Admin\MealController;
 use App\Http\Controllers\Admin\MealGoalController;
 use App\Http\Controllers\Admin\MealItemController;
+use App\Http\Controllers\Admin\ProgramController as AdminProgramController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ArticleController as PublicArticleController;
 use App\Http\Controllers\BlogController as PublicBlogController;
@@ -264,6 +265,18 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
 
   Route::patch('/users/{user:id}/toggle', [UserController::class, 'toggle'])
     ->name('admin.users.toggle');
+
+  // =========================
+  // PROGRAMS
+  // =========================
+  Route::get('/programs', [AdminProgramController::class, 'index'])
+    ->name('admin.programs.index');
+
+  Route::get('/programs/suggest', [AdminProgramController::class, 'suggest'])
+    ->name('admin.programs.suggest');
+
+  Route::delete('/programs/{program}', [AdminProgramController::class, 'destroy'])
+    ->name('admin.programs.destroy');
 });
 
 // =======================
@@ -426,7 +439,10 @@ Route::get('/meals/suggest', [PublicMealItemController::class, 'suggest'])
 
 Route::middleware(['auth', 'nocache'])->group(function () {
 
-  Route::get('/profile', [ProfileController::class, 'edit'])
+  Route::get('/profile', [ProfileController::class, 'index'])
+    ->name('profile.index');
+
+  Route::get('/profile/edit', [ProfileController::class, 'edit'])
     ->name('profile.edit');
 
   Route::put('/profile', [ProfileController::class, 'update'])

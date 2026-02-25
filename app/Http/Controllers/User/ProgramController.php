@@ -23,8 +23,44 @@ class ProgramController extends Controller
   public function index()
   {
     $programs = Program::where('user_id', Auth::id())
+      ->with('days.workouts') // penting
       ->latest()
       ->get();
+
+    foreach ($programs as $program) {
+
+      $completedSets = ProgramDayWorkoutSet::where('user_id', Auth::id())
+        ->whereIn(
+          'program_day_workout_id',
+          $program->days->flatMap(fn($d) => $d->workouts->pluck('id'))
+        )
+        ->get();
+
+      $dayProgress = [];
+
+      foreach ($program->days as $day) {
+
+        $totalSets = $day->workouts->sum('sets');
+
+        $completedCount = $completedSets
+          ->whereIn('program_day_workout_id', $day->workouts->pluck('id'))
+          ->count();
+
+        $dayProgress[$day->id] = $totalSets > 0
+          ? round(($completedCount / $totalSets) * 100)
+          : 0;
+      }
+
+      $totalDays = $program->days->count();
+
+      $completedDays = collect($dayProgress)
+        ->filter(fn($p) => $p >= 100)
+        ->count();
+
+      $program->progress = $totalDays > 0
+        ? round(($completedDays / $totalDays) * 100)
+        : 0;
+    }
 
     return view('programs.index', compact('programs'));
   }

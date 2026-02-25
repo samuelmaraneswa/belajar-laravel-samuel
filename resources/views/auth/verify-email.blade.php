@@ -1,4 +1,4 @@
-<x-layout title="Verify Email">
+<x-layout title="Verify Email" class="mb-40">
   <x-auth-card>
     <x-auth-title>Verifikasi Email</x-auth-title>
 

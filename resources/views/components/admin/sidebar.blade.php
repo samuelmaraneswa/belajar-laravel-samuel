@@ -15,7 +15,9 @@
       Dashboard
     </x-admin.nav-link>
 
-    <x-admin.nav-link href="/users">
+    <x-admin.nav-link href="{{ route('admin.users.index') }}"
+          :active="false"
+          class="flex-1">
       Users
     </x-admin.nav-link>
 

@@ -21,7 +21,8 @@
     {{-- My Programs --}}
     <x-user.nav-link
       href="/user/programs"
-      :active="request()->routeIs('user.programs.index')"
+      :active="request()->routeIs('user.programs.*') 
+        && !request()->routeIs('user.programs.create')"
     >
       <i class="fa-regular fa-calendar w-4"></i>
       <span>My Programs</span>

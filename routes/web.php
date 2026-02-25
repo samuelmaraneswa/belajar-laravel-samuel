@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\MealCategoryController;
 use App\Http\Controllers\Admin\MealController;
 use App\Http\Controllers\Admin\MealGoalController;
 use App\Http\Controllers\Admin\MealItemController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ArticleController as PublicArticleController;
 use App\Http\Controllers\BlogController as PublicBlogController;
 use App\Http\Controllers\BlogPostController as PublicBlogPostController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\MealController as PublicMealController;
 use App\Http\Controllers\MealItemController as PublicMealItemController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ProgramController as UserProgramController;
 use App\Http\Controllers\WorkoutController;
 use App\Http\Controllers\WorkoutSetController;
@@ -246,6 +248,22 @@ Route::middleware(['auth', 'admin', 'nocache'])->prefix('admin')->group(function
 
   Route::delete('/meals/items/{meal}', [MealItemController::class, 'destroy'])
     ->name('admin.meals.items.destroy');
+
+  // Users (AJAX CRUD)
+  Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+  Route::get('/users/suggest', [UserController::class, 'suggest'])
+    ->name('admin.users.suggest');
+
+  Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
+  Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
+
+  Route::get('/users/{user:id}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+  Route::put('/users/{user:id}', [UserController::class, 'update'])->name('admin.users.update');
+
+  Route::get('/users/{user:id}', [UserController::class, 'show'])->name('admin.users.show');
+
+  Route::patch('/users/{user:id}/toggle', [UserController::class, 'toggle'])
+    ->name('admin.users.toggle');
 });
 
 // =======================
@@ -264,27 +282,33 @@ Route::get('/email/verify', function () {
   return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
-  $user = User::findOrFail($id);
+// Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+//   $user = User::findOrFail($id);
 
-  // validasi hash email
-  if (! hash_equals(
-    sha1($user->getEmailForVerification()),
-    $hash
-  )) {
-    abort(403);
-  }
+//   // validasi hash email
+//   if (! hash_equals(
+//     sha1($user->getEmailForVerification()),
+//     $hash
+//   )) {
+//     abort(403);
+//   }
 
-  // isi email_verified_at
-  if (! $user->email_verified_at) {
-    $user->markEmailAsVerified();
-  }
+//   // isi email_verified_at
+//   if (! $user->email_verified_at) {
+//     $user->markEmailAsVerified();
+//   }
 
-  return redirect('/login')->with(
-    'success',
-    'Email berhasil diverifikasi. Silakan login.'
-  );
-})->middleware('signed')->name('verification.verify');
+//   return redirect('/login')->with(
+//     'success',
+//     'Email berhasil diverifikasi. Silakan login.'
+//   );
+// })->middleware('signed')->name('verification.verify');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+  $request->fulfill();
+
+  return redirect('/dashboard');
+})->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
   $request->user()->sendEmailVerificationNotification();
@@ -395,3 +419,16 @@ Route::get('/meals/items/{meal:slug}', [PublicMealItemController::class, 'show']
 
 Route::get('/meals/suggest', [PublicMealItemController::class, 'suggest'])
   ->name('meals.suggest');
+
+// =======================
+// USER PROFILE – AUTH
+// =======================
+
+Route::middleware(['auth', 'nocache'])->group(function () {
+
+  Route::get('/profile', [ProfileController::class, 'edit'])
+    ->name('profile.edit');
+
+  Route::put('/profile', [ProfileController::class, 'update'])
+    ->name('profile.update');
+});

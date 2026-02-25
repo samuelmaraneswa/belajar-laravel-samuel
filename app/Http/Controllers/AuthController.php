@@ -28,6 +28,38 @@ class AuthController extends Controller
     return view('auth.login');
   }
 
+  // public function login(Request $request)
+  // {
+  //   $credentials = $request->validate([
+  //     'email' => 'required|email',
+  //     'password' => 'required',
+  //   ]);
+
+  //   if (Auth::attempt($credentials)) {
+  //     $request->session()->regenerate();
+
+  //     // 🔒 BELUM VERIFY → KUNCI
+  //     if (!Auth::user()->email_verified_at) {
+  //       return redirect()->route('verification.notice');
+  //     }
+
+  //     // 🔥 AMANKAN intended (hindari ajax/api)
+  //     $intended = session('url.intended');
+  //     if ($intended && Str::contains($intended, ['/ajax', '/api'])) {
+  //       session()->forget('url.intended');
+  //     }
+
+  //     // ✅ ADMIN → /admin | USER → /dashboard
+  //     return Auth::user()->role === 'admin'
+  //       ? redirect()->intended('/admin')
+  //       : redirect()->intended('/dashboard');
+  //   }
+
+  //   return back()->withErrors([
+  //     'email' => 'Login gagal, email atau password salah.',
+  //   ]);
+  // }
+
   public function login(Request $request)
   {
     $credentials = $request->validate([
@@ -36,21 +68,32 @@ class AuthController extends Controller
     ]);
 
     if (Auth::attempt($credentials)) {
+
       $request->session()->regenerate();
 
-      // 🔒 BELUM VERIFY → KUNCI
-      if (!Auth::user()->email_verified_at) {
+      $user = Auth::user();
+
+      // ⛔ CEK NONAKTIF
+      if (!$user->is_active) {
+        Auth::logout();
+        return back()->withErrors([
+          'email' => 'Akun Anda dinonaktifkan. Hubungi admin.',
+        ]);
+      }
+
+      // 🔒 BELUM VERIFY
+      if (!$user->email_verified_at) {
         return redirect()->route('verification.notice');
       }
 
-      // 🔥 AMANKAN intended (hindari ajax/api)
+      // 🔥 Amankan intended (hindari ajax/api)
       $intended = session('url.intended');
       if ($intended && Str::contains($intended, ['/ajax', '/api'])) {
         session()->forget('url.intended');
       }
 
       // ✅ ADMIN → /admin | USER → /dashboard
-      return Auth::user()->role === 'admin'
+      return $user->role === 'admin'
         ? redirect()->intended('/admin')
         : redirect()->intended('/dashboard');
     }

@@ -76,7 +76,7 @@
             $unit = old('serving_unit', $food->serving_unit ?? 'g');
           @endphp
 
-          <option value="g" {{ $unit === 'g' ? 'selected' : '' }}>Gram (g)</option>
+          <option value="gr" {{ $unit === 'gr' ? 'selected' : '' }}>Gram (gr)</option>
           <option value="ml" {{ $unit === 'ml' ? 'selected' : '' }}>Milliliter (ml)</option>
           <option value="pcs" {{ $unit === 'pcs' ? 'selected' : '' }}>Piece (pcs)</option>
           <option value="tbsp" {{ $unit === 'tbsp' ? 'selected' : '' }}>Tablespoon (tbsp)</option>

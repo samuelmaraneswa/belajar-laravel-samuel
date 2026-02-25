@@ -42,9 +42,10 @@
         <div class="relative">
           {{-- avatar --}}
           <x-button id="userMenuBtn" class="px-2! py-1!">
-            <img src="{{ auth()->user()->avatar
-              ? asset('storage/'.auth()->user()->avatar)
-              : asset('images/default-avatar.jpg') }}"
+            <img 
+              src="{{ str_starts_with(auth()->user()->avatar, 'users/')
+                    ? asset('storage/' . auth()->user()->avatar)
+                    : asset(auth()->user()->avatar ?? 'images/default-avatar.jpg') }}"
               class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover"
               alt="Avatar">
           </x-button>

@@ -1,4 +1,4 @@
-<x-layout title="Login">
+<x-layout title="Login" class="mb-20 sm:mb-40">
   <x-auth-card>
     <x-auth-title>Login</x-auth-title>
 

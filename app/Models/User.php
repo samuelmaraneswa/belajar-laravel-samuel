@@ -19,12 +19,14 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'avatar',
-    ];
+  protected $fillable = [
+    'name',
+    'email',
+    'password',
+    'avatar',
+    'role',
+    'is_active',
+  ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,11 +43,12 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+  protected function casts(): array
+  {
+    return [
+      'email_verified_at' => 'datetime',
+      'password' => 'hashed',
+      'is_active' => 'boolean',
+    ];
+  }
 }

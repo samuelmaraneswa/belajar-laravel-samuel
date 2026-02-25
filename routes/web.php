@@ -33,6 +33,9 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// =======================
+// PUBLIC
+// =======================
 Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
@@ -338,7 +341,7 @@ Route::get('/dashboard', [UserDashboardController::class, 'index'])
 // =========
 // PROGRAMS 
 // =========
-Route::middleware(['auth', 'verified'])
+Route::middleware(['auth', 'verified', 'nocache'])
   ->prefix('user')
   ->name('user.')
   ->group(function () {
@@ -360,7 +363,7 @@ Route::middleware(['auth', 'verified'])
   });
 
 Route::post('/workout-sets/complete', [WorkoutSetController::class, 'complete'])
-  ->middleware(['auth', 'verified'])
+  ->middleware(['auth', 'verified', 'nocache'])
   ->name('workout-sets.complete');
 
 // Public workouts
